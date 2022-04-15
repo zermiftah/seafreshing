@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoIcon from "../assets/img/favicon.png"
-import style from "./Carousel/CarouselContainer.module.css"
+import logoIcon from "../assets/img/favicon.png";
+import logoIcon2 from "../assets/img/Seafreshing.png";
 
 const Header = () => {
   return (
     <div>
       {/* Top Header */}
-      {/* <div className="Announcement ">
+      <div className="Announcement ">
         <div className="container">
           <div className="row">
             <div className="col-md-6 d-flex align-items-center display-none">
@@ -33,7 +33,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       {/* Header */}
 
       <div className="header">
@@ -45,6 +45,7 @@ const Header = () => {
                 <div className="col-6 d-flex align-items-center">
                   <Link className="navbar-brand" to="/">
                     <img alt="logo" src={logoIcon} />
+                    <img alt="logo" src={logoIcon2} />
                   </Link>
                 </div>
                 <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
@@ -92,9 +93,10 @@ const Header = () => {
 
           <div className="pc-header">
             <div className="row">
-              <div className="col-md-3 col-4 d-flex align-items-center">
+              <div className="col-md-2 col-3  d-flex align-items-center">
                 <Link className="navbar-brand" to="/">
                   <img alt="logo" src={logoIcon} />
+                  <img alt="logo" src={logoIcon2} />
                 </Link>
               </div>
               <div className="col-md-6 col-8 d-flex align-items-center">

@@ -8,17 +8,20 @@ import axios from "axios";
 
 const SingleProduct = ({ match }) => {
   const [product, setProduct] = useState([])
-  console.log(match, "match");
 
   useEffect(() => {
     const fetchproduct = async () => {
-      const data = await axios.get(`https:103.102.152.201:3001/api/product/get-product/${match.params.id}`)
-      console.log(data, 'Data');
-      let temp = data.product
-      setProduct(temp)
+      try {
+        const data = await axios.get(`http://localhost:3001/api/product/get-product/${match.params.id}`)
+        let temp = data.data.product
+        setProduct(temp)
+      } catch (e) {
+        return e.response.data.msg
+      }
     }
     fetchproduct()
   }, []);
+
   return (
     <>
       <Header />
@@ -26,7 +29,7 @@ const SingleProduct = ({ match }) => {
         <div className="row">
           <div className="col-md-6">
             <div className="single-image">
-              {/* <img src={product.image.imgUrl} alt={product.productName} /> */}
+              <img src={product.image ? product.image[0].imgUrl : ""} alt={product.productName} />
             </div>
           </div>
           <div className="col-md-6">
@@ -39,7 +42,7 @@ const SingleProduct = ({ match }) => {
               <div className="product-count col-lg-7 ">
                 <div className="flex-box d-flex justify-content-between align-items-center">
                   <h6>Price</h6>
-                  <span>{product.price.value}</span>
+                  <span>{product.price ? product.price.value : ""}</span>
                 </div>
                 <div className="flex-box d-flex justify-content-between align-items-center">
                   <h6>Status</h6>
@@ -56,21 +59,25 @@ const SingleProduct = ({ match }) => {
                     text={`${product.numReviews} reviews`}
                   />
                 </div>
-                {product.availableStock.total > 0 ? (
-                  <>
-                    <div className="flex-box d-flex justify-content-between align-items-center">
-                      <h6>Quantity</h6>
-                      <select>
-                        {[...Array(product.availableStock.total).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <button className="round-black-btn">Add To Cart</button>
-                  </>
-                ) : null}
+                {
+                  product.availableStock ?
+                    product.availableStock.total > 0 ? (
+                      <>
+                        <div className="flex-box d-flex justify-content-between align-items-center">
+                          <h6>Quantity</h6>
+                          <select>
+                            {[...Array(product.availableStock.total).keys()].map((x) => (
+                              <option key={x + 1} value={x + 1}>
+                                {x + 1}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <button className="round-black-btn">Add To Cart</button>
+                      </>
+                    ) : null
+                    : ""
+                }
               </div>
             </div>
           </div>

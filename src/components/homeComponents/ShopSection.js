@@ -10,7 +10,7 @@ const ShopSection = () => {
 
   useEffect(() => {
     const fetchproducts = async () => {
-      const data = await axios.get("api/product/get-all-product")
+      const data = await axios.get("api/product/get-all-product?page=1&limit=10")
       console.log(data)
       let temp = data.data.product.results
       setProducts(temp)
