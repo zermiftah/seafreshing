@@ -8,6 +8,7 @@ import axios from "axios";
 
 const SingleProduct = ({ match }) => {
   const [product, setProduct] = useState([])
+  console.log(product)
 
   useEffect(() => {
     const fetchproduct = async () => {
@@ -46,11 +47,15 @@ const SingleProduct = ({ match }) => {
                 </div>
                 <div className="flex-box d-flex justify-content-between align-items-center">
                   <h6>Status</h6>
-                  {product.availableStock > 0 ? (
-                    <span>In Stock</span>
-                  ) : (
-                    <span>unavailable</span>
-                  )}
+                  {
+                    product.availableStock ?
+                      product.availableStock.total > 0 ? (
+                        <span>In Stock</span>
+                      ) : (
+                        <span>unavailable</span>
+                      )
+                      : ""
+                  }
                 </div>
                 <div className="flex-box d-flex justify-content-between align-items-center">
                   <h6>Reviews</h6>
