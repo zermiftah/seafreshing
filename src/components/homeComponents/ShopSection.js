@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Component } from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import Pagination from "./pagination";
@@ -20,24 +20,24 @@ const ShopSection = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="section">
-          <div className="row">
-            <div className="col-lg-12 col-md-12 article">
-              <div className="shopcontainer row">
+      <div classNameName="container">
+        <div classNameName="section">
+          <div classNameName="row">
+            <div classNameName="col-lg-12 col-md-12 article">
+              <div classNameName="shopcontainer row">
                 {products.map((product) => (
                   < div
-                    className="shop col-lg-4 col-md-6 col-sm-6"
+                    classNameName="shop col-lg-4 col-md-6 col-sm-6"
                     key={product.id}
                   >
-                    <div className="border-product">
+                    <div classNameName="border-product">
                       <Link to={`/products/${product.id}`}>
-                        <div className="shopBack">
+                        <div classNameName="shopBack">
                           <img src={product.image[0].imgUrl} alt={product.productName} />
                         </div>
                       </Link>
 
-                      <div className="shoptext">
+                      <div classNameName="shoptext">
                         <p>
                           <Link to={`/products/${product.id}`}>
                             {product.productName}
@@ -53,7 +53,6 @@ const ShopSection = () => {
                     </div>
                   </div>
                 ))}
-                {/* Pagination */}
                 <Pagination />
               </div>
             </div>
