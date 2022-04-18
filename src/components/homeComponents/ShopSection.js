@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import Pagination from "./pagination";
@@ -10,34 +10,39 @@ const ShopSection = () => {
 
   useEffect(() => {
     const fetchproducts = async () => {
-      const data = await axios.get("api/product/get-all-product?page=1&limit=10")
-      console.log(data)
+      const data = await axios.get("http://localhost:3001/api/product/get-all-product?page=1=&limit=10")
       let temp = data.data.product.results
       setProducts(temp)
     }
     fetchproducts()
   }, []);
 
+  const Page = (items) => Math.ceil(items.length / 10);
+
   return (
     <>
-      <div classNameName="container">
-        <div classNameName="section">
-          <div classNameName="row">
-            <div classNameName="col-lg-12 col-md-12 article">
-              <div classNameName="shopcontainer row">
+      <center>
+        <h1 className="display-6">...</h1>
+        <h1 className="display-6">Our Product</h1>
+      </center>
+      <div className="container">
+        <div className="section">
+          <div className="row">
+            <div className="col-lg-12 col-md-12 article">
+              <div className="shopcontainer row">
                 {products.map((product) => (
                   < div
-                    classNameName="shop col-lg-4 col-md-6 col-sm-6"
+                    className="shop col-lg-4 col-md-6 col-sm-6"
                     key={product.id}
                   >
-                    <div classNameName="border-product">
+                    <div className="border-product">
                       <Link to={`/products/${product.id}`}>
-                        <div classNameName="shopBack">
+                        <div className="shopBack">
                           <img src={product.image[0].imgUrl} alt={product.productName} />
                         </div>
                       </Link>
 
-                      <div classNameName="shoptext">
+                      <div className="shoptext">
                         <p>
                           <Link to={`/products/${product.id}`}>
                             {product.productName}
@@ -53,7 +58,6 @@ const ShopSection = () => {
                     </div>
                   </div>
                 ))}
-                <Pagination />
               </div>
             </div>
           </div>

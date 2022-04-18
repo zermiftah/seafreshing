@@ -8,7 +8,8 @@ import axios from "axios";
 
 const SingleProduct = ({ match }) => {
   const [product, setProduct] = useState([])
-  console.log(product)
+  const [buyKg, setBuyKg] = useState(false);
+  const [buyTon, setBuyTon] = useState(false);
 
   useEffect(() => {
     const fetchproduct = async () => {
@@ -22,6 +23,16 @@ const SingleProduct = ({ match }) => {
     }
     fetchproduct()
   }, []);
+
+  const handleKg = () => {
+    setBuyKg(true);
+    setBuyTon(false);
+  }
+
+  const handleTon = () => {
+    setBuyTon(true);
+    setBuyKg(false);
+  }
 
   return (
     <>
@@ -69,16 +80,48 @@ const SingleProduct = ({ match }) => {
                     product.availableStock.total > 0 ? (
                       <>
                         <div className="flex-box d-flex justify-content-between align-items-center">
-                          <h6>Quantity</h6>
-                          <select>
-                            {[...Array(product.availableStock.total).keys()].map((x) => (
-                              <option key={x + 1} value={x + 1}>
-                                {x + 1}
-                              </option>
-                            ))}
-                          </select>
+                          <h6>Buy per</h6>
+                          <div className="btn-group" role="group">
+                            <button onClick={handleKg} type="button" className="btn btn-outline-primary">Kg</button>
+                            <button onClick={handleTon} type="button" className="btn btn-outline-primary">Kwintal</button>
+                            <button onClick={handleTon} type="button" className="btn btn-outline-primary">Ton</button>
+                          </div>
                         </div>
-                        <button className="round-black-btn">Add To Cart</button>
+                        {
+                          buyKg && (
+                            <div className="flex-box d-flex justify-content-between align-items-center">
+                              <h6>Quantity</h6>
+                              <select>
+                                {
+                                  [...Array(product.availableStock.total).keys()].map((x) => (
+                                    x >= 1 ?
+                                      <option key={x * 10} value={x * 10}>
+                                        {x * 10}
+                                      </option>
+                                      : ""
+                                  ))
+                                }
+                              </select>
+                            </div>
+                          )
+                        }
+                        {
+                          buyTon && (
+                            <div className="flex-box d-flex justify-content-between align-items-center">
+                              <h6>Quantity</h6>
+                              <select>
+                                {
+                                  [...Array(product.availableStock.total).keys()].map((x) => (
+                                    <option key={x + 1} value={x + 1}>
+                                      {x + 1}
+                                    </option>
+                                  ))
+                                }
+                              </select>
+                            </div>
+                          )
+                        }
+                        <button className="round-black-btn">Add To Freezer</button>
                       </>
                     ) : null
                     : ""

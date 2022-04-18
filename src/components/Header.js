@@ -1,7 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import logoIcon2 from "../assets/img/Seafreshing.png";
 import { FaSearch, FaCartArrowDown, FaRegBell, FaRegEnvelope } from "react-icons/fa";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+
 
 const searchButton = ({
   '@media (min-width : 994px)': {
@@ -13,6 +15,30 @@ const searchButton = ({
 
 
 const Header = () => {
+
+  const cartCounter = JSON.parse(localStorage.getItem('cart-counter'));
+  const [user, setUser] = useState([]);
+  const history = useHistory();
+  const userData = JSON.parse(localStorage.getItem('user-data'));
+
+  useEffect(() => {
+    getUser();
+  }, [])
+
+  const getUser = async () => {
+    try {
+      const response = axios.get(`http://localhost:3001/api/user/get-user/${userData.accounttype}/${userData.id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': JSON.parse(localStorage.getItem('token')),
+        }
+      });
+      // console.log(response.data)
+      setUser(response.data)
+    } catch (e) {
+      // console.log(e.response.data.msg)
+    }
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow p-1 mb-2 bg-body rounded">
       <div className="container">
@@ -31,20 +57,22 @@ const Header = () => {
             <li className="nav-item">
               <a className="nav-link fa-lg " href="#"><FaRegBell /></a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link fa-lg" href="#"><FaCartArrowDown /></a>
-            </li>
+            <Link to="/cart">
+              <li className="nav-item">
+                <a className="nav-link fa-lg" href="#"><FaCartArrowDown /></a>
+              </li>
+            </Link>
             <li className="nav-item">
               <a className="nav-link fa-lg cyan-text" href="#"><FaRegEnvelope />  |  </a>
             </li>
             <li className="nav-item">
-              <button type="button" class="btn btn-outline-info me-md-2">Resigter</button>
-              <button type="button" class="btn btn-outline-info">Log-in</button>
+              <Link to="/register"><button type="button" class="btn btn-outline-info me-md-2">Resigter</button></Link>
+              <Link to="/login"><button type="button" class="btn btn-outline-info">Log-in</button></Link>
             </li>
           </ul>
         </div>
       </div>
-    </nav>
+    </nav >
   );
 };
 
