@@ -10,21 +10,17 @@ const ShopSection = () => {
 
   useEffect(() => {
     const fetchproducts = async () => {
-      const data = await axios.get("http://localhost:3001/api/product/get-all-product?page=1=&limit=10")
+      const data = await axios.get("http://103.102.152.201:3001/api/product/get-all-product?page=1=&limit=10")
       let temp = data.data.product.results
       setProducts(temp)
     }
     fetchproducts()
   }, []);
-
-  const Page = (items) => Math.ceil(items.length / 10);
+  
+  const Page = (items) => Math.ceil(items.length/10);
 
   return (
     <>
-      <center>
-        <h1 className="display-6">...</h1>
-        <h1 className="display-6">Our Product</h1>
-      </center>
       <div className="container">
         <div className="section">
           <div className="row">
@@ -58,6 +54,8 @@ const ShopSection = () => {
                     </div>
                   </div>
                 ))}
+                {/* Pagination */}
+                <Pagination page={Page(products)} />
               </div>
             </div>
           </div>

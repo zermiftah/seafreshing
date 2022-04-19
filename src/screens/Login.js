@@ -12,17 +12,19 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append('email', email);
-    data.append('password', password);
+    const qs = require('qs');
 
     try {
-      let response = await axios.post('http://localhost:3001/api/user/login', data, {
+      let response = await axios.post('http://103.102.152.201:3001/api/user/login', qs.stringify({ 'id': email, 'password': password, }), {
         header: {
           'Content-Type': 'application/json',
         }
       })
-      if (response.data) history.push('/');
+      if (response.data) {
+        localStorage.setItem('token', JSON.stringify(response.data.token))
+        localStorage.setItem('user-data', JSON.stringify(response.data.user))
+        history.push('/')
+      }
     } catch (e) {
       if (e.response.data.msg) setNotif(e.response.data.msg);
     }

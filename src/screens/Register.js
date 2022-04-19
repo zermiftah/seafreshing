@@ -19,7 +19,7 @@ const Register = () => {
     data.append('requestId', requestId);
 
     try {
-      let response = await axios.post('http://localhost:3001/api/user/register', data, {
+      let response = await axios.post('https://localhost:3001/api/user/register', data, {
         header: {
           'Content-Type': 'application/json',
         }

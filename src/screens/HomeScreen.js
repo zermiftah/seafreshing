@@ -14,8 +14,8 @@ const HomeScreen = () => {
         <Header />
         <CarouselContainer />
         <ShopSection />
-        {/* <CalltoActionSection /> */}
-        {/* <ContactInfo /> */}
+        <CalltoActionSection />
+        <ContactInfo />
         <Footer />
       </div>
     </Fragment>

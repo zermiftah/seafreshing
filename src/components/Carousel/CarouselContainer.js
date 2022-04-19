@@ -1,33 +1,56 @@
 import React from "react";
-import slide6 from "../../assets/img/slide6.png"
-import slide7 from "../../assets/img/slide7.png"
-// import slide8 from "../../assets/img/slide8.png"
+import { Carousel } from "react-bootstrap";
+
+
+import slide1 from "../../assets/img/slide1.png"
+import slide2 from "../../assets/img/slide2.png"
+import slide3 from "../../assets/img/slide3.png"
 
 const CarouselContainer = () => {
+    const getBanner = async () => {
+        try {
+
+        } catch(e) {
+            console.log(e.response.data.msg)
+        }
+    }
+
     return (
-        <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
-            <div className="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div className="carousel-inner">
-                <div className="carousel-item active">
-                    <img src={slide6} className="d-block img-fluid" alt="..." />
-                </div>
-                <div className="carousel-item">
-                    <img src={slide7} className="d-block img-fluid" alt="..." />
-                </div>
-            </div>
-            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Previous</span>
-            </button>
-            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Next</span>
-            </button>
-        </div>
+        <Carousel>
+            <Carousel.Item interval={1000}>
+                <img
+                    className="d-block w-100"
+                    src={slide1}
+                    alt="First slide"
+                />
+                <Carousel.Caption>
+                    <h3>What our clients say</h3>
+                    <p>Our clients happily stay with our services for more several years now. See real reviews from our clients.</p>
+                </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item interval={500}>
+                <img
+                    className="d-block w-100"
+                    src={slide2}
+                    alt="Second slide"
+                />
+                <Carousel.Caption>
+                    <h3>Our security</h3>
+                    <p>Learn more about our security systems to make sure your data is always safe</p>
+                </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
+                <img
+                    className="d-block w-100"
+                    src={slide3}
+                    alt="Third slide"
+                />
+                <Carousel.Caption>
+                    <h3>Our Team</h3>
+                    <p>Our team consists of the best experts in the industry, learn about them</p>
+                </Carousel.Caption>
+            </Carousel.Item>
+        </Carousel>
     );
 };
 

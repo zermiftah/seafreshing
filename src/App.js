@@ -2,8 +2,6 @@ import React from "react";
 import "./App.css";
 import "./responsive.css";
 import "react-toastify/dist/ReactToastify.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 import SingleProduct from "./screens/SingleProduct";
@@ -16,6 +14,8 @@ import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";
+import Auth from './middleware/auth';
+import Guest from './middleware/guest';
 
 const App = () => {
   return (
@@ -23,12 +23,36 @@ const App = () => {
       <Switch>
         <Route path="/" component={HomeScreen} exact />
         <Route path="/products/:id" component={SingleProduct} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <Route path="/profile" component={ProfileScreen} />
-        <Route path="/cart/:id?" component={CartScreen} />
-        <Route path="/shipping" component={ShippingScreen} />
-        <Route path="/payment" component={PaymentScreen} />
+        <Route path="/login">
+          <Guest>
+            <Login />
+          </Guest>
+        </Route>
+        <Route path="/register">
+          <Guest>
+            <Register />
+          </Guest>
+        </Route>
+        <Route path="/profile">
+          <Auth>
+            <ProfileScreen />
+          </Auth>
+        </Route>
+        <Route path="/cart/:id?">
+          <Auth>
+            <CartScreen />
+          </Auth>
+        </Route>
+        <Route path="/shipping">
+          <Auth>
+            <ShippingScreen />
+          </Auth>
+        </Route>
+        <Route path="/payment">
+          <Auth>
+            <PaymentScreen />
+          </Auth>
+        </Route>
         <Route path="/placeorder" component={PlaceOrderScreen} />
         <Route path="/order" component={OrderScreen} />
         <Route path="*" component={NotFound} />
