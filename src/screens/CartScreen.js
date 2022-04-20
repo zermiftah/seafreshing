@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./../components/Header";
+import HeaderHS from "../components/HeaderHS";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -18,7 +18,7 @@ const CartScreen = () => {
       });
       setItems(response.data.freezer);
       console.log(response.data.freezer)
-    } catch(e) {
+    } catch (e) {
       console.log(e.response.data.msg)
     }
   }
@@ -29,7 +29,7 @@ const CartScreen = () => {
 
   return (
     <>
-      <Header />
+      <HeaderHS />
       {/* Cart */}
       <div className="container">
         {

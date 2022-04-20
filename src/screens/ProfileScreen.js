@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
+import HeaderHS from "../components/HeaderHS";
 import ProfileTabs from "../components/profileComponents/ProfileTabs";
 import Orders from "./../components/profileComponents/Orders";
 
@@ -9,7 +9,7 @@ const ProfileScreen = () => {
 
   const [user, setUser] = useState([]);
   const userData = JSON.parse(localStorage.getItem('user-data'));
-  
+
   useEffect(() => {
     getUser();
   }, [])
@@ -29,7 +29,7 @@ const ProfileScreen = () => {
 
   return (
     <>
-      <Header />
+      <HeaderHS />
       <div className="container mt-lg-5 mt-3">
         <div className="row align-items-start">
           <div className="col-lg-4 p-0 shadow ">

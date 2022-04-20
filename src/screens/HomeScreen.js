@@ -1,5 +1,5 @@
 import { React, Fragment } from "react";
-import Header from "./../components/Header";
+import HeaderHS from "../components/HeaderHS";
 import ShopSection from "./../components/homeComponents/ShopSection";
 import ContactInfo from "./../components/homeComponents/ContactInfo";
 import CalltoActionSection from "./../components/homeComponents/CalltoActionSection";
@@ -11,11 +11,11 @@ const HomeScreen = () => {
   return (
     <Fragment>
       <div>
-        <Header />
+        <HeaderHS />
         <CarouselContainer />
         <ShopSection />
-        <CalltoActionSection />
-        <ContactInfo />
+        {/* <CalltoActionSection />
+        <ContactInfo /> */}
         <Footer />
       </div>
     </Fragment>

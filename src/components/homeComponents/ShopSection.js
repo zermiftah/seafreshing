@@ -16,8 +16,8 @@ const ShopSection = () => {
     }
     fetchproducts()
   }, []);
-  
-  const Page = (items) => Math.ceil(items.length/10);
+
+  const Page = (items) => Math.ceil(items.length / 10);
 
   return (
     <>
