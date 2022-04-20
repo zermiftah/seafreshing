@@ -10,7 +10,7 @@ const CarouselContainer = () => {
     const getBanner = async () => {
         try {
 
-        } catch(e) {
+        } catch (e) {
             console.log(e.response.data.msg)
         }
     }
