@@ -1,14 +1,18 @@
 import { useHistory } from 'react-router-dom';
 
 const Guest = (props) => {
-    const getToken = JSON.parse(localStorage.getItem('token'));
+    console.log(localStorage.getItem('token'), "PROPS")
+    
     const history = useHistory();
-
-    if (getToken) {
-        history.push('/');
+    if (!localStorage.getItem('token')){
+        const getToken = JSON.parse(localStorage.getItem('token'));
+        if (!getToken) {
+            history.push('/');
+        }
     }
+    
 
-    return props.children
+    return props.children   
 }
 
 export default Guest;
