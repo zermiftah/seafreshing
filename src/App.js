@@ -14,6 +14,7 @@ import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";
+import Dashboard from "./screens/Dashboard";
 import Auth from './middleware/auth';
 import Guest from './middleware/guest';
 
@@ -21,7 +22,8 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/" component={HomeScreen} exact />
+        <Route path="/" component={Dashboard} exact />
+        <Route path="/HomeScreen" component={HomeScreen} exact />
         <Route path="/products/:id" component={SingleProduct} />
         <Route path="/login">
           <Guest>

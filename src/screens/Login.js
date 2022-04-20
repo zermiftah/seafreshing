@@ -23,7 +23,7 @@ const Login = () => {
       if (response.data) {
         localStorage.setItem('token', JSON.stringify(response.data.token))
         localStorage.setItem('user-data', JSON.stringify(response.data.user))
-        history.push('/')
+        history.push('/HomeScreen')
       }
     } catch (e) {
       if (e.response.data.msg) setNotif(e.response.data.msg);
