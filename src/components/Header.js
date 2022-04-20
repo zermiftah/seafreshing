@@ -1,8 +1,9 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
-import logoIcon from "../assets/img/favicon.png"
-import style from "./Carousel/CarouselContainer.module.css"
+import axios from "axios";
+import { FaSearch, FaCartArrowDown, FaRegBell, FaRegEnvelope } from "react-icons/fa";
+
+import logoIcon2 from "../assets/img/Seafreshing.png";
 
 const Header = () => {
   const cartCounter = JSON.parse(localStorage.getItem('cart-counter'));
@@ -36,178 +37,52 @@ const Header = () => {
   }
 
   return (
-    <div>
-      {/* Top Header */}
-      {/* <div className="Announcement ">
+    <Fragment>
+      <nav class="py-1 bg-light border-bottom">
+        <div class="container d-flex flex-wrap">
+          <ul class="nav me-auto">
+            <li class="nav-item"><a href="#" class="nav-link link-dark px-2 active" aria-current="page">Download App</a></li>
+          </ul>
+        </div>
+      </nav>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light shadow p-1 mb-2 bg-body rounded">
         <div className="container">
-          <div className="row">
-            <div className="col-md-6 d-flex align-items-center display-none">
-              <p>+255 768 356 890</p>
-              <p>info@seafresh.com</p>
-            </div>
-            <div className=" col-12 col-lg-6 justify-content-center justify-content-lg-end d-flex align-items-center">
-              <Link to="">
-                <i className="fab fa-facebook-f"></i>
+          <Link className="navbar-brand" to="/">
+            <img src={logoIcon2} alt="" />
+          </Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav" >
+            <form className="d-flex ms-auto my-2 my-lg-0">
+              <input className="form-control me-2" style={{ width: '650px' }} type="search" placeholder="Search" aria-label="Search" />
+              <button className="btn btn-secondary" type="submit"><FaSearch /></button>
+            </form>
+            <ul className="navbar-nav ms-auto" style={{ textAlign: 'center' }}>
+              <Link to="/login">
+                <li className="nav-item">
+                  <a className="nav-link fa-lg " href="#"><FaRegBell /></a>
+                </li>
               </Link>
-              <Link to="">
-                <i className="fab fa-instagram"></i>
+              <Link to="/login">
+                <li className="nav-item">
+                  <a className="nav-link fa-lg" href="#"><FaCartArrowDown /></a>
+                </li>
               </Link>
-              <Link to="">
-                <i className="fab fa-linkedin-in"></i>
+              <Link to="/login">
+                <li className="nav-item">
+                  <a className="nav-link fa-lg cyan-text" href="#"><FaRegEnvelope />  |  </a>
+                </li>
               </Link>
-              <Link to="">
-                <i className="fab fa-youtube"></i>
-              </Link>
-              <Link to="">
-                <i className="fab fa-pinterest-p"></i>
-              </Link>
-            </div>
+              <li className="nav-item">
+                <Link to="/register"><button type="button" class="btn btn-outline-info me-md-2">Resigter</button></Link>
+                <Link to="/login"><button type="button" class="btn btn-outline-info">Log-in</button></Link>
+              </li>
+            </ul>
           </div>
         </div>
-      </div> */}
-      {/* Header */}
-
-      <div className="header">
-        <div className="container">
-          {/* MOBILE HEADER */}
-          <div className="mobile-header">
-            <div className="container ">
-              <div className="row ">
-                <div className="col-6 d-flex align-items-center">
-                  <Link className="navbar-brand" to="/">
-                    <img alt="logo" src={logoIcon} />
-                  </Link>
-                </div>
-                {
-                  userData ?
-                    <>
-                      <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
-                        <div className="btn-group">
-                          <button
-                            type="button"
-                            className="name-button dropdown-toggle"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            <i className="fas fa-user"></i>
-                          </button>
-                          <div className="dropdown-menu">
-                            <Link className="dropdown-item" to="/profile">
-                              Profile
-                            </Link>
-                            <Link onClick={logout} className="dropdown-item" to="#">
-                              Logout
-                            </Link>
-                          </div>
-                        </div>
-                        <Link to="/cart" className="cart-mobile-icon">
-                          <i className="fas fa-shopping-bag"></i>
-                          {
-                            cartCounter > 0 ?
-                              <span className="badge">{cartCounter}</span>
-                              : ""
-                          }
-                        </Link>
-                      </div>
-                    </>
-                    :
-                    <>
-                      <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
-                        <div className="btn-group">
-                          <Link className="name-button" to='/login'><i className="fas fa-sign-in"></i></Link>
-                          <Link className="name-button" to='/register'><i className="fas fa-user-plus"></i></Link>
-                        </div>
-                      </div>
-                    </>
-                }
-                <div className="col-12 d-flex align-items-center">
-                  <form className="input-group">
-                    <input
-                      type="search"
-                      className="form-control rounded search"
-                      placeholder="Search"
-                    />
-                    <button type="submit" className="search-button">
-                      search
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* PC HEADER */}
-
-          <div className="pc-header">
-            <div className="row">
-              <div className="col-md-3 col-4 d-flex align-items-center">
-                <Link className="navbar-brand" to="/">
-                  <img alt="logo" src={logoIcon} />
-                </Link>
-              </div>
-              <div className="col-md-6 col-8 d-flex align-items-center">
-                <form className="input-group">
-                  <input
-                    type="search"
-                    className="form-control rounded search"
-                    placeholder="Search"
-                  />
-                  <button type="submit" className="search-button">
-                    search
-                  </button>
-                </form>
-              </div>
-              {
-                userData ?
-                  <>
-                    <div className="col-md-3 d-flex align-items-center justify-content-end Login-Register">
-                      <div className="btn-group">
-                        <button
-                          type="button"
-                          className="name-button dropdown-toggle"
-                          data-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                        >
-                          {`Hi ${userData.fullname}`}
-                        </button>
-                        <div className="dropdown-menu">
-                          <Link className="dropdown-item" to="/profile">
-                            Profile
-                          </Link>
-
-                          <Link onClick={logout} className="dropdown-item" to="#">
-                            Logout
-                          </Link>
-                        </div>
-                      </div>
-
-                      <Link to="/cart">
-                        <i className="fas fa-shopping-bag"></i>
-                        {
-                          cartCounter > 0 ?
-                            <span className="badge">{cartCounter}</span>
-                            : ""
-                        }
-                      </Link>
-                    </div>
-                  </>
-                  :
-                  <>
-                    <div className="col-md-3 d-flex align-items-center justify-content-end Login-Register">
-                      <div className="btn-group">
-                        <Link to='/login'>Login</Link>
-                        <Link to='/register'>Register</Link>
-                      </div>
-                    </div>
-                  </>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </nav >
+    </Fragment>
   );
 };
 
