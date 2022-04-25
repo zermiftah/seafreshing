@@ -1,39 +1,17 @@
-import React, { useEffect, useState, Fragment } from "react";
-import { Link, useHistory } from "react-router-dom";
-import axios from "axios";
+import React, { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
 import { FaSearch, FaCartArrowDown, FaRegBell, FaRegEnvelope } from "react-icons/fa";
 
 import logoIcon2 from "../assets/img/Seafreshing.png";
+import { useHistory } from "react-router-dom";
+import Search from "../screens/Search";
 
 const Header = () => {
-  const cartCounter = JSON.parse(localStorage.getItem('cart-counter'));
-  const [user, setUser] = useState([]);
+  const [valSearch, setValSearch] = useState('');
   const history = useHistory();
-  const userData = JSON.parse(localStorage.getItem('user-data'));
 
-  useEffect(() => {
-    getUser();
-  }, [])
-
-  const getUser = async () => {
-    try {
-      const response = axios.get(`http://103.102.152.201:3001/api/user/get-user/${userData.accounttype}/${userData.id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': JSON.parse(localStorage.getItem('token')),
-        }
-      });
-      // console.log(response.data)
-      setUser(response.data)
-    } catch (e) {
-      // console.log(e.response.data.msg)
-    }
-  }
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user-data');
-    history.push('/login');
+  const getValSearch = () => {
+    history.push(`/search/${valSearch}`)
   }
 
   return (
@@ -54,8 +32,8 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav" >
-            <form className="d-flex ms-auto my-2 my-lg-0">
-              <input className="form-control me-2" style={{ width: '650px' }} type="search" placeholder="Search" aria-label="Search" />
+            <form onSubmit={getValSearch} className="d-flex ms-auto my-2 my-lg-0">
+              <input value={valSearch} onChange={(e) => setValSearch(e.target.value)} className="form-control me-2" style={{ width: '650px' }} type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-secondary" type="submit"><FaSearch /></button>
             </form>
             <ul className="navbar-nav ms-auto" style={{ textAlign: 'center' }}>
