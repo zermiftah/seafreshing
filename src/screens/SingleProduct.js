@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./../components/Header";
+import HeaderHS from "../components/HeaderHS";
 import Rating from "../components/homeComponents/Rating";
 import { Link } from "react-router-dom";
 import Message from "./../components/LoadingError/Error";
@@ -75,7 +75,7 @@ const SingleProduct = ({ match }) => {
 
   return (
     <>
-      <Header />
+      <HeaderHS />
       {
         product[0] ?
           <div className="container single-product">
