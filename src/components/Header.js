@@ -12,7 +12,7 @@ const Header = () => {
 
   const getValSearch = () => {
     history.push(`/search/${valSearch}`)
-  }
+}
 
   return (
     <Fragment>

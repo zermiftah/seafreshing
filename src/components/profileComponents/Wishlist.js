@@ -1,11 +1,49 @@
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import Rating from '../homeComponents/Rating'
-import "../../assets/css/whislist.css"
+import "../../assets/css/wishlist.css"
 
 const Wishlist = (props) => {
     return (
         <>
+            {/* <div classNameName="container">
+                <div classNameName="section">
+                    <div classNameName="row">
+                        <div classNameName="col-lg-12 col-md-12 article">
+                            <div classNameName="shopcontainer row">
+                                {props.getWishlist.map((product) => (
+                                    < div
+                                        classNameName="shop col-lg-4 col-md-6 col-sm-6"
+                                        key={product.id}
+                                    >
+                                        <div classNameName="border-product">
+                                            <Link to={`/products/${product.id}`}>
+                                                <div classNameName="shopBack">
+                                                    <img src={product.image} alt={product.productName} />
+                                                </div>
+                                            </Link>
+
+                                            <div classNameName="shoptext">
+                                                <p>
+                                                    <Link to={`/products/${product.id}`}>
+                                                        {product.name}
+                                                    </Link>
+                                                </p>
+
+                                                <Rating
+                                                    value={product.rating}
+                                                    text={`${product.numReviews} reviews`}
+                                                />
+                                                <h3>{product.price}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> */}
             <Fragment>
                 <div className="container mb-4">
                     <div className="row">

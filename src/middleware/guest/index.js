@@ -5,7 +5,7 @@ const Guest = (props) => {
     const history = useHistory();
 
     if (getToken) {
-        history.push('/');
+        history.push('/HomeScreen');
     }
 
     return props.children

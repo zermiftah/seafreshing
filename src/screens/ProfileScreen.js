@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import HeaderHS from "../components/HeaderHS";
 import ProfileTabs from "../components/profileComponents/ProfileTabs";
+import Wishlist from "../components/profileComponents/Wishlist";
 import Orders from "./../components/profileComponents/Orders";
 
 const ProfileScreen = () => {
@@ -9,9 +10,14 @@ const ProfileScreen = () => {
 
   const [user, setUser] = useState([]);
   const userData = JSON.parse(localStorage.getItem('user-data'));
+  const [getOrders, setOrders] = useState([]);
+  const [getWishlist, setWishlist] = useState([]);
+  const token = JSON.parse(localStorage.getItem('token'));
 
   useEffect(() => {
     getUser();
+    getOrdersData();
+    getWishlistData();
   }, [])
 
   const getUser = async () => {
@@ -24,6 +30,31 @@ const ProfileScreen = () => {
       setUser(response.data.user)
     } catch (e) {
       console.log(e)
+    }
+  }
+
+  const getOrdersData = async () => {
+    try {
+      let response = await axios.get('http://103.102.152.201:3001/api/user/get-transaction-test');
+      setOrders(response.data)
+    } catch (e) {
+      console.log(e)
+      console.log(e.response.data)
+    }
+  }
+
+  const getWishlistData = async () => {
+    try {
+      let response = await axios.get(`http://103.102.152.201:3001/api/user/get-wishlist/${userData.accounttype}/${userData.id}`, {
+        headers: {
+          'auth-token': token,
+        }
+      });
+      setWishlist(response.data.wishlist[0].wishlist)
+      console.log(response.data.wishlist)
+    } catch (e) {
+      console.log(e)
+      console.log(e.response.data)
     }
   }
 
@@ -80,7 +111,30 @@ const ProfileScreen = () => {
                     aria-selected="false"
                   >
                     Orders List
-                    <span className="badge2">3</span>
+                    {
+                      getOrders.length === 0 ?
+                        null
+                        :
+                        <span className="badge2">{getOrders.length}</span>
+                    }
+                  </button>
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-wishlist-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-wishlist"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-wishlist"
+                    aria-selected="false"
+                  >
+                    Wishlist
+                    {
+                      getWishlist.length === 0 ?
+                        null
+                        :
+                        <span className="badge2">{getWishlist.length}</span>
+                    }
                   </button>
                 </div>
               </div>
@@ -106,7 +160,15 @@ const ProfileScreen = () => {
               role="tabpanel"
               aria-labelledby="v-pills-profile-tab"
             >
-              <Orders />
+              <Orders orderList={getOrders} />
+            </div>
+            <div
+              className="tab-pane fade"
+              id="v-pills-wishlist"
+              role="tabpanel"
+              aria-labelledby="v-pills-wishlist-tab"
+            >
+              <Wishlist getWishlist={getWishlist} />
             </div>
           </div>
         </div>

@@ -8,6 +8,10 @@ const CartScreen = () => {
   const [items, setItems] = useState([]);
   const token = JSON.parse(localStorage.getItem('token'));
   const userData = JSON.parse(localStorage.getItem('user-data'));
+console.log(userData)
+  useEffect(() => {
+    getFreezer();
+  }, [])
 
   const getFreezer = async () => {
     try {
@@ -17,15 +21,36 @@ const CartScreen = () => {
         }
       });
       setItems(response.data.freezer);
-      console.log(response.data.freezer)
     } catch (e) {
-      console.log(e.response.data.msg)
+      console.log(e)
     }
   }
 
-  useEffect(() => {
-    getFreezer();
-  }, [])
+  const totalPrice = () => {
+    const totPrice = items.reduce((total, item) => {
+      return total += (item.product[0].price * item.product[0].productQuantity);
+    }, 0);
+    return totPrice;
+  }
+
+  const removeItem = async (freezerId, productId) => {
+    try {
+      let response = await axios.delete('http://103.102.152.201:3001/api/user/delete-freezer', {
+        headers: {
+          'auth-token': token,
+        }
+      }, {
+        'id': userData.id,
+        "freezer.id": freezerId,
+        'productId': productId,
+
+      });
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+      console.log(e.response.data)
+    }
+  }
 
   return (
     <>
@@ -33,8 +58,8 @@ const CartScreen = () => {
       {/* Cart */}
       <div className="container">
         {
-          items[0] ?
-            items[0].product.length === 0 ?
+          items ?
+            items.length === 0 ?
               <div className=" alert alert-info text-center mt-3">
                 Your cart is empty
                 <Link
@@ -52,22 +77,22 @@ const CartScreen = () => {
                 <div className=" alert alert-info text-center mt-3">
                   Total Cart Products
                   <Link className="text-success mx-2" to="/cart">
-                    {items[0].product.length}
+                    {items.length}
                   </Link>
                 </div>
                 {/* cartiterm */}
                 {
-                  items[0].product.map((item, id) => (
-                    <div className="cart-iterm row" key={id}>
-                      <div className="remove-button d-flex justify-content-center align-items-center">
+                  items.map((item) => (
+                    <div className="cart-iterm row" key={item.id}>
+                      <div onClick={() => removeItem(item.id, item.product[0].id)} className="remove-button d-flex justify-content-center align-items-center">
                         <i className="fas fa-times"></i>
                       </div>
                       <div className="cart-image col-md-3">
-                        <img src={item.image} alt={item.name} />
+                        <img src={item.product[0].image} alt={item.product[0].name} />
                       </div>
                       <div className="cart-text col-md-5 d-flex align-items-center">
                         <Link to="#">
-                          <h4>{item.name}</h4>
+                          <h4>{item.product[0].name}</h4>
                         </Link>
                       </div>
                       <div className="cart-qty col-md-2 col-sm-5 mt-md-5 mt-3 mt-md-0 d-flex flex-column justify-content-center">
@@ -80,7 +105,7 @@ const CartScreen = () => {
                       </div>
                       <div className="cart-price mt-3 mt-md-0 col-md-2 align-items-sm-end align-items-start  d-flex flex-column justify-content-center col-sm-7">
                         <h6>SUBTOTAL</h6>
-                        <h4>{item.price}</h4>
+                        <h4>{item.product[0].price}</h4>
                       </div>
                     </div>
                   ))
@@ -89,7 +114,7 @@ const CartScreen = () => {
                 {/* End of cart iterms */}
                 <div className="total">
                   <span className="sub">total:</span>
-                  <span className="total-price">$567</span>
+                  <span className="total-price">{`Rp${totalPrice()}`}</span>
                 </div>
                 <hr />
                 <div className="cart-buttons d-flex align-items-center row">
@@ -106,7 +131,7 @@ const CartScreen = () => {
                 </div>
               </>
             :
-            "Error get cart data"
+            "Loading..."
         }
       </div>
     </>

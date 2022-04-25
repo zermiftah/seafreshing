@@ -1,5 +1,7 @@
 import React from "react";
 import HeaderHS from "../components/HeaderHS";
+import "../assets/css/freezer.css";
+import Footers from "../components/Footers";
 
 
 const OrderScreen = () => {
@@ -8,72 +10,179 @@ const OrderScreen = () => {
   return (
     <>
       <HeaderHS />
-      <div className="h-screen bg-gray-300">
-        <div className="py-12">
-          <div className="max-w-md mx-auto bg-gray-100 shadow-lg rounded-lg md:max-w-5xl">
-            <div className="md:flex ">
-              <div className="w-full p-4 px-5 py-5">
-                <div className="md:grid md:grid-cols-3 gap-2 ">
-                  <div className="col-span-2 p-5">
-                    <h1 className="text-xl font-medium ">Shopping Cart</h1>
-                    <div className="flex justify-between items-center mt-6 pt-6">
-                      <div className="flex items-center"> <img src="https://i.imgur.com/EEguU02.jpg" width="60" className="rounded-full " />
-                        <div className="flex flex-col ml-3"> <span className="md:text-md font-medium">Chicken momo</span> <span className="text-xs font-light text-gray-400">#41551</span> </div>
-                      </div>
-                      <div className="flex justify-center items-center">
-                        <div className="pr-8 flex "> <span className="font-semibold">-</span> <input type="text" className="focus:outline-none bg-gray-100 border h-6 w-8 rounded text-sm px-2 mx-2" value="1" /> <span className="font-semibold">+</span> </div>
-                        <div className="pr-8 "> <span className="text-xs font-medium">$10.50</span> </div>
-                        <div> <i className="fa fa-close text-xs font-medium"></i> </div>
+      <section class="h-100 h-custom" style={{ backgroundColor: "#adb5bd" }}>
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+              <div class="card card-registration card-registration-2">
+                <div class="card-body p-0">
+                  <div class="row g-0">
+                    <div class="col-lg-8">
+                      <div class="p-5">
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                          <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                          <h6 class="mb-0 text-muted">3 items</h6>
+                        </div>
+                        <hr class="my-4" />
+
+                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                          <div class="col-md-2 col-lg-2 col-xl-2">
+                            <img
+                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img5.webp"
+                              class="img-fluid rounded-3" alt="Cotton T-shirt" />
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-3">
+                            <h6 class="text-muted">Shirt</h6>
+                            <h6 class="text-black mb-0">Cotton T-shirt</h6>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                            <button class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                              <i class="fas fa-minus"></i>
+                            </button>
+
+                            <input id="form1" min="0" name="quantity" value="1" type="number"
+                              class="form-control form-control-sm" />
+
+                            <button class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                            <h6 class="mb-0">€ 44.00</h6>
+                          </div>
+                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                            <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                          </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                          <div class="col-md-2 col-lg-2 col-xl-2">
+                            <img
+                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img6.webp"
+                              class="img-fluid rounded-3" alt="Cotton T-shirt" />
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-3">
+                            <h6 class="text-muted">Shirt</h6>
+                            <h6 class="text-black mb-0">Cotton T-shirt</h6>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                            <button class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                              <i class="fas fa-minus"></i>
+                            </button>
+
+                            <input id="form1" min="0" name="quantity" value="1" type="number"
+                              class="form-control form-control-sm" />
+
+                            <button class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                            <h6 class="mb-0">€ 44.00</h6>
+                          </div>
+                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                            <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                          </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                          <div class="col-md-2 col-lg-2 col-xl-2">
+                            <img
+                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img7.webp"
+                              class="img-fluid rounded-3" alt="Cotton T-shirt" />
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-3">
+                            <h6 class="text-muted">Shirt</h6>
+                            <h6 class="text-black mb-0">Cotton T-shirt</h6>
+                          </div>
+                          <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                            <button class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                              <i class="fas fa-minus"></i>
+                            </button>
+
+                            <input id="form1" min="0" name="quantity" value="1" type="number"
+                              class="form-control form-control-sm" />
+
+                            <button class="btn btn-link px-2"
+                              onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                            <h6 class="mb-0">€ 44.00</h6>
+                          </div>
+                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                            <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                          </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="pt-5">
+                          <h6 class="mb-0"><a href="#!" class="text-body"><i
+                            class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center pt-6 mt-6 border-t">
-                      <div className="flex items-center"> <img src="https://i.imgur.com/Uv2Yqzo.jpg" width="60" className="rounded-full " />
-                        <div className="flex flex-col ml-3 "> <span className="text-md font-medium w-auto">Spicy Mexican potatoes</span> <span className="text-xs font-light text-gray-400">#66999</span> </div>
-                      </div>
-                      <div className="flex justify-center items-center">
-                        <div className="pr-8 flex"> <span className="font-semibold">-</span> <input type="text" className="focus:outline-none bg-gray-100 border h-6 w-8 rounded text-sm px-2 mx-2" value="1" /> <span className="font-semibold">+</span> </div>
-                        <div className="pr-8"> <span className="text-xs font-medium">$10.50</span> </div>
-                        <div> <i className="fa fa-close text-xs font-medium"></i> </div>
+                    <div class="col-lg-4 bg-grey">
+                      <div class="p-5">
+                        <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-between mb-4">
+                          <h5 class="text-uppercase">items 3</h5>
+                          <h5>€ 132.00</h5>
+                        </div>
+
+                        <h5 class="text-uppercase mb-3">Shipping</h5>
+
+                        <div class="mb-4 pb-2">
+                          <select class="select">
+                            <option value="1">Standard-Delivery- €5.00</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                            <option value="4">Four</option>
+                          </select>
+                        </div>
+
+                        <h5 class="text-uppercase mb-3">Give code</h5>
+
+                        <div class="mb-5">
+                          <div class="form-outline">
+                            <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                            <label class="form-label" for="form3Examplea2">Enter your code</label>
+                          </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex justify-content-between mb-5">
+                          <h5 class="text-uppercase">Total price</h5>
+                          <h5>€ 137.00</h5>
+                        </div>
+
+                        <button type="button" class="btn btn-dark btn-block btn-lg"
+                          data-mdb-ripple-color="dark">Checkout</button>
+
                       </div>
                     </div>
-                    <div className="flex justify-between items-center mt-6 pt-6 border-t">
-                      <div className="flex items-center"> <img src="https://i.imgur.com/xbTAITF.jpg" width="60" className="rounded-full " />
-                        <div className="flex flex-col ml-3 "> <span className="text-md font-medium">Breakfast</span> <span className="text-xs font-light text-gray-400">#86577</span> </div>
-                      </div>
-                      <div className="flex justify-center items-center">
-                        <div className="pr-8 flex"> <span className="font-semibold">-</span> <input type="text" className="focus:outline-none bg-gray-100 border h-6 w-8 rounded text-sm px-2 mx-2" value="1" /> <span className="font-semibold">+</span> </div>
-                        <div className="pr-8"> <span className="text-xs font-medium">$10.50</span> </div>
-                        <div> <i className="fa fa-close text-xs font-medium"></i> </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center mt-6 pt-6 border-t">
-                      <div className="flex items-center"> <i className="fa fa-arrow-left text-sm pr-2"></i> <span className="text-md font-medium text-blue-500">Continue Shopping</span> </div>
-                      <div className="flex justify-center items-end"> <span className="text-sm font-medium text-gray-400 mr-1">Subtotal:</span> <span className="text-lg font-bold text-gray-800 "> $24.90</span> </div>
-                    </div>
-                  </div>
-                  <div className=" p-5 bg-gray-800 rounded overflow-visible"> <span className="text-xl font-medium text-gray-100 block pb-3">Card Details</span> <span className="text-xs text-gray-400 ">Card Type</span>
-                    <div className="overflow-visible flex justify-between items-center mt-2">
-                      <div className="rounded w-52 h-28 bg-gray-500 py-2 px-4 relative right-10"> <span className="italic text-lg font-medium text-gray-200 underline">VISA</span>
-                        <div className="flex justify-between items-center pt-4 "> <span className="text-xs text-gray-200 font-medium">****</span> <span className="text-xs text-gray-200 font-medium">****</span> <span className="text-xs text-gray-200 font-medium">****</span> <span className="text-xs text-gray-200 font-medium">****</span> </div>
-                        <div className="flex justify-between items-center mt-3"> <span className="text-xs text-gray-200">Giga Tamarashvili</span> <span className="text-xs text-gray-200">12/18</span> </div>
-                      </div>
-                      <div className="flex justify-center items-center flex-col"> <img src="https://img.icons8.com/color/96/000000/mastercard-logo.png" width="40" className="relative right-5" /> <span className="text-xs font-medium text-gray-200 bottom-2 relative right-5">mastercard.</span> </div>
-                    </div>
-                    <div className="flex justify-center flex-col pt-3"> <label className="text-xs text-gray-400 ">Name on Card</label> <input type="text" className="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="Giga Tamarashvili" /> </div>
-                    <div className="flex justify-center flex-col pt-3"> <label className="text-xs text-gray-400 ">Card Number</label> <input type="text" className="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="**** **** **** ****" /> </div>
-                    <div className="grid grid-cols-3 gap-2 pt-2 mb-3">
-                      <div className="col-span-2 "> <label className="text-xs text-gray-400">Expiration Date</label>
-                        <div className="grid grid-cols-2 gap-2"> <input type="text" className="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="mm" /> <input type="text" className="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="yyyy" /> </div>
-                      </div>
-                      <div className=""> <label className="text-xs text-gray-400">CVV</label> <input type="text" className="focus:outline-none w-full h-6 bg-gray-800 text-white placeholder-gray-300 text-sm border-b border-gray-600 py-4" placeholder="XXX" /> </div>
-                    </div> <button className="h-12 w-full bg-blue-500 rounded focus:outline-none text-white hover:bg-blue-600">Check Out</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <Footers />
     </>
   );
 };

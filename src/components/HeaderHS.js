@@ -6,10 +6,10 @@ import axios from "axios";
 import logoIcon2 from "../assets/img/Seafreshing.png";
 
 const HeaderHS = () => {
-    const cartCounter = JSON.parse(localStorage.getItem('cart-counter'));
     const [user, setUser] = useState([]);
     const history = useHistory();
     const userData = JSON.parse(localStorage.getItem('user-data'));
+    const [valSearch, setValSearch] = useState('');
 
     useEffect(() => {
         getUser();
@@ -17,19 +17,22 @@ const HeaderHS = () => {
 
     const getUser = async () => {
         try {
-            const response = axios.get(`http://103.102.152.201:3001/api/user/get-user/${userData.accounttype}/${userData.id}`, {
+            const response = await axios.get(`http://103.102.152.201:3001/api/user/get-user/${userData.accounttype}/${userData.id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token': JSON.parse(localStorage.getItem('token')),
                 }
             });
-            // console.log(response.data)
-            setUser(response.data)
+            setUser(response.data.user)
         } catch (e) {
-            // console.log(e.response.data.msg)
+            return e
         }
     }
 
+    const getValSearch = () => {
+        history.push(`/search/${valSearch}`)
+    }
+    
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user-data');
@@ -54,8 +57,8 @@ const HeaderHS = () => {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav" >
-                        <form className="d-flex ms-auto my-2 my-lg-0">
-                            <input className="form-control me-2" style={{ width: '650px' }} type="search" placeholder="Search" aria-label="Search" />
+                        <form onSubmit={getValSearch} className="d-flex ms-auto my-2 my-lg-0">
+                            <input value={valSearch} onChange={(e) => setValSearch(e.target.value)} className="form-control me-2" style={{ width: '650px' }} type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn btn-secondary" type="submit"><FaSearch /></button>
                         </form>
                         <ul className="navbar-nav ms-auto" style={{ textAlign: 'center' }}>
@@ -72,7 +75,7 @@ const HeaderHS = () => {
                             </li>
                             <div class="flex-shrink-0 dropdown">
                                 <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle" />
+                                    <img src={user.profile} alt="mdo" width="32" height="32" class="rounded-circle" />
                                 </a>
                                 <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                                     <Link to="/profile" className="dropdown-item">

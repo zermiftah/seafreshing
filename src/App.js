@@ -17,13 +17,22 @@ import NotFound from "./screens/NotFound";
 import Dashboard from "./screens/Dashboard";
 import Auth from './middleware/auth';
 import Guest from './middleware/guest';
+import Search from "./screens/Search";
 
 const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/" component={Dashboard} exact />
-        <Route path="/HomeScreen" component={HomeScreen} exact />
+        <Route path="/" exact>
+          <Guest>
+            <Dashboard />
+          </Guest>
+        </Route>
+        <Route path="/HomeScreen" exact>
+          <Auth>
+            <HomeScreen />
+          </Auth>
+        </Route>
         <Route path="/products/:id" component={SingleProduct} />
         <Route path="/login">
           <Guest>
@@ -57,6 +66,7 @@ const App = () => {
         </Route>
         <Route path="/placeorder" component={PlaceOrderScreen} />
         <Route path="/order" component={OrderScreen} />
+        <Route path="/search/:id" component={Search} />
         <Route path="*" component={NotFound} />
       </Switch>
     </Router>
