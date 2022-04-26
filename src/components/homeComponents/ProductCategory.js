@@ -19,7 +19,6 @@ const ProductCategory = () => {
                                     <img className="pic-1" src={fish} />
                                 </a>
                                 <ul className="product-links">
-                                    <li><a href="#" data-tip="Add to Wishlist"><i className="fas fa-heart"></i></a></li>
                                     <li><a href="#" data-tip="Compare"><i className="fa fa-random"></i></a></li>
                                     <li><a href="#" data-tip="Quick View"><i className="fa fa-search"></i></a></li>
                                 </ul>
@@ -37,7 +36,6 @@ const ProductCategory = () => {
                                     <img className="pic-1" src={shrimp} />
                                 </a>
                                 <ul className="product-links">
-                                    <li><a href="#" data-tip="Add to Wishlist"><i className="fas fa-heart"></i></a></li>
                                     <li><a href="#" data-tip="Compare"><i className="fa fa-random"></i></a></li>
                                     <li><a href="#" data-tip="Quick View"><i className="fa fa-search"></i></a></li>
                                 </ul>
@@ -55,7 +53,6 @@ const ProductCategory = () => {
                                     <img className="pic-1" src={mussels} />
                                 </a>
                                 <ul className="product-links">
-                                    <li><a href="#" data-tip="Add to Wishlist"><i className="fas fa-heart"></i></a></li>
                                     <li><a href="#" data-tip="Compare"><i className="fa fa-random"></i></a></li>
                                     <li><a href="#" data-tip="Quick View"><i className="fa fa-search"></i></a></li>
                                 </ul>
@@ -73,7 +70,6 @@ const ProductCategory = () => {
                                     <img className="pic-1" src={items} />
                                 </a>
                                 <ul className="product-links">
-                                    <li><a href="#" data-tip="Add to Wishlist"><i className="fas fa-heart"></i></a></li>
                                     <li><a href="#" data-tip="Compare"><i className="fa fa-random"></i></a></li>
                                     <li><a href="#" data-tip="Quick View"><i className="fa fa-search"></i></a></li>
                                 </ul>
