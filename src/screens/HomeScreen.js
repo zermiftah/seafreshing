@@ -1,8 +1,7 @@
 import { React, Fragment } from "react";
 import HeaderHS from "../components/HeaderHS";
 import ShopSection from "./../components/homeComponents/ShopSection";
-import ContactInfo from "./../components/homeComponents/ContactInfo";
-import CalltoActionSection from "./../components/homeComponents/CalltoActionSection";
+import ProductCategory from "../components/homeComponents/ProductCategory";
 import Footer from "./../components/Footers";
 import CarouselContainer from "../components/Carousel/CarouselContainer";
 
@@ -13,9 +12,8 @@ const HomeScreen = () => {
       <div>
         <HeaderHS />
         <CarouselContainer />
+        <ProductCategory />
         <ShopSection />
-        {/* <CalltoActionSection />
-        <ContactInfo /> */}
         <Footer />
       </div>
     </Fragment>
