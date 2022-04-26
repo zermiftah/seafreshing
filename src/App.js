@@ -18,6 +18,8 @@ import Dashboard from "./screens/Dashboard";
 import Auth from './middleware/auth';
 import Guest from './middleware/guest';
 import Search from "./screens/Search";
+import ProductList from "./screens/ProductList";
+import HeaderHS from "./components/HeaderHS";
 
 const App = () => {
   return (
@@ -62,6 +64,12 @@ const App = () => {
         <Route path="/payment">
           <Auth>
             <PaymentScreen />
+          </Auth>
+        </Route>
+        <Route path="/productList" component={ProductList} >
+          <Auth>
+            <HeaderHS />
+            <ProductList />
           </Auth>
         </Route>
         <Route path="/placeorder" component={PlaceOrderScreen} />

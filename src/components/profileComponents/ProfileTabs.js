@@ -84,7 +84,7 @@ const ProfileTabs = (props) => {
             <input className="form-control" type="password" value={confirmPass} onChange={(e) => setConfirmPass(e.target.value)} />
           </div>
         </div>
-        <button type="submit">Update Profile</button>
+        <button className="btn1" type="submit">Update Profile</button>
       </form>
     </>
   );

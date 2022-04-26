@@ -7,7 +7,7 @@ import "../../assets/css/Carousel.css"
 const CarouselContainer = () => {
 
     return (
-        <div className="container">
+        <div className="container p-3">
             <div id="mycarousel" className="carousel slide" data-ride="carousel" data-interval="2000">
                 <ol className="carousel-indicators">
                     <li data-target="#mycarousel" data-slide-to="0" className="active"></li>
