@@ -1,5 +1,6 @@
 
 import React, { Fragment, useEffect, useState } from 'react'
+import { Link } from "react-router-dom";
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import axios from "axios";
@@ -141,26 +142,32 @@ const Category = () => {
                         <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                             {products.map((product) => (
                                 <div key={product.id}>
-                                    <div className="relative">
-                                        <div className="relative w-full h-72 rounded-lg overflow-hidden">
-                                            <img
-                                                src={product.image[0].imgUrl}
-                                                alt={product.productName}
-                                                className="w-full h-full object-center object-cover"
-                                            />
+                                    <a href='/DetailProduct'>
+                                        <div className="relative">
+
+                                            <div className="relative w-full h-72 rounded-lg overflow-hidden">
+
+                                                <img
+                                                    src={product.image[0].imgUrl}
+                                                    alt={product.productName}
+                                                    className="w-full h-full object-center object-cover"
+                                                />
+
+                                            </div>
+
+                                            <div className="relative mt-4">
+                                                <h3 className="text-sm font-medium text-gray-900">{product.productName}</h3>
+                                                <p className="mt-1 text-sm text-gray-500">{product.category}</p>
+                                            </div>
+                                            <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
+                                                <div
+                                                    aria-hidden="true"
+                                                    className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
+                                                />
+                                                <p className="relative text-lg font-semibold text-white">{product.price.value}</p>
+                                            </div>
                                         </div>
-                                        <div className="relative mt-4">
-                                            <h3 className="text-sm font-medium text-gray-900">{product.productName}</h3>
-                                            <p className="mt-1 text-sm text-gray-500">{product.category}</p>
-                                        </div>
-                                        <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
-                                            <div
-                                                aria-hidden="true"
-                                                className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                                            />
-                                            <p className="relative text-lg font-semibold text-white">{product.price.value}</p>
-                                        </div>
-                                    </div>
+                                    </a>
                                     <div className="mt-6">
                                         <button class="flex items-center justify-center w-full px-2 py-2 mt-4 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mx-1" viewBox="0 0 20 20" fill="currentColor">
@@ -175,7 +182,7 @@ const Category = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

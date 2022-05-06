@@ -140,7 +140,7 @@ const HeaderHS = () => {
                             </a>
 
                             <a
-                                href="/cart"
+                                href="/Freezer"
                                 className="bg-gray-100 p-1 rounded-full text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
                             >
                                 <span className="sr-only">View Freezer</span>
@@ -175,6 +175,16 @@ const HeaderHS = () => {
                                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                 >
                                                     Your Profile
+                                                </a>
+                                            )}
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <a
+                                                    href="/profile"
+                                                    className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                                                >
+                                                    Your Kios
                                                 </a>
                                             )}
                                         </Menu.Item>

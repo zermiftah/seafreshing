@@ -20,6 +20,12 @@ import Guest from './middleware/guest';
 import Search from "./screens/Search";
 import KioskScreen from "./screens/KioskScreen";
 import ProductList from "./screens/ProductList";
+import DetailProduct from "./screens/DetailProduct";
+import Freezer from "./screens/Freezer";
+import HeaderHS from "./components/HeaderHS";
+import Footer from "./components/Footers";
+import TrendingProduct from "./components/TrendingProduct/TrendingProduct";
+import Profile from "./screens/Profile";
 
 const App = () => {
   return (
@@ -48,7 +54,7 @@ const App = () => {
         </Route>
         <Route path="/profile">
           <Auth>
-            <ProfileScreen />
+            <Profile />
           </Auth>
         </Route>
         <Route path="/cart/:id?">
@@ -66,11 +72,31 @@ const App = () => {
             <PaymentScreen />
           </Auth>
         </Route>
+        <Route path="/DetailProduct">
+          <Auth>
+            <HeaderHS />
+            <DetailProduct />
+            <TrendingProduct />
+            <Footer />
+          </Auth>
+        </Route>
+        <Route path="/Freezer">
+          <Auth>
+            <HeaderHS />
+            <Freezer />
+            <TrendingProduct />
+            <Footer />
+          </Auth>
+        </Route>
+        <Route path="/NotFound">
+          <Auth>
+            <NotFound />
+          </Auth>
+        </Route>
         <Route path="/placeorder" component={PlaceOrderScreen} />
         <Route path="/order" component={OrderScreen} />
         <Route path="/search/:id" component={Search} />
         <Route path="/kiosk" component={KioskScreen} />
-        <Route path="*" component={NotFound} />
         <Route path="/ProductList" component={ProductList} />
       </Switch>
     </Router>
