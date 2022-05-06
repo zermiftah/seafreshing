@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Header from "./../components/Header";
-import Rating from "../components/homeComponents/Rating";
 import { Link } from "react-router-dom";
 import Message from "./../components/LoadingError/Error";
 import axios from "axios";
@@ -9,9 +8,12 @@ import HeaderHS from "../components/HeaderHS";
 
 const SingleProduct = ({ match }) => {
   const [product, setProduct] = useState([])
-  const [quantity, setQuantity] = useState('');
+  const [quantity, setQuantity] = useState(0);
   const userData = JSON.parse(localStorage.getItem('user-data'));
   const token = JSON.parse(localStorage.getItem('token'));
+  const qs = require('qs');
+
+  console.log(product)
 
   useEffect(() => {
     fetchproduct();
@@ -29,14 +31,14 @@ const SingleProduct = ({ match }) => {
 
   const handleAddToCart = async () => {
     try {
-      let response = await axios.patch('http://103.102.152.201:3001/api/user/add-freezer', {
+      let response = await axios.patch('http://103.102.152.201:3001/api/user/add-freezer', JSON.stringify({
         'clearPrice': product[0].price.value.replace(/\D/g, ''),
         'productId': match.params.id,
         'image': product[0].image[0].imgUrl,
         'name': product[0].productName,
         'price': product[0].price.value,
-        'productQuantity': quantity,
         'priceUnit': "Kg",
+        'productQuantity': 12,
         'kioskName': product[0].kioskName,
         'kioskId': product[0].kioskId,
         'idUser': userData.id,
@@ -44,7 +46,7 @@ const SingleProduct = ({ match }) => {
         'minimumOrder': product[0].minimumOrder.total,
         'isWholesalePrice': product[0].isWholesalePrice,
         'isChecked': true,
-      }, {
+      }), {
         headers: {
           'Content-Type': 'application/json',
           'auth-token': token,
@@ -52,8 +54,8 @@ const SingleProduct = ({ match }) => {
       });
       // console.log(response.data)
     } catch (e) {
-      // console.log(e)
-      // console.log(e.response.data)
+      console.log(e)
+      console.log(e.response.data)
     }
   }
 
@@ -128,17 +130,14 @@ const SingleProduct = ({ match }) => {
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Reviews</h6>
-                      <Rating
-                        value={product[0].rating}
-                        text={`${product[0].numReviews} reviews`}
-                      />
                     </div>
                     {
                       product[0].availableStock.total > 0 ? (
                         <>
                           <div className="flex-box d-flex justify-content-between align-items-center">
                             <h6>Quantity</h6>
-                            <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
+                            <select value={quantity} onChange={(e) => setQuantity(e.target.value)} required>
+                              <option selected>Select Quantity</option>
                               {
                                 [...Array(product[0].availableStock.total).keys()].map((x) => (
                                   <option key={x + 1} value={x + 1}>
@@ -171,8 +170,8 @@ const SingleProduct = ({ match }) => {
                 <h6 className="mb-3">REVIEWS</h6>
                 <Message variant={"alert-info mt-3"}>No Reviews</Message>
                 <div className="mb-5 mb-md-3 bg-light p-3 shadow-sm rounded">
-                  <strong>{product.kioskName}</strong>
-                  <Rating />
+                  <strong>{product[0].kioskName}</strong>
+
                   <span>Jan 12 2021</span>
                   <div className="alert alert-info mt-3">
                     Lorem Ipsum is simply dummy text of the printing and typesetting

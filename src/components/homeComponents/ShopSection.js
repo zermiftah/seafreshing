@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
-import Pagination from "./pagination";
 import axios from "axios";
 
 const ShopSection = () => {
@@ -54,8 +53,6 @@ const ShopSection = () => {
                     </div>
                   </div>
                 ))}
-                {/* Pagination */}
-                <Pagination page={Page(products)} />
               </div>
             </div>
           </div>

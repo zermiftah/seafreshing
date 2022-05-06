@@ -4,6 +4,8 @@ import HeaderHS from "../components/HeaderHS";
 import ProfileTabs from "../components/profileComponents/ProfileTabs";
 import Wishlist from "../components/profileComponents/Wishlist";
 import Orders from "./../components/profileComponents/Orders";
+import { FaStore } from "react-icons/fa";
+import Kiosk from "../components/profileComponents/Kiosk";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
@@ -54,14 +56,14 @@ const ProfileScreen = () => {
       console.log(response.data.wishlist)
     } catch (e) {
       console.log(e)
-      console.log(e.response.data)
+      console.log(e.response)
     }
   }
 
   return (
     <>
       <HeaderHS />
-      <div className="container mt-lg-5 mt-3">
+      <div className="container mt-lg-5 mt-3 mb-3">
         <div className="row align-items-start">
           <div className="col-lg-4 p-0 shadow ">
             <div className="author-card pb-0 pb-md-3">
@@ -80,6 +82,16 @@ const ProfileScreen = () => {
                 </div>
               </div>
             </div>
+            <div className="px-4 py-2 bg-info">
+              <div className="d-flex justify-content-start align-items-center gap-2 mb-3">
+                <span><FaStore /></span>
+                <span><strong>Kiosk</strong></span>
+              </div>
+              <div className="text-center">
+                <h5>Earn extra income</h5>
+                <p>Create a kiosk and start selling on Seafreshing to earn income.</p>
+              </div>
+            </div>
             <div className="wizard pt-3 ">
               <div className="d-flex align-items-start">
                 <div
@@ -89,6 +101,18 @@ const ProfileScreen = () => {
                   aria-orientation="vertical"
                 >
                   <button
+                    className="nav-link"
+                    id="v-pills-kiosk-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-kiosk"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-kiosk"
+                    aria-selected="false"
+                  >
+                    Open Kiosk
+                  </button>
+                  <button
                     className="nav-link active"
                     id="v-pills-home-tab"
                     data-bs-toggle="pill"
@@ -96,7 +120,7 @@ const ProfileScreen = () => {
                     type="button"
                     role="tab"
                     aria-controls="v-pills-home"
-                    aria-selected="true"
+                    aria-selected="false"
                   >
                     Profile Settings
                   </button>
@@ -146,6 +170,14 @@ const ProfileScreen = () => {
             className="tab-content col-lg-8 pb-5 pt-lg-0 pt-3"
             id="v-pills-tabContent"
           >
+            <div
+              className="tab-pane fade"
+              id="v-pills-kiosk"
+              role="tabpanel"
+              aria-labelledby="v-pills-kiosk-tab"
+            >
+              <Kiosk />
+            </div>
             <div
               className="tab-pane fade show active"
               id="v-pills-home"

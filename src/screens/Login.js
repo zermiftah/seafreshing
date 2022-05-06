@@ -13,13 +13,12 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const qs = require('qs');
+    let data = new FormData();
+    data.append('id', email);
+    data.append('password', password);
 
     try {
-      let response = await axios.post('http://103.102.152.201:3001/api/user/login', qs.stringify({ 'id': email, 'password': password, }), {
-        header: {
-          'Content-Type': 'application/json',
-        }
-      })
+      let response = await axios.post('http://103.102.152.201:3001/api/user/login', data)
       if (response.data) {
         localStorage.setItem('token', JSON.stringify(response.data.token))
         localStorage.setItem('user-data', JSON.stringify(response.data.user))

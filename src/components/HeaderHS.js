@@ -32,7 +32,7 @@ const HeaderHS = () => {
     const getValSearch = () => {
         history.push(`/search/${valSearch}`)
     }
-
+    
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user-data');
@@ -48,7 +48,7 @@ const HeaderHS = () => {
                     </ul>
                 </div>
             </nav>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light shadow p-2 mb-2 bg-body rounded">
+            <nav className="navbar navbar-expand-lg navbar-light bg-light shadow p-1 mb-2 bg-body rounded">
                 <div className="container">
                     <Link className="navbar-brand" to="/HomeScreen">
                         <img src={logoIcon2} alt="" />
