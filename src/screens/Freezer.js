@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const Freezer = () => {
@@ -213,7 +214,9 @@ const Freezer = () => {
                         </dl>
 
                         <div class="mt-6">
-                            <button type="submit" class="w-full bg-sky-500 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500">Checkout</button>
+                            <Link to="/checkout">
+                                <button type="submit" class="w-full bg-sky-500 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500">Checkout</button>
+                            </Link>
                         </div>
                     </section>
                 </form>

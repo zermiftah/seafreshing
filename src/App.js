@@ -27,6 +27,7 @@ import Footer from "./components/Footers";
 import TrendingProduct from "./components/TrendingProduct/TrendingProduct";
 import Profile from "./screens/Profile";
 import Wishlist from "./screens/Wishlist";
+import Checkout from "./screens/Checkout";
 
 const App = () => {
   return (
@@ -70,9 +71,11 @@ const App = () => {
             <CartScreen />
           </Auth>
         </Route>
-        <Route path="/shipping">
+        <Route path="/checkout">
           <Auth>
-            <ShippingScreen />
+            <HeaderHS />
+            <Checkout />
+            <Footer />
           </Auth>
         </Route>
         <Route path="/payment">
