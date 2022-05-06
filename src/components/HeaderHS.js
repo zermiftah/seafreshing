@@ -99,7 +99,7 @@ const HeaderHS = () => {
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <a class="text-2xl font-bold text-sky-400 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-sky-700 dark:hover:text-sky-400" href="#">SeaFreshing</a>
+                            <a class="text-2xl font-bold text-sky-400 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-sky-700 dark:hover:text-sky-400" href="/HomeScreen">SeaFreshing</a>
 
                             {/* <!-- Search input on desktop screen --> */}
                             <div class="hidden mx-10 md:block">
@@ -191,7 +191,7 @@ const HeaderHS = () => {
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <a
-                                                    href="#"
+                                                    href="/wishlist"
                                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                 >
                                                     Wishlist

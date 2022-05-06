@@ -26,6 +26,7 @@ import HeaderHS from "./components/HeaderHS";
 import Footer from "./components/Footers";
 import TrendingProduct from "./components/TrendingProduct/TrendingProduct";
 import Profile from "./screens/Profile";
+import Wishlist from "./screens/Wishlist";
 
 const App = () => {
   return (
@@ -55,6 +56,13 @@ const App = () => {
         <Route path="/profile">
           <Auth>
             <Profile />
+          </Auth>
+        </Route>
+        <Route path="/wishlist">
+          <Auth>
+            <HeaderHS />
+            <Wishlist />
+            <Footer />
           </Auth>
         </Route>
         <Route path="/cart/:id?">
