@@ -8,90 +8,62 @@ import { ChevronDownIcon, PlusSmIcon } from '@heroicons/react/solid'
 const breadcrumbs = [{ id: 1, name: 'Men', href: '#' }]
 const filters = [
     {
-        id: 'color',
-        name: 'Color',
+        id: 'Filters',
+        name: 'Filters',
         options: [
-            { value: 'white', label: 'White' },
-            { value: 'beige', label: 'Beige' },
-            { value: 'blue', label: 'Blue' },
-            { value: 'brown', label: 'Brown' },
-            { value: 'green', label: 'Green' },
-            { value: 'purple', label: 'Purple' },
+            { value: 'Most Expensive', label: 'Most Expensive' },
+            { value: 'Most inexpensive', label: 'Most inexpensive' },
+            { value: 'Best Seller', label: 'Best Seller' },
+            { value: 'Daily Fresh', label: 'Daily Fresh' },
+            { value: 'Frozen', label: 'Frozen' },
         ],
     },
-    {
-        id: 'category',
-        name: 'Category',
-        options: [
-            { value: 'new-arrivals', label: 'All New Arrivals' },
-            { value: 'tees', label: 'Tees' },
-            { value: 'crewnecks', label: 'Crewnecks' },
-            { value: 'sweatshirts', label: 'Sweatshirts' },
-            { value: 'pants-shorts', label: 'Pants & Shorts' },
-        ],
-    },
-    {
-        id: 'sizes',
-        name: 'Sizes',
-        options: [
-            { value: 'xs', label: 'XS' },
-            { value: 's', label: 'S' },
-            { value: 'm', label: 'M' },
-            { value: 'l', label: 'L' },
-            { value: 'xl', label: 'XL' },
-            { value: '2xl', label: '2XL' },
-        ],
-    },
+
 ]
 const products = [
     {
         id: 1,
-        name: 'Basic Tee 8-Pack',
+        name: 'Ikan Tenggiri',
         href: '#',
-        price: '$256',
-        description: 'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
-        options: '8 colors',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
-        imageAlt: 'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+        price: 'Rp.250.000',
+        description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores.',
+        options: '8 stocks',
+        imageSrc: 'https://dahliagroup.co.id/wp-content/uploads/2019/11/6.-Ikan-Tenggri-segar.jpg',
+        imageAlt: '',
     },
     {
         id: 2,
-        name: 'Basic Tee',
+        name: 'Ikan Kakap',
         href: '#',
-        price: '$32',
-        description: 'Look like a visionary CEO and wear the same black t-shirt every day.',
-        options: 'Black',
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
-        imageAlt: 'Front of plain black t-shirt.',
+        price: 'Rp.320.000',
+        description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores.',
+        options: '10 stocks',
+        imageSrc: 'https://img.freepik.com/free-photo/top-view-raw-fish-tomatoes-lemon-slices-table-free-space_179666-46495.jpg?t=st=1651846661~exp=1651847261~hmac=6c361f06cae74352125f2a96f2cebea4baa82e76a858ececec52b9047c9a6fcd&w=1060',
+        imageAlt: '',
+    },
+    {
+        id: 1,
+        name: 'Gurita Segar',
+        href: '#',
+        price: 'Rp.250.000',
+        description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores.',
+        options: '8 stocks',
+        imageSrc: 'https://img.freepik.com/free-photo/octopus-tentacles-hang-from-tray_296586-5365.jpg?w=1060',
+        imageAlt: '',
+    },
+    {
+        id: 1,
+        name: 'Udang',
+        href: '#',
+        price: 'Rp.250.000',
+        description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores.',
+        options: '8 stocks',
+        imageSrc: 'https://img.freepik.com/free-photo/close-up-raw-shrimps-wooden-background_127675-2694.jpg?t=st=1651846934~exp=1651847534~hmac=fae2f4974af0245578daffd8c54da4941a31965b5be7db986b0599d3322f03e7&w=1060',
+        imageAlt: '',
     },
     // More products...
 ]
-const footerNavigation = {
-    products: [
-        { name: 'Bags', href: '#' },
-        { name: 'Tees', href: '#' },
-        { name: 'Objects', href: '#' },
-        { name: 'Home Goods', href: '#' },
-        { name: 'Accessories', href: '#' },
-    ],
-    company: [
-        { name: 'Who we are', href: '#' },
-        { name: 'Sustainability', href: '#' },
-        { name: 'Press', href: '#' },
-        { name: 'Careers', href: '#' },
-        { name: 'Terms & Conditions', href: '#' },
-        { name: 'Privacy', href: '#' },
-    ],
-    customerService: [
-        { name: 'Contact', href: '#' },
-        { name: 'Shipping', href: '#' },
-        { name: 'Returns', href: '#' },
-        { name: 'Warranty', href: '#' },
-        { name: 'Secure Payments', href: '#' },
-        { name: 'FAQ', href: '#' },
-        { name: 'Find a store', href: '#' },
-    ],
-}
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -189,40 +161,12 @@ export default function Wishlist() {
                     </Dialog>
                 </Transition.Root>
 
-                <div className="border-b border-gray-200">
-                    <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <ol role="list" className="flex items-center space-x-4 py-4">
-                            {breadcrumbs.map((breadcrumb) => (
-                                <li key={breadcrumb.id}>
-                                    <div className="flex items-center">
-                                        <a href={breadcrumb.href} className="mr-4 text-sm font-medium text-gray-900">
-                                            {breadcrumb.name}
-                                        </a>
-                                        <svg
-                                            viewBox="0 0 6 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            aria-hidden="true"
-                                            className="h-5 w-auto text-gray-300"
-                                        >
-                                            <path d="M4.878 4.34H3.551L.27 16.532h1.327l3.281-12.19z" fill="currentColor" />
-                                        </svg>
-                                    </div>
-                                </li>
-                            ))}
-                            <li className="text-sm">
-                                <a href="#" aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                                    New Arrivals
-                                </a>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
 
                 <main className="max-w-2xl mx-auto px-4 lg:max-w-7xl lg:px-8">
                     <div className="border-b border-gray-200 pt-24 pb-10">
                         <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">Wishlist</h1>
                         <p className="mt-4 text-base text-gray-500">
-                            Checkout out the latest release of Basic Tees, new and improved with four openings!
+                            Immediately freeze the fresh seafoods you have!
                         </p>
                     </div>
 
