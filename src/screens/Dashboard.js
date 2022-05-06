@@ -4,6 +4,7 @@ import React, { Fragment } from "react";
 import Header from "../components/Header";
 import Category from "../components/Catageory/Category";
 import NewArrival from "../components/NewArrival/NewArrival";
+import CTA from "../components/CTA/CTA";
 
 const Dashboard = () => {
 
@@ -13,6 +14,7 @@ const Dashboard = () => {
             <Banner />
             <Category />
             <NewArrival />
+            <CTA />
             <Footer />
         </Fragment >
 
