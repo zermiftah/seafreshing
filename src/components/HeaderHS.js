@@ -17,7 +17,7 @@ const HeaderHS = () => {
 
     const getUser = async () => {
         try {
-            const response = await axios.get(`http://103.102.152.201:3001/api/user/get-user/${userData.accounttype}/${userData.id}`, {
+            const response = await axios.get(`https://server.seafreshing.com/api/user/get-user/${userData.accounttype}/${userData.id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token': JSON.parse(localStorage.getItem('token')),
@@ -198,7 +198,7 @@ const HeaderHS = () => {
                                                 </a>
                                             )}
                                         </Menu.Item>
-                                        <Menu.Item>
+                                        {/* <Menu.Item>
                                             {({ active }) => (
                                                 <a
                                                     href="#"
@@ -207,7 +207,7 @@ const HeaderHS = () => {
                                                     Chat
                                                 </a>
                                             )}
-                                        </Menu.Item>
+                                        </Menu.Item> */}
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <a

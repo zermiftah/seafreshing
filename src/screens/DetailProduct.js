@@ -1,241 +1,233 @@
-import { useState } from 'react'
-import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
-import { StarIcon } from '@heroicons/react/solid'
-import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
+import React, { useEffect, useState } from "react";
+import Header from "./../components/Header";
+import { Link } from "react-router-dom";
+import Message from "./../components/LoadingError/Error";
+import axios from "axios";
+import HeaderHS from "../components/HeaderHS";
+import Footer from "../components/Footers"
+import TrendingProduct from "../components/TrendingProduct/TrendingProduct"
 
-const product = {
-    name: 'Zip Tote Basket',
-    price: '$140',
-    rating: 4,
-    images: [
-        {
-            id: 1,
-            name: 'Angled view',
-            src: 'https://tailwindui.com/img/ecommerce-images/product-page-03-product-01.jpg',
-            alt: 'Angled front view with bag zipped and handles upright.',
-        },
-        // More images...
-    ],
-    colors: [
-        { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
-        { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
-        { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
-    ],
-    description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-    details: [
-        {
-            name: 'Features',
-            items: [
-                'Multiple strap configurations',
-                'Spacious interior with top zip',
-                'Leather handle and tabs',
-                'Interior dividers',
-                'Stainless strap loops',
-                'Double stitched construction',
-                'Water-resistant',
-            ],
-        },
-        // More sections...
-    ],
-}
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+const SingleProduct = ({ match }) => {
+    const [product, setProduct] = useState([])
+    const [quantity, setQuantity] = useState(0);
+    const userData = JSON.parse(localStorage.getItem('user-data'));
+    const token = JSON.parse(localStorage.getItem('token'));
+    const qs = require('qs');
 
-export default function DetailProduct() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
+    console.log(product)
+
+    useEffect(() => {
+        fetchproduct();
+    }, []);
+
+    const fetchproduct = async () => {
+        try {
+            const data = await axios.get(`https://server.seafreshing.com/api/product/get-product/${match.params.id}`)
+            let temp = data.data.product;
+            setProduct(temp)
+        } catch (e) {
+            return e.response.data.msg
+        }
+    }
+
+    const handleAddToCart = async () => {
+        try {
+            let response = await axios.patch('https://server.seafreshing.com/api/user/add-freezer', JSON.stringify({
+                'clearPrice': product[0].price.value.replace(/\D/g, ''),
+                'productId': match.params.id,
+                'image': product[0].image[0].imgUrl,
+                'name': product[0].productName,
+                'price': product[0].price.value,
+                'priceUnit': "Kg",
+                'productQuantity': 12,
+                'kioskName': product[0].kioskName,
+                'kioskId': product[0].kioskId,
+                'idUser': userData.id,
+                'kioskCity': product[0].kioskDetails[0].city,
+                'minimumOrder': product[0].minimumOrder.total,
+                'isWholesalePrice': product[0].isWholesalePrice,
+                'isChecked': true,
+            }), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': token,
+                }
+            });
+            // console.log(response.data)
+        } catch (e) {
+            console.log(e)
+            console.log(e.response.data)
+        }
+    }
+
+    const handleAddWishlist = async () => {
+        try {
+            let response = await axios.patch('https://server.seafreshing.com/api/user/add-wishlist', {
+                'id': userData.id,
+                'productId': match.params.id,
+                'image': product[0].image[0].imgUrl,
+                'name': product[0].productName,
+                'price': product[0].price.value,
+                'rating': '',
+                'productQuantity': quantity,
+                'priceUnit': "Kg",
+                'kioskName': product[0].kioskName,
+                'kioskId': product[0].kioskId,
+                'idUser': userData.id,
+                'kioskCity': product[0].kioskDetails[0].city,
+                'minimumOrder': product[0].minimumOrder.total,
+                'isWholesale': product[0].isWholesalePrice,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': token,
+                }
+            });
+            console.log(response.data)
+        } catch (e) {
+            console.log(e)
+            console.log(e.response.data)
+        }
+    }
 
     return (
-        <div className="bg-white">
-            <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-                <div className="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
-                    {/* Image gallery */}
-                    <Tab.Group as="div" className="flex flex-col-reverse">
-                        {/* Image selector */}
-                        <div className="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-                            <Tab.List className="grid grid-cols-4 gap-6">
-                                {product.images.map((image) => (
-                                    <Tab
-                                        key={image.id}
-                                        className="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
-                                    >
-                                        {({ selected }) => (
-                                            <>
-                                                <span className="sr-only">{image.name}</span>
-                                                <span className="absolute inset-0 rounded-md overflow-hidden">
-                                                    <img src={image.src} alt="" className="w-full h-full object-center object-cover" />
-                                                </span>
-                                                <span
-                                                    className={classNames(
-                                                        selected ? 'ring-indigo-500' : 'ring-transparent',
-                                                        'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none'
-                                                    )}
-                                                    aria-hidden="true"
-                                                />
-                                            </>
-                                        )}
-                                    </Tab>
-                                ))}
-                            </Tab.List>
-                        </div>
+        <>
+            {
+                token ?
+                    <HeaderHS />
+                    :
+                    <Header />
+            }
+            {
+                product[0] ?
+                    <div class="bg-white">
+                        <div class="pt-6 pb-16 sm:pb-24">
 
-                        <Tab.Panels className="w-full aspect-w-1 aspect-h-1">
-                            {product.images.map((image) => (
-                                <Tab.Panel key={image.id}>
-                                    <img
-                                        src={image.src}
-                                        alt={image.alt}
-                                        className="w-full h-full object-center object-cover sm:rounded-lg"
-                                    />
-                                </Tab.Panel>
-                            ))}
-                        </Tab.Panels>
-                    </Tab.Group>
+                            <div class="mt-8 max-w-2xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                                <div class="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
+                                    <div class="lg:col-start-8 lg:col-span-5">
+                                        <div class="flex justify-between">
+                                            <h1 class="text-xl font-medium text-gray-900">{product[0].productName}</h1>
+                                            <p class="text-xl font-medium text-gray-900">{product[0].price.value}</p>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h2 class="sr-only">Reviews</h2>
+                                            <div class="flex items-center">
+                                                <p class="text-sm text-gray-700">
+                                                    3.9
+                                                    <span class="sr-only"> out of 5 stars</span>
+                                                </p>
+                                                <div class="ml-1 flex items-center">
 
-                    {/* Product info */}
-                    <div className="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
-                        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">{product.name}</h1>
+                                                    <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
 
-                        <div className="mt-3">
-                            <h2 className="sr-only">Product information</h2>
-                            <p className="text-3xl text-gray-900">{product.price}</p>
-                        </div>
+                                                    <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
 
-                        {/* Reviews */}
-                        <div className="mt-3">
-                            <h3 className="sr-only">Reviews</h3>
-                            <div className="flex items-center">
-                                <div className="flex items-center">
-                                    {[0, 1, 2, 3, 4].map((rating) => (
-                                        <StarIcon
-                                            key={rating}
-                                            className={classNames(
-                                                product.rating > rating ? 'text-indigo-500' : 'text-gray-300',
-                                                'h-5 w-5 flex-shrink-0'
-                                            )}
-                                            aria-hidden="true"
-                                        />
-                                    ))}
-                                </div>
-                                <p className="sr-only">{product.rating} out of 5 stars</p>
-                            </div>
-                        </div>
+                                                    <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
 
-                        <div className="mt-6">
-                            <h3 className="sr-only">Description</h3>
+                                                    <svg class="text-yellow-400 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
 
-                            <div
-                                className="text-base text-gray-700 space-y-6"
-                                dangerouslySetInnerHTML={{ __html: product.description }}
-                            />
-                        </div>
+                                                    <svg class="text-gray-200 h-5 w-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                                    </svg>
+                                                </div>
+                                                <div aria-hidden="true" class="ml-4 text-sm text-gray-300">·</div>
 
-                        <form className="mt-6">
-                            {/* Colors */}
-                            <div>
-                                <h3 className="text-sm text-gray-600">Color</h3>
-
-                                <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
-                                    <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
-                                    <div className="flex items-center space-x-3">
-                                        {product.colors.map((color) => (
-                                            <RadioGroup.Option
-                                                key={color.name}
-                                                value={color}
-                                                className={({ active, checked }) =>
-                                                    classNames(
-                                                        color.selectedColor,
-                                                        active && checked ? 'ring ring-offset-1' : '',
-                                                        !active && checked ? 'ring-2' : '',
-                                                        '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-                                                    )
-                                                }
-                                            >
-                                                <RadioGroup.Label as="p" className="sr-only">
-                                                    {color.name}
-                                                </RadioGroup.Label>
-                                                <span
-                                                    aria-hidden="true"
-                                                    className={classNames(
-                                                        color.bgColor,
-                                                        'h-8 w-8 border border-black border-opacity-10 rounded-full'
-                                                    )}
-                                                />
-                                            </RadioGroup.Option>
-                                        ))}
+                                            </div>
+                                        </div>
                                     </div>
-                                </RadioGroup>
-                            </div>
+                                    <div class="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
+                                        <h2 class="sr-only">Images</h2>
 
-                            <div className="mt-10 flex sm:flex-col1">
-                                <button
-                                    type="submit"
-                                    className="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
-                                >
-                                    Add to bag
-                                </button>
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
+                                            <img src={product[0].image[0].imgUrl} alt={product.productName} class="lg:col-span-2 lg:row-span-2 rounded-lg" />
+                                        </div>
+                                    </div>
 
-                                <button
-                                    type="button"
-                                    className="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                                >
-                                    <HeartIcon className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
-                                    <span className="sr-only">Add to wishlist</span>
-                                </button>
-                            </div>
-                        </form>
+                                    <div class="mt-8 lg:col-span-5">
+                                        <form>
+                                            <div>
+                                                <h2 class="text-sm font-medium text-gray-900">Qty</h2>
 
-                        <section aria-labelledby="details-heading" className="mt-12">
-                            <h2 id="details-heading" className="sr-only">
-                                Additional details
-                            </h2>
+                                                <fieldset class="mt-2">
+                                                    <legend class="sr-only">Qty</legend>
+                                                    <div>
+                                                        <div class="mt-1 relative rounded-md shadow-sm">
+                                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                                <span class="text-gray-500 sm:text-sm"> </span>
+                                                            </div>
+                                                            <input type="text" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0" />
+                                                            <div class="absolute inset-y-0 right-0 flex items-center">
+                                                                <label for="currency" class="sr-only">Qty</label>
+                                                                <select id="currency" name="currency" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
+                                                                    <option>Kg</option>
+                                                                    <option>Kwintal</option>
+                                                                    <option>Ton</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
 
-                            <div className="border-t divide-y divide-gray-200">
-                                {product.details.map((detail) => (
-                                    <Disclosure as="div" key={detail.name}>
-                                        {({ open }) => (
-                                            <>
-                                                <h3>
-                                                    <Disclosure.Button className="group relative w-full py-6 flex justify-between items-center text-left">
-                                                        <span
-                                                            className={classNames(open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium')}
-                                                        >
-                                                            {detail.name}
+                                            <div class="mt-10">
+                                                <h2 class="text-sm font-medium text-gray-900">Description</h2>
+
+                                                <div class="mt-4 prose prose-sm text-gray-500">
+                                                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores, repellendus perferendis libero suscipit nam temporibus molestiae.</p>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="mt-8 w-full bg-sky-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Add to cart</button>
+                                        </form>
+
+
+                                        <div class="mt-8 border-t border-gray-200 pt-8">
+                                            <div class="relative pb-8">
+                                                <div class="relative flex items-start space-x-3">
+                                                    <div class="relative">
+                                                        <img class="h-10 w-10 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white" src={product[0].kioskPicture} alt="" />
+
+                                                        <span class="absolute -bottom-0.5 -right-1 bg-white rounded-tl px-0.5 py-px">
+
+
+                                                            <img class="h-12 w-12 rounded-full" src={product[0].kioskPicture} alt="" />
+                                                            <span class="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-300"></span>
+
                                                         </span>
-                                                        <span className="ml-6 flex items-center">
-                                                            {open ? (
-                                                                <MinusSmIcon
-                                                                    className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
-                                                                    aria-hidden="true"
-                                                                />
-                                                            ) : (
-                                                                <PlusSmIcon
-                                                                    className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                                                                    aria-hidden="true"
-                                                                />
-                                                            )}
-                                                        </span>
-                                                    </Disclosure.Button>
-                                                </h3>
-                                                <Disclosure.Panel as="div" className="pb-6 prose prose-sm">
-                                                    <ul role="list">
-                                                        {detail.items.map((item) => (
-                                                            <li key={item}>{item}</li>
-                                                        ))}
-                                                    </ul>
-                                                </Disclosure.Panel>
-                                            </>
-                                        )}
-                                    </Disclosure>
-                                ))}
+                                                    </div>
+                                                    <div class="min-w-0 flex-1">
+                                                        <div>
+                                                            <div class="text-sm">
+                                                                <a href="#" class="font-medium text-gray-900">{product[0].kioskName}</a>
+                                                            </div>
+                                                            <p class="mt-0.5 text-sm text-gray-500">Actived 2h ago</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
-                        </section>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    )
-}
+                    : "Loading..."
+            }
+            <TrendingProduct />
+            <Footer />
+        </>
+    );
+};
+
+export default SingleProduct;

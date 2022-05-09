@@ -141,42 +141,36 @@ const Category = () => {
                         </section>
                         <div className="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                             {products.map((product) => (
-                                <div key={product.id}>
-                                    <a href='/DetailProduct'>
-                                        <div className="relative">
+                                <Link to={`/products/${product.id}`}>
+                                    <div
+                                        key={product.id}
+                                        className="group relative bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden"
+                                    >
+                                        <div className="aspect-w-3 aspect-h-4 bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-96">
 
-                                            <div className="relative w-full h-72 rounded-lg overflow-hidden">
+                                            <img
+                                                src={product.image[0].imgUrl}
+                                                alt={product.image[0].imgUrl}
+                                                className="w-full h-full object-center object-cover sm:w-full sm:h-full"
+                                            />
 
-                                                <img
-                                                    src={product.image[0].imgUrl}
-                                                    alt={product.productName}
-                                                    className="w-full h-full object-center object-cover"
-                                                />
+                                        </div>
 
-                                            </div>
-
-                                            <div className="relative mt-4">
-                                                <h3 className="text-sm font-medium text-gray-900">{product.productName}</h3>
-                                                <p className="mt-1 text-sm text-gray-500">{product.category}</p>
-                                            </div>
-                                            <div className="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
-                                                <div
-                                                    aria-hidden="true"
-                                                    className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"
-                                                />
-                                                <p className="relative text-lg font-semibold text-white">{product.price.value}</p>
+                                        <div className="flex-1 p-4 space-y-2 flex flex-col">
+                                            <h3 className="text-sm font-medium text-gray-900">
+                                                <a href="">
+                                                    <span aria-hidden="true" className="absolute inset-0" />
+                                                    {product.productName}
+                                                </a>
+                                            </h3>
+                                            <p className="text-sm text-gray-500">{product.productDescription}</p>
+                                            <div className="flex-1 flex flex-col justify-end">
+                                                <p className="text-sm italic text-gray-500">{product.options}</p>
+                                                <p className="text-base font-medium text-gray-900">{product.price.value}</p>
                                             </div>
                                         </div>
-                                    </a>
-                                    <div className="mt-6">
-                                        <button class="flex items-center justify-center w-full px-2 py-2 mt-4 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mx-1" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                                            </svg>
-                                            <span class="mx-1">Add to freezer</span>
-                                        </button>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>
