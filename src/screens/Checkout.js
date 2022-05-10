@@ -1,7 +1,8 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/solid'
+import axios from 'axios';
 
 const products = [
     {
@@ -32,6 +33,93 @@ function classNames(...classes) {
 
 export default function Example() {
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
+    const userData = JSON.parse(localStorage.getItem('user-data'));
+    console.log(userData, "user data");
+    useEffect(() => {
+        const pay = async () => {
+            try {
+                const toPay = await axios.post(`https://server.seafreshing.com/api/orders/create-order`, {
+                    "amount": 1,
+                    "buyerDetails": {
+                        "id": userData.id,
+                        "userEmail": userData.email,
+                        "userName": userData.fullname,
+                        "userPhone": userData.mobilenumber
+                    },
+                    "orderDate": "1652166301743",
+                    "content": [
+                        {
+                            "destination": {
+                                "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
+                                "latitude": userData.address[0].lat,
+                                "longitude": userData.address[0].lng,
+                                "name": userData.fullname + " - " + userData.address[0].label
+                            },
+                            "kioskDetails": {
+                                "id": "3402HhLqrw5N",
+                                "kioskPhone": "+62265813946",
+                                "name": "fazriseapood"
+                            },
+                            "origin": {
+                                "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
+                                "latitude": "106.83358702808619",
+                                "longitude": "-6.157134476099802",
+                                "name": "fazriseapood"
+                            },
+                            "product": [
+                                {
+                                    "clearPrice": 50000,
+                                    "id": "1475pOZECMcl",
+                                    "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
+                                    "isWholesale": true,
+                                    "isWholesalePrice": false,
+                                    "minimumOrder": {
+                                        "total": 1,
+                                        "unit": "kg"
+                                    },
+                                    "note": "",
+                                    "packingVariant": {
+                                        "isCheck": false,
+                                        "packingDimensions": {
+                                            "height": 5,
+                                            "length": 5,
+                                            "weight": {
+                                                "unit": "kg",
+                                                "value": "1"
+                                            },
+                                            "width": 5
+                                        },
+                                        "packingName": "Carton"
+                                    },
+                                    "price": "Rp50.000",
+                                    "priceUnit": "kg",
+                                    "priceWholesale": 0,
+                                    "productName": "Ikan tuna",
+                                    "productQuantity": 1,
+                                    "productQuantityUnit": "kg",
+                                    "quantityWholesale": 0,
+                                    "quantityWholesaleReal": 0,
+                                    "totalPrice": 50000
+                                }
+                            ],
+                            "shipping": {
+                                "cost": 12300,
+                                "service": "lalamove",
+                                "status": "",
+                                "trackUrl": ""
+                            },
+                            "status": "PENDING"
+                        }
+                    ]
+                })
+
+                console.log(toPay)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        pay()
+    })
 
     return (
         <div className="bg-gray-50">
@@ -47,14 +135,14 @@ export default function Example() {
                                 <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
                                     Email address
                                 </label>
-                                <div className="mt-1">
-                                    <input
+                                <div className="mt-1"> {userData.email}
+                                    {/* <input
                                         type="email"
                                         id="email-address"
                                         name="email-address"
                                         autoComplete="email"
                                         className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                         </div>
@@ -65,20 +153,20 @@ export default function Example() {
                             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div>
                                     <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                                        First name
+                                        Fullname
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.fullname}
+                                        {/* <input
                                             type="text"
                                             id="first-name"
                                             name="first-name"
                                             autoComplete="given-name"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
                                         Last name
                                     </label>
@@ -90,20 +178,20 @@ export default function Example() {
                                             autoComplete="family-name"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
-                                    </div>
-                                </div>
+                                    </div>*/}
+                                </div> 
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="company" className="block text-sm font-medium text-gray-700">
                                         Company
                                     </label>
                                     <div className="mt-1">
-                                        <input
+                                        {/* <input
                                             type="text"
                                             name="company"
                                             id="company"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
 
@@ -111,51 +199,51 @@ export default function Example() {
                                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                                         Address
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.address[0].fullAddress}
+                                        {/* <input
                                             type="text"
                                             name="address"
                                             id="address"
                                             autoComplete="street-address"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
-                                        Apartment, suite, etc.
+                                        District, etc.
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.address[0].district}
+                                        {/* <input
                                             type="text"
                                             name="apartment"
                                             id="apartment"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
 
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                                         City
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.address[0].city}
+                                        {/* <input
                                             type="text"
                                             name="city"
                                             id="city"
                                             autoComplete="address-level2"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                                         Country
                                     </label>
-                                    <div className="mt-1">
+                                    <div className="mt-1">{userData.address[0].country}
                                         <select
                                             id="country"
                                             name="country"
@@ -167,20 +255,20 @@ export default function Example() {
                                             <option>Mexico</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div>
                                     <label htmlFor="region" className="block text-sm font-medium text-gray-700">
                                         State / Province
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.address[0].province}
+                                        {/* <input
                                             type="text"
                                             name="region"
                                             id="region"
                                             autoComplete="address-level1"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
 
@@ -188,14 +276,14 @@ export default function Example() {
                                     <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700">
                                         Postal code
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.address[0].zipCode}
+                                        {/* <input
                                             type="text"
                                             name="postal-code"
                                             id="postal-code"
                                             autoComplete="postal-code"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
 
@@ -203,14 +291,14 @@ export default function Example() {
                                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                                         Phone
                                     </label>
-                                    <div className="mt-1">
-                                        <input
+                                    <div className="mt-1">{userData.mobilenumber}
+                                        {/* <input
                                             type="text"
                                             name="phone"
                                             id="phone"
                                             autoComplete="tel"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +357,7 @@ export default function Example() {
                         </div>
 
                         {/* Payment */}
-                        <div className="mt-10 border-t border-gray-200 pt-10">
+                        {/* <div className="mt-10 border-t border-gray-200 pt-10">
                             <h2 className="text-lg font-medium text-gray-900">Payment</h2>
 
                             <fieldset className="mt-4">
@@ -363,7 +451,7 @@ export default function Example() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Order summary */}
