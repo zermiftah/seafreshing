@@ -3,9 +3,9 @@ import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
 import { StarIcon } from '@heroicons/react/solid'
 import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Notif from '../components/simple'
-// import Reviews from "../components/Reviews/Reviews";
+import Reviews from "../components/Reviews/Reviews";
 
 export default function DetailProduct() {
     const [product, setProduct] = useState([]);
@@ -199,17 +199,21 @@ export default function DetailProduct() {
                                                 </div>
                                             </fieldset>
                                         </div>
+                                        {
+                                            userData ?
+                                                <div class="mt-10 flex sm:flex-col1">
+                                                    <button onClick={handleAddToCart} class="max-w-xs flex-1 bg-sky-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500 sm:w-full">Add to freezer</button>
 
-                                        <div class="mt-10 flex sm:flex-col1">
-                                            <button onClick={handleAddToCart} class="max-w-xs flex-1 bg-sky-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500 sm:w-full">Add to freezer</button>
-
-                                            <button onClick={handleAddWishlist} class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
-                                                <svg class="h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                </svg>
-                                                <span class="sr-only">Add to Wishlist</span>
-                                            </button>
-                                        </div>
+                                                    <button onClick={handleAddWishlist} class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+                                                        <svg class="h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                        </svg>
+                                                        <span class="sr-only">Add to Wishlist</span>
+                                                    </button>
+                                                </div>
+                                                :
+                                                <Link to='/login' className="d-flex justify-content-center">You must login to add to cart</Link>
+                                        }
                                     </form>
                                     <div class="mt-8 border-t border-gray-200 pt-8">
                                         <div class="relative pb-8">
@@ -238,7 +242,7 @@ export default function DetailProduct() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <Reviews /> */}
+                            <Reviews />
                         </div>
                     </div>
                     : "Loading..."
