@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Header from "./../components/Header";
 import axios from 'axios'
+import Notif from '../components/simple'
 
 const Login = () => {
   window.scrollTo(0, 0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [notif, setNotif] = useState('');
+  const [notif, setNotif] = useState({
+    error: '',
+    success: '',
+  });
   const history = useHistory();
 
   const handleLogin = async (e) => {
@@ -22,15 +26,34 @@ const Login = () => {
       if (response.data) {
         localStorage.setItem('token', JSON.stringify(response.data.token))
         localStorage.setItem('user-data', JSON.stringify(response.data.user))
-        history.push('/HomeScreen')
+        setNotif({
+          error: '',
+          success: response.data.msg,
+        })
       }
+      setTimeout(() => {
+        history.push('/HomeScreen')
+      }, 3000)
     } catch (e) {
-      if (e.response.data.msg) setNotif(e.response.data.msg);
+      if (e.response.data.msg) setNotif({
+        error: e.response.data.msg,
+        success: '',
+      });
     }
   }
 
   return (
     <>
+      {
+        notif.success && (
+          <Notif title={notif.success} text="Redirect..." />
+        )
+      }
+      {
+        notif.error && (
+          <Notif title='Error' text={notif.error} />
+        )
+      }
       <div class="bg-white dark:bg-gray-900">
         <div class="flex justify-center h-screen">
           <div class="hidden bg-cover lg:block lg:w-2/3" style={{ backgroundImage: `url(https://img.freepik.com/free-photo/top-view-variety-fresh-fish-seafood-ice-with-copy-apace_126277-771.jpg?w=1060)` }}>

@@ -13,15 +13,13 @@ const SingleProduct = ({ match }) => {
   const token = JSON.parse(localStorage.getItem('token'));
   const qs = require('qs');
 
-  console.log(product)
-
   useEffect(() => {
     fetchproduct();
   }, []);
 
   const fetchproduct = async () => {
     try {
-      const data = await axios.get(`http://103.102.152.201:3001/api/product/get-product/${match.params.id}`)
+      const data = await axios.get(`https://server.seafreshing.com/api/product/get-product/${match.params.id}`)
       let temp = data.data.product;
       setProduct(temp)
     } catch (e) {
@@ -31,7 +29,7 @@ const SingleProduct = ({ match }) => {
 
   const handleAddToCart = async () => {
     try {
-      let response = await axios.patch('http://103.102.152.201:3001/api/user/add-freezer', JSON.stringify({
+      let response = await axios.patch('https://server.seafreshing.com/api/user/add-freezer', JSON.stringify({
         'clearPrice': product[0].price.value.replace(/\D/g, ''),
         'productId': match.params.id,
         'image': product[0].image[0].imgUrl,
@@ -61,7 +59,7 @@ const SingleProduct = ({ match }) => {
 
   const handleAddWishlist = async () => {
     try {
-      let response = await axios.patch('http://103.102.152.201:3001/api/user/add-wishlist', {
+      let response = await axios.patch('https://server.seafreshing.com/api/user/add-wishlist', {
         'id': userData.id,
         'productId': match.params.id,
         'image': product[0].image[0].imgUrl,

@@ -24,7 +24,7 @@ const ProfileScreen = () => {
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`http://103.102.152.201:3001/api/user/get-user/${userData.accounttype}/${userData.id}`, {
+      const response = await axios.get(`https://server.seafreshing.com/api/user/get-user/${userData.accounttype}/${userData.id}`, {
         headers: {
           'auth-token': JSON.parse(localStorage.getItem('token')),
         }
@@ -37,7 +37,7 @@ const ProfileScreen = () => {
 
   const getOrdersData = async () => {
     try {
-      let response = await axios.get('http://103.102.152.201:3001/api/user/get-transaction-test');
+      let response = await axios.get('https://server.seafreshing.com/api/user/get-transaction-test');
       setOrders(response.data)
     } catch (e) {
       console.log(e)
@@ -47,7 +47,7 @@ const ProfileScreen = () => {
 
   const getWishlistData = async () => {
     try {
-      let response = await axios.get(`http://103.102.152.201:3001/api/user/get-wishlist/${userData.accounttype}/${userData.id}`, {
+      let response = await axios.get(`https://server.seafreshing.com/api/user/get-wishlist/${userData.accounttype}/${userData.id}`, {
         headers: {
           'auth-token': token,
         }

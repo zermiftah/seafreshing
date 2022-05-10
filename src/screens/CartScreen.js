@@ -16,7 +16,7 @@ const CartScreen = () => {
 
   const getFreezer = async () => {
     try {
-      let response = await axios.get(`http://103.102.152.201:3001/api/user/get-freezer/${userData.id}`, {
+      let response = await axios.get(`https://server.seafreshing.com/api/user/get-freezer/${userData.id}`, {
         headers: {
           'auth-token': token,
         }
@@ -34,7 +34,7 @@ const CartScreen = () => {
 
   const removeItem = async (freezerId, productId) => {
     try {
-      let response = await axios.delete('http://103.102.152.201:3001/api/user/delete-freezer', {
+      let response = await axios.delete('https://server.seafreshing.com/api/user/delete-freezer', {
         headers: {
           'auth-token': token,
         }

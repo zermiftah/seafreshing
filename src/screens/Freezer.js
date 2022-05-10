@@ -1,7 +1,54 @@
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Freezer = () => {
+    const [items, setItems] = useState([]);
+    const [quantity, setQuantity] = useState(0);
+    const token = JSON.parse(localStorage.getItem('token'));
+    const userData = JSON.parse(localStorage.getItem('user-data'));
+    console.log(items)
+    useEffect(() => {
+        getFreezer();
+    }, [])
+
+    const getFreezer = async () => {
+        try {
+            let response = await axios.get(`https://server.seafreshing.com/api/user/get-freezer/${userData.id}`, {
+                headers: {
+                    'auth-token': token,
+                }
+            });
+            setItems(response.data.freezer);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    // const totPrice = items.reduce((total, item) => {
+    //     total += (item.product[0].clearPrice)
+    //     return total;
+    // }, 0);
+
+    // const removeItem = async (freezerId, productId) => {
+    //     try {
+    //         let response = await axios.delete('https://server.seafreshing.com/api/user/delete-freezer', {
+    //             headers: {
+    //                 'auth-token': token,
+    //             }
+    //         }, {
+    //             'id': userData.id,
+    //             "freezer.id": freezerId,
+    //             'productId': productId,
+
+    //         });
+    //         console.log(response.data)
+    //     } catch (e) {
+    //         console.log(e)
+    //         console.log(e.response.data)
+    //     }
+    // }
+
     return (
         <div class="bg-white">
             <div class="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -9,170 +56,67 @@ const Freezer = () => {
                 <form class="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
                     <section aria-labelledby="cart-heading" class="lg:col-span-7">
                         <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
-
-                        <ul role="list" class="border-t border-b border-gray-200 divide-y divide-gray-200">
-                            <li class="flex py-6 sm:py-10">
-                                <div class="flex-shrink-0">
-                                    <img src="https://previews.123rf.com/images/yelenayemchuk/yelenayemchuk1804/yelenayemchuk180400072/98705622-salmon-fresh-salmon-fish-raw-salmon-fish-fillet.jpg?fj=1" alt="Front of men&#039;s Basic Tee in sienna." class="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48" />
-                                </div>
-
-                                <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                                    <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                                        <div>
-                                            <div class="flex justify-between">
-                                                <h3 class="text-sm">
-                                                    <a href="#" class="font-medium text-gray-700 hover:text-gray-800"> Salmon Fillet</a>
-                                                </h3>
+                        {
+                            items.map(cart => (
+                                <>
+                                    <ul role="list" class="border-t border-b border-gray-200 divide-y divide-gray-200">
+                                        <li class="flex py-6 sm:py-10">
+                                            <div class="flex-shrink-0">
+                                                <img src={"abc"} alt="Front of men&#039;s Basic Tee in sienna." class="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48" />
                                             </div>
-                                            <div class="mt-1 flex text-sm">
-                                                <p class="text-gray-500">Ikan</p>
 
-                                                <p class="ml-4 pl-4 border-l border-gray-200 text-gray-500">Large</p>
-                                            </div>
-                                            <p class="mt-1 text-sm font-medium text-gray-900">Rp.30.000</p>
-                                        </div>
+                                            <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
+                                                <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                                                    <div>
+                                                        <div class="flex justify-between">
+                                                            <h3 class="text-sm">
+                                                                <a href="#" class="font-medium text-gray-700 hover:text-gray-800"> Salmon Fillet</a>
+                                                            </h3>
+                                                        </div>
+                                                        <div class="mt-1 flex text-sm">
+                                                            <p class="text-gray-500">Ikan</p>
 
-                                        <div class="mt-4 sm:mt-0 sm:pr-9">
-                                            <label for="quantity-0" class="sr-only">Quantity, Basic Tee</label>
-                                            <select id="quantity-0" name="quantity-0" class="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
+                                                            <p class="ml-4 pl-4 border-l border-gray-200 text-gray-500">Large</p>
+                                                        </div>
+                                                        <p class="mt-1 text-sm font-medium text-gray-900">Rp.30.000</p>
+                                                    </div>
 
-                                            <div class="absolute top-0 right-0">
-                                                <button type="button" class="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
-                                                    <span class="sr-only">Remove</span>
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                    <div class="mt-4 sm:mt-0 sm:pr-9">
+                                                        <label for="quantity-0" class="sr-only">Quantity, Basic Tee</label>
+                                                        <select id="quantity-0" name="quantity-0" class="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                            <option value="5">5</option>
+                                                            <option value="6">6</option>
+                                                            <option value="7">7</option>
+                                                            <option value="8">8</option>
+                                                        </select>
+
+                                                        <div class="absolute top-0 right-0">
+                                                            <button type="button" class="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
+                                                                <span class="sr-only">Remove</span>
+                                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <p class="mt-4 flex text-sm text-gray-700 space-x-2">
+                                                    <svg class="flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                                     </svg>
-                                                </button>
+                                                    <span>In stock</span>
+                                                </p>
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <p class="mt-4 flex text-sm text-gray-700 space-x-2">
-                                        <svg class="flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span>In stock</span>
-                                    </p>
-                                </div>
-                            </li>
-
-                            <li class="flex py-6 sm:py-10">
-                                <div class="flex-shrink-0">
-                                    <img src="https://dahliagroup.co.id/wp-content/uploads/2019/11/11.-Ikan-kurisi-segar.jpg" alt="Front of men&#039;s Basic Tee in black." class="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48" />
-                                </div>
-
-                                <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                                    <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                                        <div>
-                                            <div class="flex justify-between">
-                                                <h3 class="text-sm">
-                                                    <a href="#" class="font-medium text-gray-700 hover:text-gray-800"> Kurisi Merah </a>
-                                                </h3>
-                                            </div>
-                                            <div class="mt-1 flex text-sm">
-                                                <p class="text-gray-500">Ikan</p>
-
-                                                <p class="ml-4 pl-4 border-l border-gray-200 text-gray-500">Large</p>
-                                            </div>
-                                            <p class="mt-1 text-sm font-medium text-gray-900">Rp.30.000</p>
-                                        </div>
-
-                                        <div class="mt-4 sm:mt-0 sm:pr-9">
-                                            <label for="quantity-1" class="sr-only">Quantity, Basic Tee</label>
-                                            <select id="quantity-1" name="quantity-1" class="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
-
-                                            <div class="absolute top-0 right-0">
-                                                <button type="button" class="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
-                                                    <span class="sr-only">Remove</span>
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <p class="mt-4 flex text-sm text-gray-700 space-x-2">
-                                        <svg class="flex-shrink-0 h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span>Ships in 3–4 weeks</span>
-                                    </p>
-                                </div>
-                            </li>
-
-                            <li class="flex py-6 sm:py-10">
-                                <div class="flex-shrink-0">
-                                    <img src="https://dahliagroup.co.id/wp-content/uploads/2019/11/2.-Ikan-Kerapu-Segar.jpg" alt="Insulated bottle with white base and black snap lid." class="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48" />
-                                </div>
-
-                                <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-                                    <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                                        <div>
-                                            <div class="flex justify-between">
-                                                <h3 class="text-sm">
-                                                    <a href="#" class="font-medium text-gray-700 hover:text-gray-800"> Ikan Kerapu </a>
-                                                </h3>
-                                            </div>
-                                            <div class="mt-1 flex text-sm">
-                                                <p class="text-gray-500">Ikan</p>
-
-                                                <p class="ml-4 pl-4 border-l border-gray-200 text-gray-500">Large</p>
-                                            </div>
-                                            <p class="mt-1 text-sm font-medium text-gray-900">Rp.30.000</p>
-                                        </div>
-
-                                        <div class="mt-4 sm:mt-0 sm:pr-9">
-                                            <label for="quantity-2" class="sr-only">Quantity, Nomad Tumbler</label>
-                                            <select id="quantity-2" name="quantity-2" class="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                            </select>
-
-                                            <div class="absolute top-0 right-0">
-                                                <button type="button" class="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
-                                                    <span class="sr-only">Remove</span>
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <p class="mt-4 flex text-sm text-gray-700 space-x-2">
-                                        <svg class="flex-shrink-0 h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span>In stock</span>
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
+                                        </li>
+                                    </ul>
+                                </>
+                            ))
+                        }
                     </section>
 
                     <section aria-labelledby="summary-heading" class="mt-16 bg-gray-50 rounded-lg px-4 py-6 sm:p-6 lg:p-8 lg:mt-0 lg:col-span-5">

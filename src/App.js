@@ -43,7 +43,7 @@ const App = () => {
             <HomeScreen />
           </Auth>
         </Route>
-        {/* <Route path="/products/:id" component={SingleProduct} /> */}
+        <Route path="/products/:id" component={SingleProduct} />
         <Route path="/login">
           <Guest>
             <Login />
@@ -83,7 +83,14 @@ const App = () => {
             <PaymentScreen />
           </Auth>
         </Route>
-        <Route path="/products/:id" component={DetailProduct} />
+        <Route path="/DetailProduct/:id">
+          <Auth>
+            <HeaderHS />
+            <DetailProduct />
+            <TrendingProduct />
+            <Footer />
+          </Auth>
+        </Route>
         <Route path="/Freezer">
           <Auth>
             <HeaderHS />

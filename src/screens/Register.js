@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Header from "./../components/Header";
 import axios from 'axios';
+import Notif from '../components/simple'
 
 const Register = () => {
   const [fullname, setFullName] = useState('');
@@ -9,26 +10,28 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
+  const [notif, setNotif] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    let requestId = '';
-    const data = new FormData();
-    data.append('name', fullname);
-    data.append('mobilenumber', mobilenumber);
-    data.append('email', email);
-    data.append('password', email);
-    data.append('requestId', requestId);
-
+    let qs = require('qs');
+    
     try {
-      let response = await axios.post('https://server.seafreshing.com/api/user/register', data, {
+      let response = await axios.post('https://server.seafreshing.com/api/user/register', qs.stringify({
+        'name': fullname,
+        'mobilenumber': mobilenumber,
+        'email': email,
+        'requestId': password,
+      }), {
         header: {
           'Content-Type': 'application/json',
         }
       });
-      if (response.data) history.push('/login');
+      if (response.data) {
+        setNotif(response.data.msg)
+      }
     } catch (e) {
-      return e.messages
+      console.log(e.response.data)
     }
   }
 
@@ -49,6 +52,11 @@ const Register = () => {
           </p>
         </form>
       </div> */}
+      {
+        notif && (
+          <Notif title="Register" text={notif} />
+        )
+      }
       <div class="bg-white dark:bg-gray-900">
         <div class="flex justify-center h-screen">
           <div class="hidden bg-cover lg:block lg:w-2/3" style={{ backgroundImage: `url(https://img.freepik.com/free-photo/top-view-variety-fresh-fish-seafood-ice-with-copy-apace_126277-771.jpg?w=1060)` }}>
@@ -81,12 +89,12 @@ const Register = () => {
                       <label for="password" class="text-sm text-gray-600 dark:text-gray-200">Mobile Number</label>
                     </div>
 
-                    <input type="text" value={password} onChange={(e) => setPassword(e.target.value)} required name="mobilenumber" id="mobilnumber" placeholder="Your Mobile Number" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                    <input type="text" value={mobilenumber} onChange={(e) => setMobileNumber(e.target.value)} required name="mobilenumber" id="mobilnumber" placeholder="Your Mobile Number" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
                   </div>
 
                   <div class="mt-6">
                     <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Email Address</label>
-                    <input type="email" value={mobilenumber} onChange={(e) => setMobileNumber(e.target.value)} required name="email" id="email" placeholder="example@example.com" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required name="email" id="email" placeholder="example@example.com" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
                   </div>
 
 

@@ -9,14 +9,12 @@ const ShopSection = () => {
 
   useEffect(() => {
     const fetchproducts = async () => {
-      const data = await axios.get("http://103.102.152.201:3001/api/product/get-all-product?page=1=&limit=10")
+      const data = await axios.get("https://server.seafreshing.com/api/product/get-all-product?page=1=&limit=10")
       let temp = data.data.product.results
       setProducts(temp)
     }
     fetchproducts()
   }, []);
-
-  const Page = (items) => Math.ceil(items.length / 10);
 
   return (
     <>

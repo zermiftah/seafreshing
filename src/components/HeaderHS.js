@@ -198,7 +198,7 @@ const HeaderHS = () => {
                                                 </a>
                                             )}
                                         </Menu.Item>
-                                        {/* <Menu.Item>
+                                        <Menu.Item>
                                             {({ active }) => (
                                                 <a
                                                     href="#"
@@ -207,7 +207,7 @@ const HeaderHS = () => {
                                                     Chat
                                                 </a>
                                             )}
-                                        </Menu.Item> */}
+                                        </Menu.Item>
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <a

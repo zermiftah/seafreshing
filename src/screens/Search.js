@@ -16,7 +16,7 @@ const Search = ({ match }) => {
 
     const getSearch = async () => {
         try {
-            let response = await axios.get(`http://103.102.152.201:3001/api/product/search-product?q=${match.params.id}`);
+            let response = await axios.get(`https://server.seafreshing.com/api/product/search-product?q=${match.params.id}`);
             setSearch(response.data)
         } catch (e) {
             console.log(e)

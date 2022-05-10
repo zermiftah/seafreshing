@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from "react";
-import Header from "./../components/Header";
-import { Link } from "react-router-dom";
-import Message from "./../components/LoadingError/Error";
-import axios from "axios";
-import HeaderHS from "../components/HeaderHS";
-import Footer from "../components/Footers"
-import TrendingProduct from "../components/TrendingProduct/TrendingProduct"
-import Reviews from "../components/Reviews/Reviews";
+import { useEffect, useState } from 'react'
+import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
+import { StarIcon } from '@heroicons/react/solid'
+import { HeartIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/outline'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import Notif from '../components/simple'
+// import Reviews from "../components/Reviews/Reviews";
 
-
-const SingleProduct = ({ match }) => {
-    const [product, setProduct] = useState([])
-    const [quantity, setQuantity] = useState(0);
+export default function DetailProduct() {
+    const [product, setProduct] = useState([]);
+    const [quantity, setQuantity] = useState('');
+    const [unit, setUnit] = useState('');
     const userData = JSON.parse(localStorage.getItem('user-data'));
     const token = JSON.parse(localStorage.getItem('token'));
-    const qs = require('qs');
-
-    console.log(product)
+    const [notif, setNotif] = useState('');
+    const { id } = useParams();
 
     useEffect(() => {
-        fetchproduct();
-    }, []);
+        getProduct();
+    }, [])
 
-    const fetchproduct = async () => {
+    const getProduct = async () => {
         try {
-            const data = await axios.get(`https://server.seafreshing.com/api/product/get-product/${match.params.id}`)
+            const data = await axios.get(`https://server.seafreshing.com/api/product/get-product/${id}`)
             let temp = data.data.product;
             setProduct(temp)
         } catch (e) {
-            return e.response.data.msg
+            console.log(e.response.data)
+            console.log(e.response)
         }
     }
 
-    const handleAddToCart = async () => {
+    const handleAddToCart = async (e) => {
+        e.preventDefault();
         try {
             let response = await axios.patch('https://server.seafreshing.com/api/user/add-freezer', JSON.stringify({
                 'clearPrice': product[0].price.value.replace(/\D/g, ''),
-                'productId': match.params.id,
+                'productId': id,
                 'image': product[0].image[0].imgUrl,
                 'name': product[0].productName,
                 'price': product[0].price.value,
-                'priceUnit': "Kg",
-                'productQuantity': 12,
+                'priceUnit': unit,
+                'productQuantity': quantity,
                 'kioskName': product[0].kioskName,
                 'kioskId': product[0].kioskId,
                 'idUser': userData.id,
@@ -55,24 +55,27 @@ const SingleProduct = ({ match }) => {
                     'auth-token': token,
                 }
             });
-            // console.log(response.data)
+            if (response.data) {
+                setNotif(response.data.msg)
+            }
         } catch (e) {
             console.log(e)
             console.log(e.response.data)
         }
     }
 
-    const handleAddWishlist = async () => {
+    const handleAddWishlist = async (e) => {
+        e.preventDefault();
         try {
             let response = await axios.patch('https://server.seafreshing.com/api/user/add-wishlist', {
                 'id': userData.id,
-                'productId': match.params.id,
+                'productId': id,
                 'image': product[0].image[0].imgUrl,
                 'name': product[0].productName,
                 'price': product[0].price.value,
                 'rating': '',
                 'productQuantity': quantity,
-                'priceUnit': "Kg",
+                'priceUnit': unit,
                 'kioskName': product[0].kioskName,
                 'kioskId': product[0].kioskId,
                 'idUser': userData.id,
@@ -85,7 +88,9 @@ const SingleProduct = ({ match }) => {
                     'auth-token': token,
                 }
             });
-            console.log(response.data)
+            if (response.data) {
+                setNotif(response.data.msg)
+            }
         } catch (e) {
             console.log(e)
             console.log(e.response.data)
@@ -95,10 +100,9 @@ const SingleProduct = ({ match }) => {
     return (
         <>
             {
-                token ?
-                    <HeaderHS />
-                    :
-                    <Header />
+                notif && (
+                    <Notif title="Success" text={notif} />
+                )
             }
             {
                 product[0] ?
@@ -169,7 +173,7 @@ const SingleProduct = ({ match }) => {
                                         <h3 class="sr-only">Description</h3>
 
                                         <div class="text-base text-gray-700 space-y-6">
-                                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. In autem ipsa, nulla laboriosam dolores, repellendus perferendis libero suscipit nam temporibus molestiae.</p>
+                                            <p>{product[0].productDescription}</p>
                                         </div>
                                     </div>
 
@@ -183,13 +187,13 @@ const SingleProduct = ({ match }) => {
                                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                         <span class="text-gray-500 sm:text-sm"> </span>
                                                     </div>
-                                                    <input type="text" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0" />
+                                                    <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="text" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0" />
                                                     <div class="absolute inset-y-0 right-0 flex items-center">
                                                         <label for="currency" class="sr-only">Qty</label>
-                                                        <select id="currency" name="currency" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
-                                                            <option>Kg</option>
-                                                            <option>Kwintal</option>
-                                                            <option>Ton</option>
+                                                        <select value={unit} onChange={(e) => setUnit(e.target.value)} id="currency" name="currency" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
+                                                            <option value="Kg">Kg</option>
+                                                            <option value="Kwintal">Kwintal</option>
+                                                            <option value="Ton">Ton</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -197,9 +201,9 @@ const SingleProduct = ({ match }) => {
                                         </div>
 
                                         <div class="mt-10 flex sm:flex-col1">
-                                            <button type="submit" class="max-w-xs flex-1 bg-sky-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500 sm:w-full">Add to freezer</button>
+                                            <button onClick={handleAddToCart} class="max-w-xs flex-1 bg-sky-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500 sm:w-full">Add to freezer</button>
 
-                                            <button type="button" class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
+                                            <button onClick={handleAddWishlist} class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
                                                 <svg class="h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                 </svg>
@@ -234,16 +238,11 @@ const SingleProduct = ({ match }) => {
                                     </div>
                                 </div>
                             </div>
-                            <Reviews />
+                            {/* <Reviews /> */}
                         </div>
                     </div>
                     : "Loading..."
             }
-
-            <TrendingProduct />
-            <Footer />
         </>
-    );
-};
-
-export default SingleProduct;
+    )
+}
