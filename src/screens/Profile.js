@@ -1,21 +1,23 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
+import Notif from '../components/simple';
 
-export default function Profile(props) {
+export default function Profile() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
     const [notif, setNotif] = useState({
-        type: '',
-        text: '',
+        error: '',
+        success: '',
     });
+    const userData = JSON.parse(localStorage.getItem('user-data'));
 
     const validatePassword = (oldPass, newPass) => {
         if (oldPass !== newPass) {
             setNotif({
-                type: 'danger',
-                text: 'Password doesnt match',
+                error: 'Password doesnt match',
+                success: '',
             })
         }
     }
@@ -24,33 +26,58 @@ export default function Profile(props) {
         e.preventDefault();
         if (!validatePassword(password, confirmPass)) {
             const qs = require('qs');
-            const data = new FormData();
-            data.append('username', username);
-            data.append('email', email);
-            data.append('password', password);
 
             try {
-                const response = await axios.patch(`LINK API`, qs.stringify(data), {
+                let response = await axios.patch(`https://server.seafreshing.com/api/user/set-fullname`, qs.stringify({
+                    'id': userData.id,
+                    'fullname': username,
+                }), {
                     headers: {
                         'Content-Type': 'application/json',
                         'auth-token': JSON.parse(localStorage.getItem('token')),
                     }
                 })
-                if (response.data) setNotif({
-                    type: 'success',
-                    text: 'Data berhasil disimpan.',
-                })
+                if (response.data) {
+                    try {
+                        let response = await axios.patch(`https://server.seafreshing.com/api/user/update-password-user`, qs.stringify({
+                            'id': userData.id,
+                            'fullname': password,
+                        }), {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'auth-token': JSON.parse(localStorage.getItem('token')),
+                            }
+                        })
+                        console.log(response.data)
+                    } catch (e) {
+                        console.log(e.response.data)
+                    }
+                }
             } catch (e) {
                 if (e.response.data) setNotif({
-                    type: 'danger',
-                    text: e.response.data.msg,
+                    error: 'e.response.data.msg',
+                    success: '',
                 })
             }
+            setNotif({
+                error: '',
+                success: 'Success',
+            })
         }
     }
+
     return (
         <>
-
+            {
+                notif.success && (
+                    <Notif title={notif.success} text="Data has been saved!" />
+                )
+            }
+            {
+                notif.error && (
+                    <Notif title='Error' text={notif.error} />
+                )
+            }
             <div className="mt-10 sm:mt-0 container px-6 py-3 mx-auto">
                 <div className="md:grid md:grid-cols-3 md:gap-6">
                     <div className="md:col-span-1">
@@ -77,13 +104,6 @@ export default function Profile(props) {
                                 </button>
                             </div>
                         </div>
-                        {
-                            notif && (
-                                <div className={"alert alert-" + notif.type} role="alert">
-                                    {notif.text}
-                                </div>
-                            )
-                        }
                         <form onSubmit={updateUser}>
                             <div className="shadow overflow-hidden sm:rounded-md">
                                 <div className="px-4 py-5 bg-white sm:p-6">
@@ -95,7 +115,7 @@ export default function Profile(props) {
                                             </label>
                                             <input
                                                 type="text"
-                                                placeholder={props.userData.fullname}
+                                                placeholder={userData.fullname}
                                                 value={username}
                                                 onChange={(e) => setUsername(e.target.value)}
                                                 required
@@ -109,7 +129,7 @@ export default function Profile(props) {
                                                 Email address
                                             </label>
                                             <input
-                                                type="email" placeholder={props.userData.email} value={email} onChange={(e) => setEmail(e.target.value)}
+                                                type="email" placeholder={userData.email} value={email} onChange={(e) => setEmail(e.target.value)}
                                                 autoComplete="email"
                                                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                             />
@@ -157,8 +177,6 @@ export default function Profile(props) {
                     <div className="border-t border-gray-200" />
                 </div>
             </div>
-
-
         </>
     )
 }
