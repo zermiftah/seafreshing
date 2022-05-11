@@ -4,9 +4,12 @@ import "./responsive.css";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
+import SingleProduct from "./screens/SingleProduct";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import CartScreen from "./screens/CartScreen";
+import ShippingScreen from "./screens/ShippingScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
@@ -25,7 +28,6 @@ import TrendingProduct from "./components/TrendingProduct/TrendingProduct";
 import Profile from "./screens/Profile";
 import Wishlist from "./screens/Wishlist";
 import Checkout from "./screens/Checkout";
-import NewArrivalScreen from "./screens/NewArrivalScreen";
 
 const App = () => {
   return (
@@ -41,6 +43,7 @@ const App = () => {
             <HomeScreen />
           </Auth>
         </Route>
+        <Route path="/products/:id" component={SingleProduct} />
         <Route path="/login">
           <Guest>
             <Login />
@@ -53,16 +56,7 @@ const App = () => {
         </Route>
         <Route path="/profile">
           <Auth>
-            <HeaderHS />
             <Profile />
-            <Footer />
-          </Auth>
-        </Route>
-        <Route path="/NewArrival">
-          <Auth>
-            <HeaderHS />
-            <NewArrivalScreen />
-            <Footer />
           </Auth>
         </Route>
         <Route path="/wishlist">
@@ -112,8 +106,18 @@ const App = () => {
         </Route>
         <Route path="/placeorder" component={PlaceOrderScreen} />
         <Route path="/order" component={OrderScreen} />
-        <Route path="/search/:id" component={Search} />
-        <Route path="/kiosk" component={KioskScreen} />
+        <Route path="/search/:id">
+          <Auth>
+            <HeaderHS />
+            <Search />
+            <Footer />
+          </Auth>
+        </Route>
+        <Route path="/kiosk">
+          <Auth>
+            <KioskScreen />
+          </Auth>
+        </Route>
         <Route path="/ProductList" component={ProductList} />
       </Switch>
     </Router>

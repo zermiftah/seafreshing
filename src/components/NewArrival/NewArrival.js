@@ -87,7 +87,7 @@ const NewArrival = () => {
                             while they're still in stock.
                         </p>
                         <a
-                            href="/NewArrival"
+                            href="#"
                             className="mt-8 inline-block bg-white border border-transparent rounded-md py-3 px-8 text-base font-medium text-gray-900 hover:bg-gray-100"
                         >
                             Shop New Arrivals

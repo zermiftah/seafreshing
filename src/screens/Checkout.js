@@ -179,43 +179,43 @@ export default function Example() {
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
                                     </div>*/}
-                                </div> 
+                            </div>
 
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-                                        Company
-                                    </label>
-                                    <div className="mt-1">
-                                        {/* <input
+                            <div className="sm:col-span-2">
+                                <label htmlFor="company" className="block text-sm font-medium text-gray-700">
+                                    Company
+                                </label>
+                                <div className="mt-1">
+                                    {/* <input
                                             type="text"
                                             name="company"
                                             id="company"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         /> */}
-                                    </div>
                                 </div>
+                            </div>
 
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                                        Address
-                                    </label>
-                                    <div className="mt-1">{userData.address[0].fullAddress}
-                                        {/* <input
+                            <div className="sm:col-span-2">
+                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                    Address
+                                </label>
+                                <div className="mt-1">{userData.address[0].fullAddress}
+                                    {/* <input
                                             type="text"
                                             name="address"
                                             id="address"
                                             autoComplete="street-address"
                                             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         /> */}
-                                    </div>
                                 </div>
+                            </div>
 
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
-                                        District, etc.
-                                    </label>
-                                    <div className="mt-1">{userData.address[0].district}
-                                        {/* <input
+                            <div className="sm:col-span-2">
+                                <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
+                                    District, etc.
+                                </label>
+                                <div className="mt-1">{userData.address[0].district}
+                                    {/* <input
                                             type="text"
                                             name="apartment"
                                             id="apartment"
