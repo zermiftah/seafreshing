@@ -10,55 +10,24 @@ const HeaderHS = () => {
     const history = useHistory();
     const userData = JSON.parse(localStorage.getItem('user-data'));
     const [valSearch, setValSearch] = useState('');
-    const [getOrders, setOrders] = useState([]);
-    const [getWishlist, setWishlist] = useState([]);
-    const token = JSON.parse(localStorage.getItem('token'));
 
     useEffect(() => {
         getUser();
-        getOrdersData();
-        getWishlistData();
     }, [])
 
     const getUser = async () => {
         try {
             const response = await axios.get(`https://server.seafreshing.com/api/user/get-user/${userData.accounttype}/${userData.id}`, {
                 headers: {
+                    'Content-Type': 'application/json',
                     'auth-token': JSON.parse(localStorage.getItem('token')),
                 }
-            })
+            });
             setUser(response.data.user)
         } catch (e) {
-            console.log(e)
+            return e
         }
     }
-
-    const getOrdersData = async () => {
-        try {
-            let response = await axios.get('https://server.seafreshing.com/api/user/get-transaction-test');
-            setOrders(response.data)
-        } catch (e) {
-            console.log(e)
-            console.log(e.response.data)
-        }
-    }
-
-    const getWishlistData = async () => {
-        try {
-            let response = await axios.get(`https://server.seafreshing.com/api/user/get-wishlist/${userData.accounttype}/${userData.id}`, {
-                headers: {
-                    'auth-token': token,
-                }
-            });
-            setWishlist(response.data.wishlist[0].wishlist)
-            console.log(response.data.wishlist)
-        } catch (e) {
-            console.log(e)
-            console.log(e.response)
-        }
-    }
-
-
 
     const getValSearch = () => {
         history.push(`/search/${valSearch}`)
@@ -74,6 +43,7 @@ const HeaderHS = () => {
         return classes.filter(Boolean).join(' ')
     }
     return (
+
         <nav class="bg-white shadow dark:bg-gray-800">
             <div class="container px-6 py-3 mx-auto">
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center">
@@ -89,8 +59,10 @@ const HeaderHS = () => {
                                             <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                         </svg>
                                     </span>
-
-                                    <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search" />
+                                    <form onSubmit={getValSearch}>
+                                        <input value={valSearch} onChange={(e) => setValSearch(e.target.value)} type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search" />
+                                        <button type='submit' hidden></button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +133,7 @@ const HeaderHS = () => {
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <a
-                                                    href="/profile"
+                                                    href="/kiosk"
                                                     className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                                                 >
                                                     Your Kios
@@ -212,7 +184,10 @@ const HeaderHS = () => {
                                     </svg>
                                 </span>
 
-                                <input type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search" />
+                                <form onSubmit={getValSearch}>
+                                    <input value={valSearch} onChange={(e) => setValSearch(e.target.value)} type="text" class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search" />
+                                    <button type='submit' hidden></button>
+                                </form>
                             </div>
                         </div>
                     </div>
