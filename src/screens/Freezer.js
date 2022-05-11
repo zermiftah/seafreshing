@@ -14,21 +14,27 @@ const Freezer = () => {
 
     const getFreezer = async () => {
         try {
+            let dataItems = [];
             let response = await axios.get(`https://server.seafreshing.com/api/user/get-freezer/${userData.id}`, {
                 headers: {
                     'auth-token': token,
                 }
             });
-            setItems(response.data.freezer);
+            response.data.freezer[0].freezer.map(cart=>{
+                cart.product.forEach(product=>{
+                    dataItems.push(product);
+                })
+            })
+            setItems(dataItems);
         } catch (e) {
             console.log(e)
         }
     }
 
-    // const totPrice = items.reduce((total, item) => {
-    //     total += (item.product[0].clearPrice)
-    //     return total;
-    // }, 0);
+    const totPrice = items.reduce((total, item) => {
+        total += (item.clearPrice)
+        return total;
+    }, 0);
 
     // const removeItem = async (freezerId, productId) => {
     //     try {
@@ -62,7 +68,7 @@ const Freezer = () => {
                                     <ul role="list" class="border-t border-b border-gray-200 divide-y divide-gray-200">
                                         <li class="flex py-6 sm:py-10">
                                             <div class="flex-shrink-0">
-                                                <img src={"abc"} alt="Front of men&#039;s Basic Tee in sienna." class="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48" />
+                                                <img src={cart.image} alt="Front of men&#039;s Basic Tee in sienna." class="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48" />
                                             </div>
 
                                             <div class="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
@@ -70,15 +76,15 @@ const Freezer = () => {
                                                     <div>
                                                         <div class="flex justify-between">
                                                             <h3 class="text-sm">
-                                                                <a href="#" class="font-medium text-gray-700 hover:text-gray-800"> Salmon Fillet</a>
+                                                                <a href="#" class="font-medium text-gray-700 hover:text-gray-800">{cart.name}</a>
                                                             </h3>
                                                         </div>
-                                                        <div class="mt-1 flex text-sm">
+                                                        {/* <div class="mt-1 flex text-sm">
                                                             <p class="text-gray-500">Ikan</p>
 
                                                             <p class="ml-4 pl-4 border-l border-gray-200 text-gray-500">Large</p>
-                                                        </div>
-                                                        <p class="mt-1 text-sm font-medium text-gray-900">Rp.30.000</p>
+                                                        </div> */}
+                                                        <p class="mt-1 text-sm font-medium text-gray-900">{cart.price}</p>
                                                     </div>
 
                                                     <div class="mt-4 sm:mt-0 sm:pr-9">
@@ -115,6 +121,7 @@ const Freezer = () => {
                                         </li>
                                     </ul>
                                 </>
+                                
                             ))
                         }
                     </section>
@@ -125,9 +132,9 @@ const Freezer = () => {
                         <dl class="mt-6 space-y-4">
                             <div class="flex items-center justify-between">
                                 <dt class="text-sm text-gray-600">Subtotal</dt>
-                                <dd class="text-sm font-medium text-gray-900">Rp.90.000</dd>
+                                <dd class="text-sm font-medium text-gray-900">Rp.{totPrice}</dd>
                             </div>
-                            <div class="border-t border-gray-200 pt-4 flex items-center justify-between">
+                            {/* <div class="border-t border-gray-200 pt-4 flex items-center justify-between">
                                 <dt class="flex items-center text-sm text-gray-600">
                                     <span>Shipping estimate</span>
                                     <a href="#" class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
@@ -150,10 +157,10 @@ const Freezer = () => {
                                     </a>
                                 </dt>
                                 <dd class="text-sm font-medium text-gray-900">Rp.10.000</dd>
-                            </div>
+                            </div> */}
                             <div class="border-t border-gray-200 pt-4 flex items-center justify-between">
                                 <dt class="text-base font-medium text-gray-900">Order total</dt>
-                                <dd class="text-base font-medium text-gray-900">Rp.110.000</dd>
+                                <dd class="text-base font-medium text-gray-900">Rp.{totPrice}</dd>
                             </div>
                         </dl>
 
