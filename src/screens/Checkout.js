@@ -34,11 +34,17 @@ export default function Example() {
             "auth-token": JSON.parse(localStorage.getItem('token'))
         }
     }).then(r => {
+<<<<<<< HEAD
         console.log(r);
         localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
     })
     let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
     console.log(userData.address)
+=======
+        localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
+    })
+    let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
 
     let selectedAddress = {
         city: userData.address[0].city,
@@ -51,10 +57,16 @@ export default function Example() {
         province: userData.address[0].province,
         receivedName: userData.address[0].receivedName,
         subdistrict: userData.address[0].subdistrict,
+<<<<<<< HEAD
         zipCode: userData.address[0].zipCode
     }
 
     // console.log(selectedAddress);
+=======
+        zipCode: userData.address[0].zipCode 
+    }
+
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
 
     userData.freezer.map(element => {
         element.product.map(e => {
@@ -64,11 +76,19 @@ export default function Example() {
                 name: e.name,
                 price: e.totalPrice ? `Rp. ${e.totalPrice}, -` : `Rp. 0,-`,
                 clear: e.totalPrice ? e.totalPrice : 0,
+<<<<<<< HEAD
                 imageSrc: e.image,
                 href: "#",
                 qty: e.productQuantity ? e.productQuantity : 0
             })
 
+=======
+                imageSrc : e.image,
+                href : "#",
+                qty : e.productQuantity ? e.productQuantity : 0
+            })  
+            
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
         })
     });
     // axios({
@@ -80,7 +100,11 @@ export default function Example() {
     // }).then(r => {
     //     localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
     // })
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
     let subtotal = products.reduce((accumulator, object) => {
         return accumulator + object.clear;
     }, 0);
@@ -301,7 +325,11 @@ export default function Example() {
                                     </label>
                                     <div className="mt-1">{userData.fullname}</div>
                                 </div>
+<<<<<<< HEAD
 
+=======
+                                
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="company" className="block text-sm font-medium text-gray-700">
@@ -372,7 +400,11 @@ export default function Example() {
                                             }
                                         >
                                             {({ checked, active }) => (
+<<<<<<< HEAD
 
+=======
+                                                
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
                                                 <>
                                                     <div className="flex-1 flex">
                                                         <div className="flex flex-col">
@@ -407,7 +439,11 @@ export default function Example() {
                             </RadioGroup>
                         </div>
 
+<<<<<<< HEAD
 
+=======
+                        
+>>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
                     </div>
 
                     {/* Order summary */}
