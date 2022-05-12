@@ -21,7 +21,9 @@ function classNames(...classes) {
 
 export default function Example() {
     let products = []
-    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
+    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]),
+        [shiPrice, setShippingPrice] = useState(0),
+        [tax, setTax] = useState(0);
     let id = JSON.parse(localStorage.getItem('user-data'));
     let kiosk;
 
@@ -83,6 +85,8 @@ export default function Example() {
     const handleChange = (shipPrice) => {
         console.log(shipPrice, "ship price");
     }
+
+    // let total = 
 
     // let locations, require_signatures, extra_services, packs;
     // products.forEach(e => {
