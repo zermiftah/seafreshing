@@ -23,9 +23,10 @@ export default function Example() {
     let products = []
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]),
         [shiPrice, setShippingPrice] = useState(0),
-        [tax, setTax] = useState(0);
+        [url, setUrl] = useState(""),
+        [kiosk, setKiosk] = ("");
     let id = JSON.parse(localStorage.getItem('user-data'));
-    let kiosk;
+
 
     axios({
         method: "get",
@@ -34,17 +35,9 @@ export default function Example() {
             "auth-token": JSON.parse(localStorage.getItem('token'))
         }
     }).then(r => {
-<<<<<<< HEAD
-        console.log(r);
         localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
     })
     let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
-    console.log(userData.address)
-=======
-        localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
-    })
-    let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
 
     let selectedAddress = {
         city: userData.address[0].city,
@@ -57,63 +50,44 @@ export default function Example() {
         province: userData.address[0].province,
         receivedName: userData.address[0].receivedName,
         subdistrict: userData.address[0].subdistrict,
-<<<<<<< HEAD
-        zipCode: userData.address[0].zipCode
-    }
-
-    // console.log(selectedAddress);
-=======
         zipCode: userData.address[0].zipCode 
     }
 
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
-
     userData.freezer.map(element => {
         element.product.map(e => {
+            axios({
+                method: "get",
+                url: `https://server.seafreshing.com/api/kiosk/get-kiosk/${e.kioskId}`,
+            }).then(r => {
+               console.log(r.data.kiosk);
+            })
+       
             products.push({
                 id: e.id,
                 kiosk: e.kioskId,
                 name: e.name,
                 price: e.totalPrice ? `Rp. ${e.totalPrice}, -` : `Rp. 0,-`,
                 clear: e.totalPrice ? e.totalPrice : 0,
-<<<<<<< HEAD
-                imageSrc: e.image,
-                href: "#",
-                qty: e.productQuantity ? e.productQuantity : 0
-            })
-
-=======
                 imageSrc : e.image,
                 href : "#",
                 qty : e.productQuantity ? e.productQuantity : 0
             })  
             
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
         })
     });
-    // axios({
-    //     method: "get",
-    //     url: `https://server.seafreshing.com/api/kiosk/${id.id}`,
-    //     headers: {
-    //         "auth-token": JSON.parse(localStorage.getItem('token'))
-    //     }
-    // }).then(r => {
-    //     localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
-    // })
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
     let subtotal = products.reduce((accumulator, object) => {
         return accumulator + object.clear;
     }, 0);
 
-    const handleChange = (shipPrice) => {
-        console.log(shipPrice, "ship price");
-    }
+    let payTax = (1.11 * (subtotal + selectedDeliveryMethod.clear)).toFixed(0)
 
-    // let total = 
+    let total = subtotal + selectedDeliveryMethod.clear + parseInt(payTax)
+
+    const handleChange = (event) => {
+        console.log(event.target.value);
+        setShippingPrice(event.target.value);
+      }
 
     // let locations, require_signatures, extra_services, packs;
     // products.forEach(e => {
@@ -211,91 +185,97 @@ export default function Example() {
     // })
     // console.log(deliveree, "Deliveree")
 
-    // useEffect(() => {
-    //     const pay = async () => {
-    //         try {
-    //             const toPay = await axios.post(`https://server.seafreshing.com/api/orders/create-order`, {
-    //                 "amount": 1,
-    //                 "buyerDetails": {
-    //                     "id": userData.id,
-    //                     "userEmail": userData.email,
-    //                     "userName": userData.fullname,
-    //                     "userPhone": userData.mobilenumber
-    //                 },
-    //                 "orderDate": "1652166301743",
-    //                 "content": [
-    //                     {
-    //                         "destination": {
-    //                             "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
-    //                             "latitude": userData.address[0].lat,
-    //                             "longitude": userData.address[0].lng,
-    //                             "name": userData.fullname + " - " + userData.address[0].label
-    //                         },
-    //                         "kioskDetails": {
-    //                             "id": "3402HhLqrw5N",
-    //                             "kioskPhone": "+62265813946",
-    //                             "name": "fazriseapood"
-    //                         },
-    //                         "origin": {
-    //                             "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
-    //                             "latitude": "106.83358702808619",
-    //                             "longitude": "-6.157134476099802",
-    //                             "name": "fazriseapood"
-    //                         },
-    //                         "product": [
-    //                             {
-    //                                 "clearPrice": 50000,
-    //                                 "id": "1475pOZECMcl",
-    //                                 "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
-    //                                 "isWholesale": true,
-    //                                 "isWholesalePrice": false,
-    //                                 "minimumOrder": {
-    //                                     "total": 1,
-    //                                     "unit": "kg"
-    //                                 },
-    //                                 "note": "",
-    //                                 "packingVariant": {
-    //                                     "isCheck": false,
-    //                                     "packingDimensions": {
-    //                                         "height": 5,
-    //                                         "length": 5,
-    //                                         "weight": {
-    //                                             "unit": "kg",
-    //                                             "value": "1"
-    //                                         },
-    //                                         "width": 5
-    //                                     },
-    //                                     "packingName": "Carton"
-    //                                 },
-    //                                 "price": "Rp50.000",
-    //                                 "priceUnit": "kg",
-    //                                 "priceWholesale": 0,
-    //                                 "productName": "Ikan tuna",
-    //                                 "productQuantity": 1,
-    //                                 "productQuantityUnit": "kg",
-    //                                 "quantityWholesale": 0,
-    //                                 "quantityWholesaleReal": 0,
-    //                                 "totalPrice": 50000
-    //                             }
-    //                         ],
-    //                         "shipping": {
-    //                             "cost": 12300,
-    //                             "service": "lalamove",
-    //                             "status": "",
-    //                             "trackUrl": ""
-    //                         },
-    //                         "status": "PENDING"
-    //                     }
-    //                 ]
-    //             })
-
-    //             console.log(toPay)
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     pay()
-    // })
+    useEffect(() => {
+        const pay = async () => {
+            try {
+                const toPay = await axios({
+                    method: "post",
+                    url: `https://server.seafreshing.com/api/orders/create-order`,
+                    headers: {
+                        "auth-token": JSON.parse(localStorage.getItem('token'))
+                    }, 
+                    data: {
+                        "amount": total,
+                        "buyerDetails": {
+                            "id": userData.id,
+                            "userEmail": userData.email,
+                            "userName": userData.fullname,
+                            "userPhone": userData.mobilenumber
+                        },
+                        "orderDate": "1652166301743",
+                        "content": [
+                            {
+                                "destination": {
+                                    "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
+                                    "latitude": userData.address[0].lat,
+                                    "longitude": userData.address[0].lng,
+                                    "name": userData.fullname + " - " + userData.address[0].label
+                                },
+                                "kioskDetails": {
+                                    "id": "3402HhLqrw5N",
+                                    "kioskPhone": "+62265813946",
+                                    "name": "fazriseapood"
+                                },
+                                "origin": {
+                                    "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
+                                    "latitude": "106.83358702808619",
+                                    "longitude": "-6.157134476099802",
+                                    "name": "fazriseapood"
+                                },
+                                "product": [
+                                    {
+                                        "clearPrice": 50000,
+                                        "id": "1475pOZECMcl",
+                                        "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
+                                        "isWholesale": true,
+                                        "isWholesalePrice": false,
+                                        "minimumOrder": {
+                                            "total": 1,
+                                            "unit": "kg"
+                                        },
+                                        "note": "",
+                                        "packingVariant": {
+                                            "isCheck": false,
+                                            "packingDimensions": {
+                                                "height": 5,
+                                                "length": 5,
+                                                "weight": {
+                                                    "unit": "kg",
+                                                    "value": "1"
+                                                },
+                                                "width": 5
+                                            },
+                                            "packingName": "Carton"
+                                        },
+                                        "price": "Rp50.000",
+                                        "priceUnit": "kg",
+                                        "priceWholesale": 0,
+                                        "productName": "Ikan tuna",
+                                        "productQuantity": 1,
+                                        "productQuantityUnit": "kg",
+                                        "quantityWholesale": 0,
+                                        "quantityWholesaleReal": 0,
+                                        "totalPrice": 50000
+                                    }
+                                ],
+                                "shipping": {
+                                    "cost": 12300,
+                                    "service": "lalamove",
+                                    "status": "",
+                                    "trackUrl": ""
+                                },
+                                "status": "PENDING"
+                            }
+                        ]
+                    }
+                })
+               console.log(toPay);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        pay()
+    })
 
     return (
         <div className="bg-gray-50">
@@ -325,11 +305,7 @@ export default function Example() {
                                     </label>
                                     <div className="mt-1">{userData.fullname}</div>
                                 </div>
-<<<<<<< HEAD
-
-=======
                                 
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="company" className="block text-sm font-medium text-gray-700">
@@ -400,11 +376,7 @@ export default function Example() {
                                             }
                                         >
                                             {({ checked, active }) => (
-<<<<<<< HEAD
-
-=======
                                                 
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
                                                 <>
                                                     <div className="flex-1 flex">
                                                         <div className="flex flex-col">
@@ -417,12 +389,12 @@ export default function Example() {
                                                             >
                                                                 {deliveryMethod.turnaround}
                                                             </RadioGroup.Description>
-                                                            <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
+                                                            <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900" >
                                                                 {deliveryMethod.price}
                                                             </RadioGroup.Description>
                                                         </div>
                                                     </div>
-                                                    {checked ? (<CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />) : null}
+                                                    {checked ? (<CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" onChange={handleChange}/>) : null}
                                                     <div
                                                         className={classNames(
                                                             active ? 'border' : 'border-2',
@@ -439,11 +411,7 @@ export default function Example() {
                             </RadioGroup>
                         </div>
 
-<<<<<<< HEAD
-
-=======
                         
->>>>>>> 13eac21dc288033c4adccd94a45743ecf1f5e084
                     </div>
 
                     {/* Order summary */}
@@ -493,15 +461,15 @@ export default function Example() {
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <dt className="text-sm">Shipping</dt>
-                                    <dd className="text-sm font-medium text-gray-900">{selectedDeliveryMethod.price} </dd>
+                                    <dd className="text-sm font-medium text-gray-900">Rp.{selectedDeliveryMethod.clear}</dd>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <dt className="text-sm">Taxes</dt>
-                                    <dd className="text-sm font-medium text-gray-900">Rp.10.000</dd>
+                                    <dd className="text-sm font-medium text-gray-900">Rp.{payTax}</dd>
                                 </div>
                                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                                     <dt className="text-base font-medium">Total</dt>
-                                    <dd className="text-base font-medium text-gray-900">Rp.270.000</dd>
+                                    <dd className="text-base font-medium text-gray-900">Rp.{total}</dd>
                                 </div>
                             </dl>
 
