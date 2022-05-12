@@ -1,24 +1,12 @@
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/solid'
+import axios from 'axios';
 
-const products = [
-    {
-        id: 1,
-        title: 'Ikan Tenggiri',
-        href: '#',
-        price: 'Rp.250.000',
-        color: 'Fish',
-        size: '',
-        imageSrc: 'https://dahliagroup.co.id/wp-content/uploads/2019/11/6.-Ikan-Tenggri-segar.jpg',
-        imageAlt: "Front of men's Basic Tee in black.",
-    },
-    // More products...
-]
+
 const deliveryMethods = [
-    { id: 1, title: 'GoSend', turnaround: '1 - 2 business days', price: 'Rp.10.000' },
-    { id: 2, title: 'GrabExpress', turnaround: '1 - 2 business days', price: 'Rp.10.000' },
+    { id: 1, title: 'GoSend', turnaround: '1 - 2 business days', price: 'Rp.20.000', clear: 20000 },
+    { id: 2, title: 'GrabExpress', turnaround: '1 - 2 business days', price: 'Rp.10.000', clear: 10000 },
 ]
 const paymentMethods = [
     { id: 'credit-card', title: 'Credit card' },
@@ -26,12 +14,257 @@ const paymentMethods = [
     { id: 'etransfer', title: 'eTransfer' },
 ]
 
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export default function Example() {
+    let products = []
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
+    let id = JSON.parse(localStorage.getItem('user-data'));
+    let kiosk;
+
+    axios({
+        method: "get",
+        url: `https://server.seafreshing.com/api/user/get-user/0/${id.id}`,
+        headers: {
+            "auth-token": JSON.parse(localStorage.getItem('token'))
+        }
+    }).then(r => {
+        localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
+    })
+    let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
+
+    let selectedAddress = {
+        city: userData.address[0].city,
+        district: userData.address[0].district,
+        fullAddress: userData.address[0].fullAddress,
+        label: userData.address[0].label,
+        lat: userData.address[0].lat,
+        lng: userData.address[0].lng,
+        mobileNumber: userData.address[0].mobileNumber,
+        province: userData.address[0].province,
+        receivedName: userData.address[0].receivedName,
+        subdistrict: userData.address[0].subdistrict,
+        zipCode: userData.address[0].zipCode 
+    }
+
+
+    userData.freezer.map(element => {
+        element.product.map(e => {
+            products.push({
+                id: e.id,
+                kiosk: e.kioskId,
+                name: e.name,
+                price: e.totalPrice ? `Rp. ${e.totalPrice}, -` : `Rp. 0,-`,
+                clear: e.totalPrice ? e.totalPrice : 0,
+                imageSrc : e.image,
+                href : "#",
+                qty : e.productQuantity ? e.productQuantity : 0
+            })  
+            
+        })
+    });
+    // axios({
+    //     method: "get",
+    //     url: `https://server.seafreshing.com/api/kiosk/${id.id}`,
+    //     headers: {
+    //         "auth-token": JSON.parse(localStorage.getItem('token'))
+    //     }
+    // }).then(r => {
+    //     localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
+    // })
+    
+    let subtotal = products.reduce((accumulator, object) => {
+        return accumulator + object.clear;
+    }, 0);
+
+    const handleChange = (shipPrice) => {
+        console.log(shipPrice, "ship price");
+    }
+
+    // let locations, require_signatures, extra_services, packs;
+    // products.forEach(e => {
+    //     packs.push({
+    //         "dimensions": [1,1,1],
+    //         "weight": e.qty,
+    //         "quantity": e.qty
+    //     })
+    // })
+
+    // let originDeliveree = {
+    //     "address": "Jl. Sultan Iskandar Muda No.21, Arteri Pondok Indah, Pd. Pinang, Kby. Lama, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    //     "latitude":-6.200000,
+    //     "longitude": 106.816666,
+    //     "recipient_name": "Duke",
+    //     "recipient_phone": "+84903398399",
+    //     "note": "Second floor, room 609"
+    // }
+
+    // let destinationDeliveree = {
+    //     "address": "Gedung Inti Sentra, Jl. Taman Kemang, RT.14/RW.1, Bangka, Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta, Indonesia",
+    //     "latitude": -6.2608232,
+    //     "longitude": 106.7884168,
+    //     "recipient_name": "Nam",
+    //     "recipient_phone": "+84903856534",
+    //     "note": "First floor, right room.",
+    //     "need_cod": true,
+    //     "cod_note": "You need to get money from Nam",
+    //     "cod_invoice_fees": 5000,
+    //     "need_pod":true,
+    //     "pod_note": "You need to ..."
+    // }
+
+    // const lala = axios.post(`https://server.seafreshing.com/api/orders/get-lalamove-info`, {
+    //         "serviceType": serviceType,
+    //         "language": "en_ID",
+    //         "stops": [
+    //             origin, destination
+    //         ],
+    //         "item": item,
+    //         "isRouteOptimized": true
+    // })
+    // console.log(lala, "Lala");
+
+    // "packages": [
+    //     {
+    //     "name": "Fish Burger",
+    //     "description": "Fish Burger with mayonnaise sauce",
+    //     "quantity": 2,
+    //     "price": 5,
+    //     "dimensions": {
+    //         "height": 0,
+    //         "width": 0,
+    //         "depth": 0,
+    //         "weight": 0
+    //     }
+    //     },
+    //     {
+    //     "name": "Truffle Fries",
+    //     "description": "Thin cut deep-fried potatoes topped with truffle oil",
+    //     "quantity": 2,
+    //     "price": 4,
+    //     "dimensions": {
+    //         "height": 0,
+    //         "width": 0,
+    //         "depth": 0,
+    //         "weight": 0
+    //     }
+    //     }
+    // ],
+    // const grab = axios.post(`https://server.seafreshing.com/api/orders/get-grab-info`, {
+    //     "serviceType": "INSTANT",
+    //     "packages": packages,
+    //     "origin": origin,
+    //     "destination": {
+    //         "address": selectedAddress.fullAddress,
+    //         "coordinates": {
+    //             "latitude": selectedAddress.lat,
+    //             "longitude": selectedAddress.lng
+    //         },
+    //     },
+    //     "cashOnDelivery": cashOnDelivery,
+    //     "paymentMethod": "CASHLESS",
+    //     "promoCode": promoCode
+    // })
+    // console.log(grab, "grab");
+
+    // const deliveree = axios.post(`https://server.seafreshing.com/api/orders/get-deliveree-info`, {
+    //     "vehicle_type_id": 12,
+    //     "note": "No notes",
+    //     "packs": packs,
+    //     "time_type": "now",
+    //     "locations": locations,
+    //     "extra_services": extra_services
+    // })
+    // console.log(deliveree, "Deliveree")
+
+    // useEffect(() => {
+    //     const pay = async () => {
+    //         try {
+    //             const toPay = await axios.post(`https://server.seafreshing.com/api/orders/create-order`, {
+    //                 "amount": 1,
+    //                 "buyerDetails": {
+    //                     "id": userData.id,
+    //                     "userEmail": userData.email,
+    //                     "userName": userData.fullname,
+    //                     "userPhone": userData.mobilenumber
+    //                 },
+    //                 "orderDate": "1652166301743",
+    //                 "content": [
+    //                     {
+    //                         "destination": {
+    //                             "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
+    //                             "latitude": userData.address[0].lat,
+    //                             "longitude": userData.address[0].lng,
+    //                             "name": userData.fullname + " - " + userData.address[0].label
+    //                         },
+    //                         "kioskDetails": {
+    //                             "id": "3402HhLqrw5N",
+    //                             "kioskPhone": "+62265813946",
+    //                             "name": "fazriseapood"
+    //                         },
+    //                         "origin": {
+    //                             "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
+    //                             "latitude": "106.83358702808619",
+    //                             "longitude": "-6.157134476099802",
+    //                             "name": "fazriseapood"
+    //                         },
+    //                         "product": [
+    //                             {
+    //                                 "clearPrice": 50000,
+    //                                 "id": "1475pOZECMcl",
+    //                                 "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
+    //                                 "isWholesale": true,
+    //                                 "isWholesalePrice": false,
+    //                                 "minimumOrder": {
+    //                                     "total": 1,
+    //                                     "unit": "kg"
+    //                                 },
+    //                                 "note": "",
+    //                                 "packingVariant": {
+    //                                     "isCheck": false,
+    //                                     "packingDimensions": {
+    //                                         "height": 5,
+    //                                         "length": 5,
+    //                                         "weight": {
+    //                                             "unit": "kg",
+    //                                             "value": "1"
+    //                                         },
+    //                                         "width": 5
+    //                                     },
+    //                                     "packingName": "Carton"
+    //                                 },
+    //                                 "price": "Rp50.000",
+    //                                 "priceUnit": "kg",
+    //                                 "priceWholesale": 0,
+    //                                 "productName": "Ikan tuna",
+    //                                 "productQuantity": 1,
+    //                                 "productQuantityUnit": "kg",
+    //                                 "quantityWholesale": 0,
+    //                                 "quantityWholesaleReal": 0,
+    //                                 "totalPrice": 50000
+    //                             }
+    //                         ],
+    //                         "shipping": {
+    //                             "cost": 12300,
+    //                             "service": "lalamove",
+    //                             "status": "",
+    //                             "trackUrl": ""
+    //                         },
+    //                         "status": "PENDING"
+    //                     }
+    //                 ]
+    //             })
+
+    //             console.log(toPay)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     pay()
+    // })
 
     return (
         <div className="bg-gray-50">
@@ -47,15 +280,7 @@ export default function Example() {
                                 <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
                                     Email address
                                 </label>
-                                <div className="mt-1">
-                                    <input
-                                        type="email"
-                                        id="email-address"
-                                        name="email-address"
-                                        autoComplete="email"
-                                        className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    />
-                                </div>
+                                <div className="mt-1"> {userData.email}</div>
                             </div>
                         </div>
 
@@ -65,153 +290,59 @@ export default function Example() {
                             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div>
                                     <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                                        First name
+                                        Fullname
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            id="first-name"
-                                            name="first-name"
-                                            autoComplete="given-name"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1">{userData.fullname}</div>
                                 </div>
-
-                                <div>
-                                    <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-                                        Last name
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            id="last-name"
-                                            name="last-name"
-                                            autoComplete="family-name"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
+                                
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="company" className="block text-sm font-medium text-gray-700">
                                         Company
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="company"
-                                            id="company"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1"></div>
                                 </div>
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                                         Address
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="address"
-                                            id="address"
-                                            autoComplete="street-address"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1">{selectedAddress.fullAddress}</div>
                                 </div>
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
-                                        Apartment, suite, etc.
+                                        District, etc.
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="apartment"
-                                            id="apartment"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1">{selectedAddress.district}</div>
                                 </div>
 
                                 <div>
                                     <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                                         City
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="city"
-                                            id="city"
-                                            autoComplete="address-level2"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-                                        Country
-                                    </label>
-                                    <div className="mt-1">
-                                        <select
-                                            id="country"
-                                            name="country"
-                                            autoComplete="country-name"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        >
-                                            <option>United States</option>
-                                            <option>Canada</option>
-                                            <option>Mexico</option>
-                                        </select>
-                                    </div>
+                                    <div className="mt-1">{selectedAddress.city}</div>
                                 </div>
 
                                 <div>
                                     <label htmlFor="region" className="block text-sm font-medium text-gray-700">
                                         State / Province
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="region"
-                                            id="region"
-                                            autoComplete="address-level1"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1">{selectedAddress.province}</div>
                                 </div>
 
                                 <div>
                                     <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700">
                                         Postal code
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="postal-code"
-                                            id="postal-code"
-                                            autoComplete="postal-code"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1">{selectedAddress.zipCode}</div>
                                 </div>
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                                         Phone
                                     </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="phone"
-                                            id="phone"
-                                            autoComplete="tel"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
+                                    <div className="mt-1">{userData.mobilenumber}</div>
                                 </div>
                             </div>
                         </div>
@@ -234,6 +365,7 @@ export default function Example() {
                                             }
                                         >
                                             {({ checked, active }) => (
+                                                
                                                 <>
                                                     <div className="flex-1 flex">
                                                         <div className="flex flex-col">
@@ -251,7 +383,7 @@ export default function Example() {
                                                             </RadioGroup.Description>
                                                         </div>
                                                     </div>
-                                                    {checked ? <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" /> : null}
+                                                    {checked ? (<CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />) : null}
                                                     <div
                                                         className={classNames(
                                                             active ? 'border' : 'border-2',
@@ -268,102 +400,7 @@ export default function Example() {
                             </RadioGroup>
                         </div>
 
-                        {/* Payment */}
-                        <div className="mt-10 border-t border-gray-200 pt-10">
-                            <h2 className="text-lg font-medium text-gray-900">Payment</h2>
-
-                            <fieldset className="mt-4">
-                                <legend className="sr-only">Payment type</legend>
-                                <div className="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
-                                    {paymentMethods.map((paymentMethod, paymentMethodIdx) => (
-                                        <div key={paymentMethod.id} className="flex items-center">
-                                            {paymentMethodIdx === 0 ? (
-                                                <input
-                                                    id={paymentMethod.id}
-                                                    name="payment-type"
-                                                    type="radio"
-                                                    defaultChecked
-                                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                                />
-                                            ) : (
-                                                <input
-                                                    id={paymentMethod.id}
-                                                    name="payment-type"
-                                                    type="radio"
-                                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                                                />
-                                            )}
-
-                                            <label htmlFor={paymentMethod.id} className="ml-3 block text-sm font-medium text-gray-700">
-                                                {paymentMethod.title}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </fieldset>
-
-                            <div className="mt-6 grid grid-cols-4 gap-y-6 gap-x-4">
-                                <div className="col-span-4">
-                                    <label htmlFor="card-number" className="block text-sm font-medium text-gray-700">
-                                        Card number
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            id="card-number"
-                                            name="card-number"
-                                            autoComplete="cc-number"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-span-4">
-                                    <label htmlFor="name-on-card" className="block text-sm font-medium text-gray-700">
-                                        Name on card
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            id="name-on-card"
-                                            name="name-on-card"
-                                            autoComplete="cc-name"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-span-3">
-                                    <label htmlFor="expiration-date" className="block text-sm font-medium text-gray-700">
-                                        Expiration date (MM/YY)
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="expiration-date"
-                                            id="expiration-date"
-                                            autoComplete="cc-exp"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="cvc" className="block text-sm font-medium text-gray-700">
-                                        CVC
-                                    </label>
-                                    <div className="mt-1">
-                                        <input
-                                            type="text"
-                                            name="cvc"
-                                            id="cvc"
-                                            autoComplete="csc"
-                                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
 
                     {/* Order summary */}
@@ -387,18 +424,8 @@ export default function Example() {
                                                             {product.title}
                                                         </a>
                                                     </h4>
-                                                    <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                                                    <p className="mt-1 text-sm text-gray-500">{product.name}</p>
                                                     <p className="mt-1 text-sm text-gray-500">{product.size}</p>
-                                                </div>
-
-                                                <div className="ml-4 flex-shrink-0 flow-root">
-                                                    <button
-                                                        type="button"
-                                                        className="-m-2.5 bg-white p-2.5 flex items-center justify-center text-gray-400 hover:text-gray-500"
-                                                    >
-                                                        <span className="sr-only">Remove</span>
-                                                        <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                                                    </button>
                                                 </div>
                                             </div>
 
@@ -409,20 +436,7 @@ export default function Example() {
                                                     <label htmlFor="quantity" className="sr-only">
                                                         Quantity
                                                     </label>
-                                                    <select
-                                                        id="quantity"
-                                                        name="quantity"
-                                                        className="rounded-md border border-gray-300 text-base font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    >
-                                                        <option value={1}>1</option>
-                                                        <option value={2}>2</option>
-                                                        <option value={3}>3</option>
-                                                        <option value={4}>4</option>
-                                                        <option value={5}>5</option>
-                                                        <option value={6}>6</option>
-                                                        <option value={7}>7</option>
-                                                        <option value={8}>8</option>
-                                                    </select>
+                                                    <p className="mt-1 text-sm font-medium text-gray-900">Qty: {product.qty}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -432,7 +446,7 @@ export default function Example() {
                             <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
                                 <div className="flex items-center justify-between">
                                     <dt className="text-sm">Subtotal</dt>
-                                    <dd className="text-sm font-medium text-gray-900">Rp.250.000</dd>
+                                    <dd className="text-sm font-medium text-gray-900">Rp. {subtotal}</dd>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <dt className="text-sm">Shipping</dt>
