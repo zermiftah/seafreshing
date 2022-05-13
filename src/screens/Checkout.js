@@ -44,7 +44,7 @@ export default function Example() {
         localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
     })
     let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
-
+    
     let selectedAddress = {
         city: userData.address[0].city,
         district: userData.address[0].district,
@@ -104,8 +104,6 @@ export default function Example() {
         })
     });
 
-    
-    
     let subtotal = products.reduce((accumulator, object) => {
         return accumulator + object.clear;
     }, 0);
@@ -375,7 +373,9 @@ export default function Example() {
                                     </label>
                                     <div className="mt-1">{userData.fullname}</div>
                                 </div>
+
                                 
+    
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="company" className="block text-sm font-medium text-gray-700">
@@ -446,7 +446,7 @@ export default function Example() {
                                             }
                                         >
                                             {({ checked, active }) => (
-                                                
+
                                                 <>
                                                     <div className="flex-1 flex">
                                                         <div className="flex flex-col">
@@ -480,8 +480,6 @@ export default function Example() {
                                 </div>
                             </RadioGroup>
                         </div>
-
-                        
                     </div>
 
                     {/* Order summary */}
