@@ -246,103 +246,103 @@ export default function Example() {
     }
 
 
-    // useEffect(() => {
-    //     const pay = async () => {
-    //         try {
-    //             const toPay = await axios({
-    //                 method: "post",
-    //                 url: `https://server.seafreshing.com/api/orders/create-order`,
-    //                 headers: {
-    //                     "auth-token": JSON.parse(localStorage.getItem('token'))
-    //                 }, 
-    //                 data: {
-    //                     "amount": total,
-    //                     "buyerDetails": {
-    //                         "id": userData.id,
-    //                         "userEmail": userData.email,
-    //                         "userName": userData.fullname,
-    //                         "userPhone": userData.mobilenumber
-    //                     },
-    //                     "orderDate": "1652166301743",
-    //                     "content": [
-    //                         {
-    //                             "destination": {
-    //                                 "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
-    //                                 "latitude": userData.address[0].lat,
-    //                                 "longitude": userData.address[0].lng,
-    //                                 "name": userData.fullname + " - " + userData.address[0].label
-    //                             },
-    //                             "kioskDetails": {
-    //                                 "id": "3402HhLqrw5N",
-    //                                 "kioskPhone": "+62265813946",
-    //                                 "name": "fazriseapood"
-    //                             },
-    //                             "origin": {
-    //                                 "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
-    //                                 "latitude": "106.83358702808619",
-    //                                 "longitude": "-6.157134476099802",
-    //                                 "name": "fazriseapood"
-    //                             },
-    //                             "product": [
-    //                                 {
-    //                                     "clearPrice": 50000,
-    //                                     "id": "1475pOZECMcl",
-    //                                     "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
-    //                                     "isWholesale": true,
-    //                                     "isWholesalePrice": false,
-    //                                     "minimumOrder": {
-    //                                         "total": 1,
-    //                                         "unit": "kg"
-    //                                     },
-    //                                     "note": "",
-    //                                     "packingVariant": {
-    //                                         "isCheck": false,
-    //                                         "packingDimensions": {
-    //                                             "height": 5,
-    //                                             "length": 5,
-    //                                             "weight": {
-    //                                                 "unit": "kg",
-    //                                                 "value": "1"
-    //                                             },
-    //                                             "width": 5
-    //                                         },
-    //                                         "packingName": "Carton"
-    //                                     },
-    //                                     "price": "Rp50.000",
-    //                                     "priceUnit": "kg",
-    //                                     "priceWholesale": 0,
-    //                                     "productName": "Ikan tuna",
-    //                                     "productQuantity": 1,
-    //                                     "productQuantityUnit": "kg",
-    //                                     "quantityWholesale": 0,
-    //                                     "quantityWholesaleReal": 0,
-    //                                     "totalPrice": 50000
-    //                                 }
-    //                             ],
-    //                             "shipping": {
-    //                                 "cost": 12300,
-    //                                 "service": "lalamove",
-    //                                 "status": "",
-    //                                 "trackUrl": ""
-    //                             },
-    //                             "status": "PENDING"
-    //                         }
-    //                     ]
-    //                 }
-    //             })
-    //             url = toPay.data.data.paymentUrl
-    //            
-    //         } catch (error) {
-    //             console.log(error); return error;
-    //         }
-    //     }
-    //     pay()
-    // })
-    // console.log(url);
+    useEffect(() => {
+        const pay = async () => {
+            try {
+                const toPay = await axios({
+                    method: "post",
+                    url: `https://server.seafreshing.com/api/orders/create-order`,
+                    headers: {
+                        "auth-token": JSON.parse(localStorage.getItem('token'))
+                    }, 
+                    data: {
+                        "amount": total,
+                        "buyerDetails": {
+                            "id": userData.id,
+                            "userEmail": userData.email,
+                            "userName": userData.fullname,
+                            "userPhone": userData.mobilenumber
+                        },
+                        "orderDate": "1652166301743",
+                        "content": [
+                            {
+                                "destination": {
+                                    "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
+                                    "latitude": userData.address[0].lat,
+                                    "longitude": userData.address[0].lng,
+                                    "name": userData.fullname + " - " + userData.address[0].label
+                                },
+                                "kioskDetails": {
+                                    "id": "3402HhLqrw5N",
+                                    "kioskPhone": "+62265813946",
+                                    "name": "fazriseapood"
+                                },
+                                "origin": {
+                                    "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
+                                    "latitude": "106.83358702808619",
+                                    "longitude": "-6.157134476099802",
+                                    "name": "fazriseapood"
+                                },
+                                "product": [
+                                    {
+                                        "clearPrice": 50000,
+                                        "id": "1475pOZECMcl",
+                                        "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
+                                        "isWholesale": true,
+                                        "isWholesalePrice": false,
+                                        "minimumOrder": {
+                                            "total": 1,
+                                            "unit": "kg"
+                                        },
+                                        "note": "",
+                                        "packingVariant": {
+                                            "isCheck": false,
+                                            "packingDimensions": {
+                                                "height": 5,
+                                                "length": 5,
+                                                "weight": {
+                                                    "unit": "kg",
+                                                    "value": "1"
+                                                },
+                                                "width": 5
+                                            },
+                                            "packingName": "Carton"
+                                        },
+                                        "price": "Rp50.000",
+                                        "priceUnit": "kg",
+                                        "priceWholesale": 0,
+                                        "productName": "Ikan tuna",
+                                        "productQuantity": 1,
+                                        "productQuantityUnit": "kg",
+                                        "quantityWholesale": 0,
+                                        "quantityWholesaleReal": 0,
+                                        "totalPrice": 50000
+                                    }
+                                ],
+                                "shipping": {
+                                    "cost": 12300,
+                                    "service": "lalamove",
+                                    "status": "",
+                                    "trackUrl": ""
+                                },
+                                "status": "PENDING"
+                            }
+                        ]
+                    }
+                })
+                url = toPay.data.data.paymentUrl
+               
+            } catch (error) {
+                console.log(error); return error;
+            }
+        }
+        pay()
+    })
+    console.log(url);
 
-    // const handleChange = () => {
-    //     window.location.href = url
-    //   }
+    const handleChange = () => {
+        window.location.href = url
+      }
     
 
     return (
