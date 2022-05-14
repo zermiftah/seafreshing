@@ -10,7 +10,7 @@ const Banner = () => {
                         <div class="grid gap-6 mt-8 sm:grid-cols-2">
                             <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
                                 <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
 
                                 <span class="mx-3">Premium Seafood</span>
@@ -18,7 +18,7 @@ const Banner = () => {
 
                             <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
                                 <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
 
                                 <span class="mx-3">Insurance</span>
@@ -26,7 +26,7 @@ const Banner = () => {
 
                             <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
                                 <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
 
                                 <span class="mx-3">All legal seafoods</span>
@@ -34,7 +34,7 @@ const Banner = () => {
 
                             <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
                                 <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
 
                                 <span class="mx-3">From Jakarta</span>
@@ -42,7 +42,7 @@ const Banner = () => {
 
                             <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
                                 <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
 
                                 <span class="mx-3">Payment Security</span>
@@ -50,7 +50,7 @@ const Banner = () => {
 
                             <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
                                 <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
 
                                 <span class="mx-3">Fast shipping </span>
