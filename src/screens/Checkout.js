@@ -28,11 +28,11 @@ export default function Example() {
         { id: 3, title: 'Deliveree', turnaround: '1 - 2 business days', price: `Rp.${delivereePrice}`, clear: delivereePrice },
     ]
 
-    let products = [], packages = [];
+    let products = [], packages = [], packs = [], content = [], url = "";
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]),
         [kiosk, setKiosk] = ("");
     let id = JSON.parse(localStorage.getItem('user-data'));
-    let url
+
 
     axios({
         method: "get",
@@ -44,6 +44,7 @@ export default function Example() {
         localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
     })
     let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
+    console.log(userData, "id")
 
     let selectedAddress = {
         city: userData.address[0].city,
@@ -59,19 +60,44 @@ export default function Example() {
         zipCode: userData.address[0].zipCode
     }
 
-    let kioskData = []
-    userData.freezer.map(element => {
-        element.product.map(e => {
-            axios({
-                method: "get",
-                url: `https://server.seafreshing.com/api/kiosk/get-kiosk/${e.kioskId}`,
-            }).then(r => {
-                kioskData.push(r.data.kiosk)
-                localStorage.setItem('data-kiosk', JSON.stringify(kioskData))
-                // lala(r.data.kiosk)
-                grab(r.data.kiosk, selectedAddress)
-            })
+    let kioskData = [], objItem = {}
+    userData.freezer.forEach(element => {
+        
+        axios({
+            method: "get",
+            url: `https://server.seafreshing.com/api/kiosk/get-kiosk/${element.id}`,
+        }).then(r => {
+            // create content from here while searching for address of kiosk
+            objItem.destination = {
+                "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
+                "latitude": userData.address[0].lat,
+                "longitude": userData.address[0].lng,
+                "name": userData.fullname + " - " + userData.address[0].label
+            }
+            objItem.kioskDetails = {
+                "id": r.data.kiosk.id,
+                "kioskPhone": r.data.kiosk.mobileNumber,
+                "name": r.data.kiosk.name
+            }
+            objItem.origin = {
+                "fullAddress": r.data.kiosk.fullAddress,
+                "latitude": r.data.kiosk.lat,
+                "longitude": r.data.kiosk.lng,
+                "name": r.data.kiosk.name
+            }
+            objItem.product = element.product
+            objItem.shipping = {}
+            objItem.status = "PENDING"
 
+            kioskData.push(objItem)
+            localStorage.setItem('data-kiosk', JSON.stringify(kioskData))
+            // lala(r.data.kiosk)
+            grab(r.data.kiosk, selectedAddress)
+            deliveree(r.data.kiosk, selectedAddress)
+        })
+
+        element.product.map(e => {
+           
             products.push({
                 id: e.id,
                 kiosk: e.kioskId,
@@ -101,8 +127,14 @@ export default function Example() {
                     "weight": e.productQuantity
                 }
             })
+            packs.push({
+                "dimensions": [0,0,0],
+                "weight": e.productQuantity,
+                "quantity": e.productQuantity
+            })
         })
     });
+    console.log(JSON.parse(localStorage.getItem('data-kiosk')), "objeItem")
 
     let subtotal = products.reduce((accumulator, object) => {
         return accumulator + object.clear;
@@ -117,7 +149,7 @@ export default function Example() {
         try {
             const quote = await axios({
                 method: "post",
-                url: `https://server.seafreshing.com/api/shipment/get-lalamove-info`,
+                // url: `https://server.seafreshing.com/api/shipment/get-lalamove-info`,
                 headers: {
                     "authorization": JSON.parse(localStorage.getItem('token'))
                 },
@@ -152,12 +184,10 @@ export default function Example() {
     }
 
     const grab = async (data, selectedAddress) => {
-        console.log(data);
-        let ship = 0
         try {
             const quote = await axios({
                 method: "post",
-                // url: `https://server.seafreshing.com/api/shipment/get-grab-info`,
+                url: `https://server.seafreshing.com/api/shipment/get-grab-info`,
                 headers: {
                     "authorization": JSON.parse(localStorage.getItem('token'))
                 },
@@ -201,25 +231,24 @@ export default function Example() {
                 }
             })
 
-            setGrabPrice(grabPrice + quote.data.quotes[0].amount)
+            setGrabPrice(quote.data.quotes[0].amount)
 
         } catch (error) {
             console.log(error);
         }
     }
 
-    const deliveree = async (data, packages) => {
-        console.log(data);
+    const deliveree = async (data, selectedAddress) => {
         try {
             const quote = await axios({
                 method: "post",
-                // url: `https://server.seafreshing.com/api/shipment/get-deliveree-info`,
+                url: `https://server.seafreshing.com/api/shipment/get-deliveree-info`,
                 headers: {
                     "authorization": JSON.parse(localStorage.getItem('token'))
                 },
                 data: {
                     "note": "no notes",
-                    "packs": packages,
+                    "packs": packs,
                     "locations": [
                         {
                             "address": data.fullAddress,
@@ -235,10 +264,10 @@ export default function Example() {
                             "recipient_name": userData.name,
                             "recipient_phone": userData.mobilenumber,
                         }],
-                    "vehicle_id": 21
+                    "vehicle_id": 12
                 }
-            })
-            setDelivereePrice(delivereePrice + quote.data.quotes[0].amount)
+            }) 
+            setDelivereePrice(quote.data.deliveree.data[11].total_fees)
 
         } catch (error) {
             console.log(error);
@@ -263,7 +292,7 @@ export default function Example() {
                             "userName": userData.fullname,
                             "userPhone": userData.mobilenumber
                         },
-                        "orderDate": "1652166301743",
+                        "orderDate": Date.now(),
                         "content": [
                             {
                                 "destination": {
@@ -338,7 +367,7 @@ export default function Example() {
         }
         pay()
     })
-    console.log(url);
+    console.log(url, "url");
 
     const handleChange = () => {
         window.location.href = url
