@@ -8,8 +8,6 @@ import SingleProduct from "./screens/SingleProduct";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import CartScreen from "./screens/CartScreen";
-import ShippingScreen from "./screens/ShippingScreen";
-import ProfileScreen from "./screens/ProfileScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
@@ -56,7 +54,9 @@ const App = () => {
         </Route>
         <Route path="/profile">
           <Auth>
+            <HeaderHS />
             <Profile />
+            <Footer />
           </Auth>
         </Route>
         <Route path="/wishlist">

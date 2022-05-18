@@ -15,7 +15,8 @@ export default function DetailProduct() {
     const token = JSON.parse(localStorage.getItem('token'));
     const [notif, setNotif] = useState('');
     const { id } = useParams();
-
+    const [show, setShow] = useState(true)
+    
     useEffect(() => {
         getProduct();
     }, [])
@@ -103,7 +104,7 @@ export default function DetailProduct() {
         <>
             {
                 notif && (
-                    <Notif title="Success" text={notif} />
+                    <Notif show={show} close={() => setShow(false)} title="Success" text={notif} />
                 )
             }
             {

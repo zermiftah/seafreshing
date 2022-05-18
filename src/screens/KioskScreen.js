@@ -94,9 +94,10 @@ const KioskScreen = () => {
   const [vill, setVill] = useState('');
   const [zipcode, setZipCode] = useState('');
   const [mobilenumber, setMobileNumber] = useState('');
-  const [kioskId, setKioskId] = useState([]);
   const [getKiosk, setKiosk] = useState([]);
-
+  const qs = require('qs');
+  const [show, setShow] = useState(true)
+  
   useEffect(() => {
     getKioskName();
   }, [kioskName])
@@ -221,6 +222,7 @@ const KioskScreen = () => {
     data.append('province', prvnc.name);
     data.append('mobilenumber', mobilenumber);
     data.append('joinTime', date)
+    data.append('userId', userData.id)
 
     try {
       let response = await axios.post('https://server.seafreshing.com/api/kiosk/open-kiosk', data, {
@@ -228,8 +230,22 @@ const KioskScreen = () => {
           'auth-token': token,
         }
       })
-      setKioskId(response.data.kiosk)
-      console.log(response.data)
+      if (response.data) {
+        let kioskDt = new FormData();
+        kioskDt.append('userid', userData.id);
+        kioskDt.append('id', response.data.kiosk.id);
+
+        try {
+          let res = await axios.post('https://server.seafreshing.com/api/user/set-kiosk', kioskDt, {
+            headers: {
+              'auth-token': token,
+            }
+          })
+          console.log(res.data)
+        } catch(e) {
+          console.log(e.res.data)
+        }
+      }
     } catch (e) {
       if (e) {
         console.log(e)
@@ -242,15 +258,15 @@ const KioskScreen = () => {
 
   useEffect(() => {
     getKioskProduct();
-  }, [])
+  }, [userData.kioskid])
 
   const getKioskProduct = async () => {
     try {
-      let response = await axios.get(`https://server.seafreshing.com/api/kiosk/get-kiosk/${kioskId.id}`)
-      setKiosk(response.data.msg)
+      let response = await axios.get(`https://server.seafreshing.com/api/kiosk/get-kiosk/${userData.kioskid}`)
+      setKiosk(response.data)
     } catch (e) {
       console.log(e)
-      console.log(e.response.data.msg)
+      console.log(e.response.data)
     }
   }
 
@@ -262,9 +278,9 @@ const KioskScreen = () => {
           :
           getKName ?
             getKName.code === 10 ?
-              <Notif title='Error' text={getKName.msg} />
+              <Notif show={show} close={() => setShow(false)} title='Error' text={getKName.msg} />
               :
-              <Notif title='Success' text={getKName.msg} />
+              <Notif show={show} close={() => setShow(false)} title='Success' text={getKName.msg} />
             : ""
       }
       {
@@ -273,19 +289,19 @@ const KioskScreen = () => {
           :
           getDName ?
             getDName.code === 10 ?
-              <Notif title='Error' text={getDName.msg} />
+              <Notif show={show} close={() => setShow(false)} title='Error' text={getDName.msg} />
               :
-              <Notif title='Success' text={getDName.msg} />
+              <Notif show={show} close={() => setShow(false)} title='Success' text={getDName.msg} />
             : ""
       }
       {
         notif.success && (
-          <Notif title={notif.success} text="Data has been saved!" />
+          <Notif show={show} close={() => setShow(false)} title={notif.success} text="Data has been saved!" />
         )
       }
       {
         notif.error && (
-          <Notif title='Error' text={notif.error} />
+          <Notif show={show} close={() => setShow(false)} title='Error' text={notif.error} />
         )
       }
       {
@@ -453,7 +469,6 @@ const KioskScreen = () => {
                                       className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                     />
                                   </div>
-                                  <button type='submit'>Create Kiosk</button>
                                 </>
                                 :
                                 ""
@@ -467,7 +482,7 @@ const KioskScreen = () => {
                           type="submit"
                           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                          Save
+                          Create Kiosk
                         </button>
                       </div>
                     </div>
@@ -638,10 +653,10 @@ const KioskScreen = () => {
 
                       <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3">
                         {
-                          getKiosk.length === 0 ?
+                          getKiosk.productSize.length === 0 ?
                             <span>Data not found</span>
                             :
-                            getKiosk.map(product => (
+                            getKiosk.productSize.map(product => (
                               <div
                                 key={product.id}
                                 className="group relative bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden"

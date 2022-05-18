@@ -11,7 +11,8 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const history = useHistory();
   const [notif, setNotif] = useState('');
-
+  const [show, setShow] = useState(true)
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     let qs = require('qs');
@@ -54,7 +55,7 @@ const Register = () => {
       </div> */}
       {
         notif && (
-          <Notif title="Register" text={notif} />
+          <Notif show={show} close={() => setShow(false)} title="Register" text={notif} />
         )
       }
       <div class="bg-white dark:bg-gray-900">

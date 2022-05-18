@@ -13,7 +13,8 @@ const Login = () => {
     success: '',
   });
   const history = useHistory();
-
+  const [show, setShow] = useState(true)
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     const qs = require('qs');
@@ -46,12 +47,12 @@ const Login = () => {
     <>
       {
         notif.success && (
-          <Notif title={notif.success} text="Redirect..." />
+          <Notif show={show} close={() => setShow(false)} title={notif.success} text="Redirect..." />
         )
       }
       {
         notif.error && (
-          <Notif title='Error' text={notif.error} />
+          <Notif show={show} close={() => setShow(false)} title='Error' text={notif.error} />
         )
       }
       <div class="bg-white dark:bg-gray-900">
