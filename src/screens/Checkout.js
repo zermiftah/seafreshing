@@ -23,9 +23,9 @@ export default function Example() {
 
 
     const deliveryMethods = [
-        { id: 1, title: 'Lalamove', turnaround: '1 - 2 business days', price: `Rp.${lalamovePrice}`, clear: lalamovePrice },
-        { id: 2, title: 'GrabExpress', turnaround: '1 - 2 business days', price: `Rp.${grabPrice}`, clear: grabPrice },
-        { id: 3, title: 'Deliveree', turnaround: '1 - 2 business days', price: `Rp.${delivereePrice}`, clear: delivereePrice },
+        { id: 'alamove', title: 'Lalamove', turnaround: '1 - 2 business days', price: `Rp.${lalamovePrice}`, clear: lalamovePrice },
+        { id: 'grab_express', title: 'GrabExpress', turnaround: '1 - 2 business days', price: `Rp.${grabPrice}`, clear: grabPrice },
+        { id: 'deliveree', title: 'Deliveree', turnaround: '1 - 2 business days', price: `Rp.${delivereePrice}`, clear: delivereePrice },
     ]
 
     let products = [], packages = [], packs = [], content = [], url = "";
@@ -44,7 +44,7 @@ export default function Example() {
         localStorage.setItem('data-in-checkout', JSON.stringify(r.data.user))
     })
     let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
-    console.log(userData, "id")
+
 
     let selectedAddress = {
         city: userData.address[0].city,
@@ -61,15 +61,17 @@ export default function Example() {
     }
 
     let kioskData = [], objItem = {}
-    userData.freezer.forEach(element => {
-        
+    // userData.freezer.forEach(element => {
+    for (let i = 0; i < userData.freezer.length; i++) {
+        let element = userData.freezer[i]
+
         axios({
             method: "get",
             url: `https://server.seafreshing.com/api/kiosk/get-kiosk/${element.id}`,
         }).then(r => {
             // create content from here while searching for address of kiosk
             objItem.destination = {
-                "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
+                "fullAddress": userData.address[0].fullAddress + " " + userData.address[0].district + " " +  userData.address[0].city + " " +  userData.address[0].province + ", " + userData.address[0].zipCode,
                 "latitude": userData.address[0].lat,
                 "longitude": userData.address[0].lng,
                 "name": userData.fullname + " - " + userData.address[0].label
@@ -86,7 +88,12 @@ export default function Example() {
                 "name": r.data.kiosk.name
             }
             objItem.product = element.product
-            objItem.shipping = {}
+            objItem.shipping = {
+                "cost": selectedDeliveryMethod.clear,
+                "service": selectedDeliveryMethod.id,
+                "status": "",
+                "trackUrl": ""
+            }
             objItem.status = "PENDING"
 
             kioskData.push(objItem)
@@ -94,10 +101,11 @@ export default function Example() {
             // lala(r.data.kiosk)
             grab(r.data.kiosk, selectedAddress)
             deliveree(r.data.kiosk, selectedAddress)
+
+            // console.log(grabPrice, "grab rpice")
         })
 
         element.product.map(e => {
-           
             products.push({
                 id: e.id,
                 kiosk: e.kioskId,
@@ -133,8 +141,10 @@ export default function Example() {
                 "quantity": e.productQuantity
             })
         })
-    });
-    console.log(JSON.parse(localStorage.getItem('data-kiosk')), "objeItem")
+    }
+        
+    // });
+
 
     let subtotal = products.reduce((accumulator, object) => {
         return accumulator + object.clear;
@@ -145,7 +155,7 @@ export default function Example() {
     let total = subtotal + selectedDeliveryMethod.clear + parseInt(payTax)
 
     const lala = async (data) => {
-        console.log(lala);
+
         try {
             const quote = await axios({
                 method: "post",
@@ -274,13 +284,13 @@ export default function Example() {
         }
     }
 
-
+    console.log(JSON.parse(localStorage.getItem('data-kiosk')))
     useEffect(() => {
         const pay = async () => {
             try {
                 const toPay = await axios({
                     method: "post",
-                    url: `https://server.seafreshing.com/api/orders/create-order`,
+                    // url: `https://server.seafreshing.com/api/orders/create-order`,
                     headers: {
                         "auth-token": JSON.parse(localStorage.getItem('token'))
                     },
@@ -293,70 +303,7 @@ export default function Example() {
                             "userPhone": userData.mobilenumber
                         },
                         "orderDate": Date.now(),
-                        "content": [
-                            {
-                                "destination": {
-                                    "fullAddress": userData.address[0].fullAddress + userData.address[0].district + userData.address[0].city + userData.address[0].province + ", " + userData.address[0].zipCode,
-                                    "latitude": userData.address[0].lat,
-                                    "longitude": userData.address[0].lng,
-                                    "name": userData.fullname + " - " + userData.address[0].label
-                                },
-                                "kioskDetails": {
-                                    "id": "3402HhLqrw5N",
-                                    "kioskPhone": "+62265813946",
-                                    "name": "fazriseapood"
-                                },
-                                "origin": {
-                                    "fullAddress": "Jl laksana raya TANJUNG PRIUK TANJUNG PRIOK KOTA JAKARTA UTARA DKI JAKARTA, 1660",
-                                    "latitude": "106.83358702808619",
-                                    "longitude": "-6.157134476099802",
-                                    "name": "fazriseapood"
-                                },
-                                "product": [
-                                    {
-                                        "clearPrice": 50000,
-                                        "id": "1475pOZECMcl",
-                                        "image": "https://server.seafreshing.com/public/uploads/dcff016aeb93f7b0a9de079dc7bdea5a.jpeg",
-                                        "isWholesale": true,
-                                        "isWholesalePrice": false,
-                                        "minimumOrder": {
-                                            "total": 1,
-                                            "unit": "kg"
-                                        },
-                                        "note": "",
-                                        "packingVariant": {
-                                            "isCheck": false,
-                                            "packingDimensions": {
-                                                "height": 5,
-                                                "length": 5,
-                                                "weight": {
-                                                    "unit": "kg",
-                                                    "value": "1"
-                                                },
-                                                "width": 5
-                                            },
-                                            "packingName": "Carton"
-                                        },
-                                        "price": "Rp50.000",
-                                        "priceUnit": "kg",
-                                        "priceWholesale": 0,
-                                        "productName": "Ikan tuna",
-                                        "productQuantity": 1,
-                                        "productQuantityUnit": "kg",
-                                        "quantityWholesale": 0,
-                                        "quantityWholesaleReal": 0,
-                                        "totalPrice": 50000
-                                    }
-                                ],
-                                "shipping": {
-                                    "cost": 12300,
-                                    "service": "lalamove",
-                                    "status": "",
-                                    "trackUrl": ""
-                                },
-                                "status": "PENDING"
-                            }
-                        ]
+                        "content": JSON.parse(localStorage.getItem('data-kiosk'))
                     }
                 })
                 url = toPay.data.data.paymentUrl
@@ -586,3 +533,18 @@ export default function Example() {
         </div>
     )
 }
+
+/** Alamat {
+    city : "KOTA JAKARTA UTARA", 
+    zipCode : 14440
+    lat : "-6.129126670421264"
+    lng : "106.81753735989332"
+    district : "PADEMANGAN"
+    subdistrict : "PADEMANGAN BARAT"
+    province : "DKI JAKARTA"
+    label : "Building"
+    fullAddress : "Jl. Industri Dalam no. 1, Kel. Pademangan barat, kec. Pademangan, Jaka…"
+    mobileNumber : "085668279796", 
+    recievedName: :juki
+  } 
+ * **/
