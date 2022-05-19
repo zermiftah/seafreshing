@@ -7,7 +7,10 @@ import HomeScreen from "./screens/HomeScreen";
 import SingleProduct from "./screens/SingleProduct";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+import OtpScreen from "./screens/OtpScreen";
 import CartScreen from "./screens/CartScreen";
+import ShippingScreen from "./screens/ShippingScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
@@ -52,11 +55,14 @@ const App = () => {
             <Register />
           </Guest>
         </Route>
+        <Route path="/otp-verify">
+          <Guest>
+            <OtpScreen />
+          </Guest>
+        </Route>
         <Route path="/profile">
           <Auth>
-            <HeaderHS />
             <Profile />
-            <Footer />
           </Auth>
         </Route>
         <Route path="/wishlist">

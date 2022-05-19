@@ -4,6 +4,15 @@ import Header from "./../components/Header";
 import axios from 'axios';
 import Notif from '../components/simple'
 
+function randomStr(len, arr) {
+  var ans = '';
+  for (var i = len; i > 0; i--) {
+      ans += 
+        arr[Math.floor(Math.random() * arr.length)];
+  }
+  return ans;
+}
+
 const Register = () => {
   const [fullname, setFullName] = useState('');
   const [mobilenumber, setMobileNumber] = useState('');
@@ -11,18 +20,19 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const history = useHistory();
   const [notif, setNotif] = useState('');
-  const [show, setShow] = useState(true)
-  
+  const [requestId, setRequestId] = useState('');
+
   const handleRegister = async (e) => {
     e.preventDefault();
     let qs = require('qs');
     
+    setRequestId(randomStr(20, '12345abcde'))
     try {
       let response = await axios.post('https://server.seafreshing.com/api/user/register', qs.stringify({
         'name': fullname,
         'mobilenumber': mobilenumber,
         'email': email,
-        'requestId': password,
+        'requestId': requestId,
       }), {
         header: {
           'Content-Type': 'application/json',
@@ -30,6 +40,18 @@ const Register = () => {
       });
       if (response.data) {
         setNotif(response.data.msg)
+        await axios.post(
+          'https://server.seafreshing.com/api/user/send-verify-email', 
+          qs.stringify(
+            {
+              'nameUser': fullname,
+              'id': Math.random().toString(36).slice(2),
+              'email': email,
+              'requestId': requestId
+            }
+          )
+        )
+        setRequestId("")
       }
     } catch (e) {
       console.log(e.response.data)
@@ -55,7 +77,7 @@ const Register = () => {
       </div> */}
       {
         notif && (
-          <Notif show={show} close={() => setShow(false)} title="Register" text={notif} />
+          <Notif title="Register" text={notif} />
         )
       }
       <div class="bg-white dark:bg-gray-900">
