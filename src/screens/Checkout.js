@@ -5,12 +5,6 @@ import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { parse } from 'qs';
 
-const paymentMethods = [
-    { id: 'credit-card', title: 'Credit card' },
-    { id: 'paypal', title: 'PayPal' },
-    { id: 'etransfer', title: 'eTransfer' },
-]
-
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -23,7 +17,7 @@ export default function Example() {
 
 
     const deliveryMethods = [
-        { id: 'alamove', title: 'Lalamove', turnaround: '1 - 2 business days', price: `Rp.${lalamovePrice}`, clear: lalamovePrice },
+        { id: 'lalamove', title: 'Lalamove', turnaround: '1 - 2 business days', price: `Rp.${lalamovePrice}`, clear: lalamovePrice },
         { id: 'grab_express', title: 'GrabExpress', turnaround: '1 - 2 business days', price: `Rp.${grabPrice}`, clear: grabPrice },
         { id: 'deliveree', title: 'Deliveree', turnaround: '1 - 2 business days', price: `Rp.${delivereePrice}`, clear: delivereePrice },
     ]
@@ -71,7 +65,7 @@ export default function Example() {
         }).then(r => {
             // create content from here while searching for address of kiosk
             objItem.destination = {
-                "fullAddress": userData.address[0].fullAddress + " " + userData.address[0].district + " " +  userData.address[0].city + " " +  userData.address[0].province + ", " + userData.address[0].zipCode,
+                "fullAddress": userData.address[0].fullAddress + " " + userData.address[0].district + " " + userData.address[0].city + " " + userData.address[0].province + ", " + userData.address[0].zipCode,
                 "latitude": userData.address[0].lat,
                 "longitude": userData.address[0].lng,
                 "name": userData.fullname + " - " + userData.address[0].label
@@ -136,13 +130,13 @@ export default function Example() {
                 }
             })
             packs.push({
-                "dimensions": [0,0,0],
+                "dimensions": [0, 0, 0],
                 "weight": e.productQuantity,
                 "quantity": e.productQuantity
             })
         })
     }
-        
+
     // });
 
 
@@ -159,7 +153,7 @@ export default function Example() {
         try {
             const quote = await axios({
                 method: "post",
-                // url: `https://server.seafreshing.com/api/shipment/get-lalamove-info`,
+                url: `https://server.seafreshing.com/api/shipment/get-lalamove-info`,
                 headers: {
                     "authorization": JSON.parse(localStorage.getItem('token'))
                 },
@@ -276,7 +270,7 @@ export default function Example() {
                         }],
                     "vehicle_id": 12
                 }
-            }) 
+            })
             setDelivereePrice(quote.data.deliveree.data[11].total_fees)
 
         } catch (error) {
@@ -284,13 +278,12 @@ export default function Example() {
         }
     }
 
-    console.log(JSON.parse(localStorage.getItem('data-kiosk')))
     useEffect(() => {
         const pay = async () => {
             try {
                 const toPay = await axios({
                     method: "post",
-                    // url: `https://server.seafreshing.com/api/orders/create-order`,
+                    url: `https://server.seafreshing.com/api/orders/create-order`,
                     headers: {
                         "auth-token": JSON.parse(localStorage.getItem('token'))
                     },
@@ -306,18 +299,55 @@ export default function Example() {
                         "content": JSON.parse(localStorage.getItem('data-kiosk'))
                     }
                 })
+                console.log(JSON.parse(localStorage.getItem('data-kiosk')), "url");
                 url = toPay.data.data.paymentUrl
-
             } catch (error) {
                 console.log(error); return error;
             }
         }
         pay()
+        console.log(pay())
     })
-    console.log(url, "url");
+
 
     const handleChange = () => {
         window.location.href = url
+    }
+
+    useEffect(() => {
+        getAddress();
+        getUser();
+    }, [])
+
+    const [address, setAddress] = useState([]);
+    const [user, setUser] = useState([]);
+
+    const getUser = async () => {
+        try {
+            const response = await axios.get(`https://server.seafreshing.com/api/user/get-user/${userData.accounttype}/${userData.id}`, {
+                headers: {
+                    'auth-token': JSON.parse(localStorage.getItem('token')),
+                }
+            })
+            setUser(response.data.user)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
+    const [selectedAddressz, setSelectedAddress] = useState(address);
+    const getAddress = async () => {
+        try {
+            const data = await axios.get(`https://server.seafreshing.com/api/user/get-address/${userData.id}`)
+            let temp = data.data.address.address;
+            setAddress(temp)
+            console.log(temp)
+
+        } catch (e) {
+            console.log(e.response.data)
+            console.log(e.response)
+        }
     }
 
 
@@ -329,20 +359,61 @@ export default function Example() {
                 <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                     <div>
                         <div>
-                            <h2 className="text-lg font-medium text-gray-900">Contact information</h2>
+                            <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
+                            <RadioGroup value={selectedAddressz} onChange={setSelectedAddress}>
 
-                            <div className="mt-4">
-                                <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
-                                    Email address
-                                </label>
-                                <div className="mt-1"> {userData.email}</div>
-                            </div>
+                                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                                    {address.map((data) => (
+                                        <RadioGroup.Option
+                                            key={data.id}
+                                            value={data}
+                                            className={({ checked, active }) =>
+                                                classNames(
+                                                    checked ? 'border-transparent' : 'border-gray-300',
+                                                    active ? 'ring-2 ring-indigo-500' : '',
+                                                    'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
+                                                )
+                                            }
+                                        >
+                                            {({ checked, active }) => (
+
+                                                <>
+                                                    <div className="flex-1 flex">
+                                                        <div className="flex flex-col">
+                                                            <RadioGroup.Label as="span" className="block text-sm font-medium text-gray-900">
+                                                                {data.label}
+                                                            </RadioGroup.Label>
+                                                            <RadioGroup.Description
+                                                                as="span"
+                                                                className="mt-1 flex items-center text-sm text-gray-500"
+                                                            >
+                                                                {data.fullAddress}
+                                                            </RadioGroup.Description>
+                                                            <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900" >
+                                                                {data.mobileNumber}
+                                                            </RadioGroup.Description>
+                                                        </div>
+                                                    </div>
+                                                    {checked ? (<CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />) : null}
+                                                    <div
+                                                        className={classNames(
+                                                            active ? 'border' : 'border-2',
+                                                            checked ? 'border-indigo-500' : 'border-transparent',
+                                                            'absolute -inset-px rounded-lg pointer-events-none'
+                                                        )}
+                                                        aria-hidden="true"
+                                                    />
+                                                </>
+                                            )}
+                                        </RadioGroup.Option>
+                                    ))}
+                                </div>
+                            </RadioGroup>
                         </div>
 
                         <div className="mt-10 border-t border-gray-200 pt-10">
-                            <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
+                            <div className=" grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
 
-                            <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div>
                                     <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
                                         Fullname
@@ -351,48 +422,30 @@ export default function Example() {
                                 </div>
 
 
-
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-                                        Company
+                                <div>
+                                    <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                                        Email
                                     </label>
-                                    <div className="mt-1"></div>
+                                    <div className="mt-1">{userData.email}</div>
                                 </div>
 
                                 <div className="sm:col-span-2">
                                     <label htmlFor="address" className="block text-sm font-medium text-gray-700">
                                         Address
                                     </label>
-                                    <div className="mt-1">{selectedAddress.fullAddress}</div>
-                                </div>
-
-                                <div className="sm:col-span-2">
-                                    <label htmlFor="apartment" className="block text-sm font-medium text-gray-700">
-                                        District, etc.
-                                    </label>
-                                    <div className="mt-1">{selectedAddress.district}</div>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-                                        City
-                                    </label>
-                                    <div className="mt-1">{selectedAddress.city}</div>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="region" className="block text-sm font-medium text-gray-700">
-                                        State / Province
-                                    </label>
-                                    <div className="mt-1">{selectedAddress.province}</div>
+                                    <div className="mt-1">
+                                        {selectedAddressz.fullAddress} <p> </p>
+                                        {selectedAddressz.district}<p> </p>
+                                        {selectedAddressz.city}<p> </p>
+                                        {selectedAddressz.province}
+                                    </div>
                                 </div>
 
                                 <div>
                                     <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700">
                                         Postal code
                                     </label>
-                                    <div className="mt-1">{selectedAddress.zipCode}</div>
+                                    <div className="mt-1">{selectedAddressz.zipCode}</div>
                                 </div>
 
                                 <div className="sm:col-span-2">
@@ -520,7 +573,7 @@ export default function Example() {
                             <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                                 <button
                                     type="submit"
-                                    // onClick={handleChange}
+                                    onClick={handleChange}
                                     className="w-full bg-sky-400 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500"
                                 >
                                     Complete Payment
@@ -533,18 +586,3 @@ export default function Example() {
         </div>
     )
 }
-
-/** Alamat {
-    city : "KOTA JAKARTA UTARA", 
-    zipCode : 14440
-    lat : "-6.129126670421264"
-    lng : "106.81753735989332"
-    district : "PADEMANGAN"
-    subdistrict : "PADEMANGAN BARAT"
-    province : "DKI JAKARTA"
-    label : "Building"
-    fullAddress : "Jl. Industri Dalam no. 1, Kel. Pademangan barat, kec. Pademangan, Jaka…"
-    mobileNumber : "085668279796", 
-    recievedName: :juki
-  } 
- * **/

@@ -86,6 +86,7 @@ const Freezer = () => {
         if (items[0]) {
             items[0].freezer.map(freezer => freezer.product.map(product => {
                 if (product.isChecked === true) {
+                    console.log(typeof product.totalPrice)
                     price.push(product.totalPrice)
                 }
             }))

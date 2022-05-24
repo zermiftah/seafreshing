@@ -4,43 +4,47 @@ import Header from "./../components/Header";
 import axios from 'axios';
 import Notif from '../components/simple'
 
-const OtpScreen = () => {
+const OtpScreen = (props) => {
   const [otp, setOtp] = useState(''),
-    [ requestId, setRequestId ] = useState(''),
-    [ email, setEmail ] = useState(''),
-    [ id, setId ] = useState(''), 
-    [ notif, setNotif ] = useState('');
+    [requestId, setRequestId] = useState(''),
+    [email, setEmail] = useState(''),
+    [id, setId] = useState(''),
+    [notif, setNotif] = useState('');
   const [fullname, setFullName] = useState('');
   const [mobilenumber, setMobileNumber] = useState('');
   const [state, setState] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
 
+
+  console.log(props.fullname)
+
+
   const handleOtpVerification = async (e) => {
     e.preventDefault();
     let qs = require('qs');
-    
+
     try {
       let response = await axios.post('https://server.seafreshing.com/api/user//verify-email-code', qs.stringify({
-        "code" : otp, 
-        "requestId": requestId, 
-        "email" : email, 
-        "id" : id
+        "code": otp,
+        "requestId": requestId,
+        "email": email,
+        "id": id
       }));
 
       if (response.data) {
         setNotif(response.data.msg)
         await axios.post(
-          'https://server.seafreshing.com/api/user/create-account', 
+          'https://server.seafreshing.com/api/user/create-account',
           qs.stringify(
             {
-              "id" : id, 
-              "state" : state, 
-              "name" : fullname, 
-              "password" : password, 
-              "email" : email, 
-              "mobilenumber" : mobilenumber, 
-              "accounttype" : 0
+              "id": id,
+              "state": state,
+              "name": fullname,
+              "password": password,
+              "email": email,
+              "mobilenumber": mobilenumber,
+              "accounttype": 0
             }
           )
         )
@@ -50,23 +54,10 @@ const OtpScreen = () => {
     }
   }
 
+
+
   return (
     <>
-      {/* <Header />
-      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-        <form onSubmit={handleRegister} className="Login col-md-8 col-lg-4 col-11">
-          <input type="text" placeholder="Fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} required />
-          <input type="text" placeholder="Mobile" value={mobilenumber} onChange={(e) => setMobileNumber(e.target.value)} required />
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-          <button type="submit">Register</button>
-          <p>
-            <Link to={"/login"}>
-              I Have Account <strong>Login</strong>
-            </Link>
-          </p>
-        </form>
-      </div> */}
       {
         notif && (
           <Notif title="Register" text={notif} />

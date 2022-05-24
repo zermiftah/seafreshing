@@ -3,12 +3,13 @@ import { Link, useHistory } from "react-router-dom";
 import Header from "./../components/Header";
 import axios from 'axios';
 import Notif from '../components/simple'
+import { version } from "react-dom";
 
 function randomStr(len, arr) {
   var ans = '';
   for (var i = len; i > 0; i--) {
-      ans += 
-        arr[Math.floor(Math.random() * arr.length)];
+    ans +=
+      arr[Math.floor(Math.random() * arr.length)];
   }
   return ans;
 }
@@ -18,15 +19,27 @@ const Register = () => {
   const [mobilenumber, setMobileNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const history = useHistory();
   const [notif, setNotif] = useState('');
   const [requestId, setRequestId] = useState('');
 
+
+
   const handleRegister = async (e) => {
+    setRequestId(randomStr(20, '12345abcde'))
+    const otpVer = {
+      fullname: fullname,
+      mobilenumber: mobilenumber,
+      email: email,
+      password: password,
+      requestId: requestId
+    }
+
+
+
     e.preventDefault();
     let qs = require('qs');
-    
-    setRequestId(randomStr(20, '12345abcde'))
+
+
     try {
       let response = await axios.post('https://server.seafreshing.com/api/user/register', qs.stringify({
         'name': fullname,
@@ -39,9 +52,10 @@ const Register = () => {
         }
       });
       if (response.data) {
+
         setNotif(response.data.msg)
         await axios.post(
-          'https://server.seafreshing.com/api/user/send-verify-email', 
+          'https://server.seafreshing.com/api/user/send-verify-email',
           qs.stringify(
             {
               'nameUser': fullname,
@@ -58,23 +72,9 @@ const Register = () => {
     }
   }
 
+
   return (
     <>
-      {/* <Header />
-      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-        <form onSubmit={handleRegister} className="Login col-md-8 col-lg-4 col-11">
-          <input type="text" placeholder="Fullname" value={fullname} onChange={(e) => setFullName(e.target.value)} required />
-          <input type="text" placeholder="Mobile" value={mobilenumber} onChange={(e) => setMobileNumber(e.target.value)} required />
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-
-          <button type="submit">Register</button>
-          <p>
-            <Link to={"/login"}>
-              I Have Account <strong>Login</strong>
-            </Link>
-          </p>
-        </form>
-      </div> */}
       {
         notif && (
           <Notif title="Register" text={notif} />
@@ -132,10 +132,15 @@ const Register = () => {
 
 
                   <div class="mt-6">
+                    {/* <Link to="/otp-verify"
+                      fullname={otpVer}
+
+                    > */}
                     <button type="submit"
                       class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                       Sign up
                     </button>
+                    {/* </Link> */}
                   </div>
 
                 </form>
@@ -144,7 +149,7 @@ const Register = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

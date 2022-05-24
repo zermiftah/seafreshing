@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 import Notif from '../components/simple';
+import headers from "../components/HeaderHS"
 
 export default function Profile() {
     const [user, setUser] = useState([]);

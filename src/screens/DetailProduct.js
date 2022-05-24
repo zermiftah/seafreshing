@@ -16,7 +16,7 @@ export default function DetailProduct() {
     const [notif, setNotif] = useState('');
     const { id } = useParams();
     const [show, setShow] = useState(true)
-    
+
     useEffect(() => {
         getProduct();
     }, [])
@@ -32,7 +32,7 @@ export default function DetailProduct() {
         }
     }
 
-    console.log(product)
+    // console.log(product)
 
     const handleAddToCart = async (e) => {
         e.preventDefault();
@@ -45,19 +45,21 @@ export default function DetailProduct() {
                 'price': product[0].price.value,
                 'priceUnit': unit,
                 'productQuantity': quantity,
+                'productQuantityUnit': unit,
                 'kioskName': product[0].kioskName,
                 'kioskId': product[0].kioskId,
                 'idUser': userData.id,
                 'kioskCity': product[0].kioskDetails[0].city,
                 'minimumOrder': product[0].minimumOrder.total,
                 'isWholesalePrice': product[0].isWholesalePrice,
-                'isChecked': true,
+                'isChecked': false,
             }), {
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token': token,
                 }
             });
+            console.log(response.data)
             if (response.data) {
                 setNotif(response.data.msg)
             }
@@ -76,9 +78,8 @@ export default function DetailProduct() {
                 'image': product[0].image[0].imgUrl,
                 'name': product[0].productName,
                 'price': product[0].price.value,
-                'rating': '',
                 'productQuantity': quantity,
-                'priceUnit': unit,
+                'priceQuantityUnit': unit,
                 'kioskName': product[0].kioskName,
                 'kioskId': product[0].kioskId,
                 'idUser': userData.id,
