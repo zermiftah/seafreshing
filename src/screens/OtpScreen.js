@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Header from "./../components/Header";
 import axios from 'axios';
@@ -15,9 +15,17 @@ const OtpScreen = (props) => {
   const [state, setState] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
+  const [otpVer, setOTPver] = useState({});
 
 
-  console.log(props.fullname)
+  useEffect(() => {
+    const otpVer = JSON.parse(localStorage.getItem('otpVer'));
+    if (otpVer) {
+      setOTPver(otpVer);
+    }
+  }, []);
+
+  console.log(otpVer)
 
 
   const handleOtpVerification = async (e) => {

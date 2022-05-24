@@ -44,15 +44,14 @@ export default function DetailProduct() {
                 'name': product[0].productName,
                 'price': product[0].price.value,
                 'priceUnit': unit,
-                'productQuantity': quantity,
-                'productQuantityUnit': unit,
+                'productQuantity': 1,
                 'kioskName': product[0].kioskName,
                 'kioskId': product[0].kioskId,
                 'idUser': userData.id,
                 'kioskCity': product[0].kioskDetails[0].city,
                 'minimumOrder': product[0].minimumOrder.total,
-                'isWholesalePrice': product[0].isWholesalePrice,
-                'isChecked': false,
+                'isWholesalePrice': false,
+                'isChecked': true,
             }), {
                 headers: {
                     'Content-Type': 'application/json',
@@ -191,7 +190,7 @@ export default function DetailProduct() {
                                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                         <span class="text-gray-500 sm:text-sm"> </span>
                                                     </div>
-                                                    <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="text" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0" />
+                                                    <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="number" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0" />
                                                     <div class="absolute inset-y-0 right-0 flex items-center">
                                                         <label for="currency" class="sr-only">Qty</label>
                                                         <select value={unit} onChange={(e) => setUnit(e.target.value)} id="currency" name="currency" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">

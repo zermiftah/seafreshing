@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Header from "./../components/Header";
 import axios from 'axios';
@@ -21,20 +21,18 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [notif, setNotif] = useState('');
   const [requestId, setRequestId] = useState('');
-
-
+  const [otpVer, setOTPver] = useState({});
 
   const handleRegister = async (e) => {
     setRequestId(randomStr(20, '12345abcde'))
-    const otpVer = {
+    const otp = {
       fullname: fullname,
       mobilenumber: mobilenumber,
       email: email,
       password: password,
       requestId: requestId
     }
-
-
+    setOTPver(otp);
 
     e.preventDefault();
     let qs = require('qs');
@@ -72,6 +70,9 @@ const Register = () => {
     }
   }
 
+  useEffect(() => {
+    localStorage.setItem('otpVer', JSON.stringify(otpVer));
+  }, [otpVer]);
 
   return (
     <>
@@ -101,7 +102,7 @@ const Register = () => {
               </div>
 
               <div class="mt-8">
-                <form onSubmit={handleRegister}>
+                <form onSubmit={handleRegister} >
                   <div>
                     <label for="fullname" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Full Name</label>
                     <input type="text" name="fullname" id="fullname" placeholder="Your Name" value={fullname} onChange={(e) => setFullName(e.target.value)} required class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
@@ -132,15 +133,14 @@ const Register = () => {
 
 
                   <div class="mt-6">
-                    {/* <Link to="/otp-verify"
-                      fullname={otpVer}
+                    <Link to="/otp-verify"
 
-                    > */}
-                    <button type="submit"
-                      class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                      Sign up
-                    </button>
-                    {/* </Link> */}
+                    >
+                      <button type="submit"
+                        class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                        Sign up
+                      </button>
+                    </Link>
                   </div>
 
                 </form>
