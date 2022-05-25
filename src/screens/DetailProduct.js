@@ -20,12 +20,12 @@ export default function DetailProduct() {
     useEffect(() => {
         getProduct();
     }, [])
-
     const getProduct = async () => {
         try {
             const data = await axios.get(`https://server.seafreshing.com/api/product/get-product/${id}`)
             let temp = data.data.product;
             setProduct(temp)
+
         } catch (e) {
             console.log(e.response.data)
             console.log(e.response)
@@ -38,20 +38,57 @@ export default function DetailProduct() {
         e.preventDefault();
         try {
             let response = await axios.patch('https://server.seafreshing.com/api/user/add-freezer', JSON.stringify({
-                'clearPrice': product[0].price.value.replace(/\D/g, ''),
-                'productId': id,
-                'image': product[0].image[0].imgUrl,
-                'name': product[0].productName,
-                'price': product[0].price.value,
-                'priceUnit': unit,
-                'productQuantity': 1,
-                'kioskName': product[0].kioskName,
-                'kioskId': product[0].kioskId,
-                'idUser': userData.id,
-                'kioskCity': product[0].kioskDetails[0].city,
-                'minimumOrder': product[0].minimumOrder.total,
-                'isWholesalePrice': false,
-                'isChecked': true,
+                // 'clearPrice': product[0].price.value.replace(/\D/g, ''),
+                // 'productId': id,
+                // 'image': product[0].image[0].imgUrl,
+                // 'name': product[0].productName,
+                // 'price': product[0].price.value,
+                // 'priceUnit': unit,
+                // 'productQuantity': 1,
+                // 'kioskName': product[0].kioskName,
+                // 'kioskId': product[0].kioskId,
+                // 'idUser': userData.id,
+                // 'kioskCity': product[0].kioskDetails[0].city,
+                // 'minimumOrder': product[0].minimumOrder.total,
+                // 'isWholesalePrice': product[0].isWholesale,
+                // "quantityWholesaleReal": 0,
+                // 'isChecked': true,
+
+                "isWholesale": true,
+                "quantityWholesaleReal": 0,
+                "idUser": "NiE4X6f8jxea",
+                "kioskId": "QmlLzQ2VuHhH",
+                "productId": "CWleYKPPC8ZG",
+                "clearPrice": 43000,
+                "name": "Cumi",
+                "price": "Rp43.000",
+                "minimumOrder": {
+                    "total": 1,
+                    "unit": "kg"
+                },
+                "image": "https://server.seafreshing.com/public/uploads/9cd266b1e030f75da986fed341b61ad7.JPG",
+                "priceUnit": "kg",
+                "productQuantity": 1,
+                "isWholesalePrice": false,
+                "unitWholesale": "kg",
+                "priceWholesale": 1,
+                "isChecked": true,
+                "latLng": "",
+                "packingVariant": {
+                    "isCheck": true,
+                    "packingDimensions": {
+                        "height": 10,
+                        "length": 10,
+                        "weight": {
+                            "unit": "kg",
+                            "value": "1"
+                        },
+                        "width": 10
+                    },
+                    "packingName": "Carton"
+                },
+                "variant": ""
+
             }), {
                 headers: {
                     'Content-Type': 'application/json',

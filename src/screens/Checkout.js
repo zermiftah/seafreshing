@@ -40,19 +40,7 @@ export default function Example() {
     let userData = JSON.parse(localStorage.getItem('data-in-checkout'))
 
 
-    let selectedAddress = {
-        city: userData.address[0].city,
-        district: userData.address[0].district,
-        fullAddress: userData.address[0].fullAddress,
-        label: userData.address[0].label,
-        lat: userData.address[0].lat,
-        lng: userData.address[0].lng,
-        mobileNumber: userData.address[0].mobileNumber,
-        province: userData.address[0].province,
-        receivedName: userData.address[0].receivedName,
-        subdistrict: userData.address[0].subdistrict,
-        zipCode: userData.address[0].zipCode
-    }
+
 
     let kioskData = [], objItem = {}
     // userData.freezer.forEach(element => {
@@ -93,8 +81,8 @@ export default function Example() {
             kioskData.push(objItem)
             localStorage.setItem('data-kiosk', JSON.stringify(kioskData))
             // lala(r.data.kiosk)
-            grab(r.data.kiosk, selectedAddress)
-            deliveree(r.data.kiosk, selectedAddress)
+            grab(r.data.kiosk, selectedAddressz)
+            deliveree(r.data.kiosk, selectedAddressz)
 
             // console.log(grabPrice, "grab rpice")
         })
@@ -163,10 +151,10 @@ export default function Example() {
                     "recipient": userData.fullname,
                     "stops": [
                         {
-                            "address": selectedAddress.fullAddress,
+                            "address": selectedAddressz.fullAddress,
                             "coordinates": {
-                                "latitude": parseFloat(selectedAddress.lat),
-                                "longitude": parseFloat(selectedAddress.lng)
+                                "latitude": parseFloat(selectedAddressz.lat),
+                                "longitude": parseFloat(selectedAddressz.lng)
                             },
                         },
                         {
@@ -187,7 +175,7 @@ export default function Example() {
         }
     }
 
-    const grab = async (data, selectedAddress) => {
+    const grab = async (data, selectedAddressz) => {
         try {
             const quote = await axios({
                 method: "post",
@@ -208,10 +196,10 @@ export default function Example() {
                         }
                     },
                     "destination": {
-                        "address": selectedAddress.fullAddress,
+                        "address": selectedAddressz.fullAddress,
                         "coordinates": {
-                            "latitude": parseFloat(selectedAddress.lat),
-                            "longitude": parseFloat(selectedAddress.lng)
+                            "latitude": parseFloat(selectedAddressz.lat),
+                            "longitude": parseFloat(selectedAddressz.lng)
                         }
                     },
                     "recipient": {
@@ -242,7 +230,7 @@ export default function Example() {
         }
     }
 
-    const deliveree = async (data, selectedAddress) => {
+    const deliveree = async (data, selectedAddressz) => {
         try {
             const quote = await axios({
                 method: "post",
@@ -262,9 +250,9 @@ export default function Example() {
                             "recipient_phone": data.mobileNumber,
                             "note": "no notes"
                         }, {
-                            "address": selectedAddress.fullAddress,
-                            "latitude": parseFloat(selectedAddress.lat),
-                            "longitude": parseFloat(selectedAddress.lng),
+                            "address": selectedAddressz.fullAddress,
+                            "latitude": parseFloat(selectedAddressz.lat),
+                            "longitude": parseFloat(selectedAddressz.lng),
                             "recipient_name": userData.name,
                             "recipient_phone": userData.mobilenumber,
                         }],
@@ -359,7 +347,19 @@ export default function Example() {
                 <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                     <div>
                         <div>
-                            <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
+                            <div className="md:flex md:items-center md:justify-between">
+                                <div className="flex-1 min-w-0">
+                                    <h2 className="text-lg font-medium text-gray-900">Shipping Information</h2>
+                                </div>
+                                <div className="mt-4 flex md:mt-0 md:ml-4">
+                                    <button
+                                        type="button"
+                                        className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-400 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    >
+                                        Add Address
+                                    </button>
+                                </div>
+                            </div>
                             <RadioGroup value={selectedAddressz} onChange={setSelectedAddress}>
 
                                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
