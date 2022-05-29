@@ -230,7 +230,16 @@ export default function Example() {
         }
     }
 
+
+    useEffect(() => {
+        getAddress();
+        getUser();
+        deliveree();
+        pay();
+    }, [])
+
     const deliveree = async (data, selectedAddressz) => {
+        console.log(selectedAddressz)
         try {
             const quote = await axios({
                 method: "post",
@@ -259,6 +268,7 @@ export default function Example() {
                     "vehicle_id": 12
                 }
             })
+            console.log(quote.data)
             setDelivereePrice(quote.data.deliveree.data[11].total_fees)
 
         } catch (error) {
@@ -266,46 +276,40 @@ export default function Example() {
         }
     }
 
-    useEffect(() => {
-        const pay = async () => {
-            try {
-                const toPay = await axios({
-                    method: "post",
-                    url: `https://server.seafreshing.com/api/orders/create-order`,
-                    headers: {
-                        "auth-token": JSON.parse(localStorage.getItem('token'))
+    const pay = async () => {
+        try {
+            const toPay = await axios({
+                method: "post",
+                url: `https://server.seafreshing.com/api/orders/create-order`,
+                headers: {
+                    "auth-token": JSON.parse(localStorage.getItem('token'))
+                },
+                data: {
+                    "amount": total,
+                    "buyerDetails": {
+                        "id": userData.id,
+                        "userEmail": userData.email,
+                        "userName": userData.fullname,
+                        "userPhone": userData.mobilenumber
                     },
-                    data: {
-                        "amount": total,
-                        "buyerDetails": {
-                            "id": userData.id,
-                            "userEmail": userData.email,
-                            "userName": userData.fullname,
-                            "userPhone": userData.mobilenumber
-                        },
-                        "orderDate": Date.now(),
-                        "content": JSON.parse(localStorage.getItem('data-kiosk'))
-                    }
-                })
-                console.log(JSON.parse(localStorage.getItem('data-kiosk')), "url");
-                url = toPay.data.data.paymentUrl
-            } catch (error) {
-                console.log(error); return error;
-            }
+                    "orderDate": Date.now(),
+                    "content": JSON.parse(localStorage.getItem('data-kiosk'))
+                }
+            })
+            console.log(JSON.parse(localStorage.getItem('data-kiosk')), "url");
+            url = toPay.data.data.paymentUrl
+        } catch (error) {
+            console.log(error); return error;
         }
-        pay()
-        console.log(pay())
-    })
+    }
+    pay()
+    console.log(pay())
+
 
 
     const handleChange = () => {
         window.location.href = url
     }
-
-    useEffect(() => {
-        getAddress();
-        getUser();
-    }, [])
 
     const [address, setAddress] = useState([]);
     const [user, setUser] = useState([]);

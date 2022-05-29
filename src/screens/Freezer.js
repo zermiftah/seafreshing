@@ -139,8 +139,7 @@ const Freezer = () => {
                 )
             }
             < div class="bg-white" >
-                <div class="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-                    <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Freezer</h2>
+                <div class=" mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                     {
                         items.length !== 0 ?
                             <form class="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">

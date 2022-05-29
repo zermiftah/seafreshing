@@ -2,7 +2,7 @@ import React from 'react';
 
 const ShippingInformation = ({
     fullname,
-    company,
+    email,
     fulladdress,
     district,
     city,
@@ -10,7 +10,7 @@ const ShippingInformation = ({
     zipcode,
     mobilenumber,
 }) => (
-    <div className="mt-10 border-t border-gray-200 pt-10">
+    <div>
         <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
         <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
             <div>
@@ -22,14 +22,14 @@ const ShippingInformation = ({
                 </label>
                 <div className="mt-1">{fullname}</div>
             </div>
-            <div className="sm:col-span-2">
+            <div>
                 <label
-                    htmlFor="company"
+                    htmlFor="first-name"
                     className="block text-sm font-medium text-gray-700"
                 >
-                    Company
+                    E-mail
                 </label>
-                <div className="mt-1">{company}</div>
+                <div className="mt-1">{email}</div>
             </div>
             <div className="sm:col-span-2">
                 <label

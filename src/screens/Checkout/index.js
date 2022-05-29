@@ -2,31 +2,35 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { methods } from './staticData';
 import UserData from './modules/UserData';
-import ContactInformation from './ContactInformation';
 import ShippingInformation from './ShippingInformation';
 import OrderSummary from './OrderSummary';
 import DeliveryMethods from './DeliveryMethods';
 import FetchHooks from './hooks/FetchHooks';
 
 export default function Checkout() {
-    const [grabPrice, setGrabPrice] = useState(0),
+    const
+        [grabPrice, setGrabPrice] = useState(0),
         [delivereePrice, setDelivereePrice] = useState(0),
-        [lalamovePrice, setLalamovePrice] = useState(0);
+        [lalamovePrice, setLalamovePrice] = useState(0),
+        [priceDelivery, setPriceDelivery] = useState(0)
 
+
+    const [typVehicle, setTypeVehicle] = useState(null)
+    const [typeDeliveryMethod, setTypeDeliveryMethod] = useState(null)
     const currFreezer = useRef(null);
 
-    let products = [],
-        packages = [],
-        packs = [],
-        content = [],
-        url = '';
+    // let products = [],
+    //     packages = [],
+    //     packs = [],
+    //     content = [],
+    //     url = '';
 
     const deliveryMethods = methods({ lalamovePrice, grabPrice, delivereePrice });
 
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
         deliveryMethods[0]
-    ),
-        [kiosk, setKiosk] = '';
+    )
+    // [kiosk, setKiosk] = '';
 
     const { userData, selectedAddress } = UserData();
     const elementId = userData?.freezer?.map((value, index) => value?.id);
@@ -70,140 +74,97 @@ export default function Checkout() {
         },
     ];
 
+    console.log(currFreezer)
+
+
     if (currFreezer.current)
         localStorage.setItem('data-kiosk', JSON.stringify(...currFreezer.current));
 
     const { destination, kioskDetails, origin, product, shipping, status } =
         currFreezer.current[0];
 
-    const { data: grab } = FetchHooks({
-        url: 'api/shipment/get-grab-info',
-        method: 'post',
-        headers: {
-            authorization: JSON.parse(localStorage.getItem('token')),
-        },
-        body: {
-            merchantOrderID: 'd97b3486-5989-4135-8562-2ff046141195',
-            serviceType: 'INSTANT',
-            paymentMethod: 'CASHLESS',
-            packages: packages,
-            origin: {
-                address: origin?.fullAddress,
-                coordinates: {
-                    latitude: parseFloat(origin?.lat),
-                    longitude: parseFloat(origin?.lng),
-                },
-            },
-            destination: {
-                address: selectedAddress.fullAddress,
-                coordinates: {
-                    latitude: parseFloat(selectedAddress.lat),
-                    longitude: parseFloat(selectedAddress.lng),
-                },
 
-            },
-            recipient: {
-                firstName: userData?.fullname,
-                lastName: userData?.fullname,
-                email: userData?.email,
-                phone: userData?.mobilenumber,
-                smsEnabled: true,
-            },
-            sender: {
-                firstName: data?.name,
-                companyName: data?.name,
-                email: data?.email ? data.email : 'mail@mail.com',
-                phone: data?.mobileNumber,
-                smsEnabled: true,
-            },
-            schedule: {
-                pickupTimeFrom: '2022-04-24T12:37:28+08:00',
-                pickupTimeTo: '2022-04-24T13:37:28+08:00',
-            },
-        },
-        callback: (res) => {
-            const { data } = res
-            setGrabPrice(data.quotes[0]?.amount);
-        },
-    });
 
-    const { data: lalamove } = FetchHooks({
-        url: 'api/shipment/get-lalamove-info',
-        method: 'post',
-        headers: {
-            authorization: JSON.parse(localStorage.getItem('token')),
-        },
-        body: {
-            serviceType: "MOTORCYCLE",
-            item: {
-                categories: [
-                    "FOOD DELIVERY",
-                    "SEAFOOD"
-                ],
-                handlingInstructions: [
-                    "AWARE"
-                ],
-                quantity: 1,
-                weight: 1
-            },
-            origin: {
-                address: origin.fullAddress,
-                coordinates: {
-                    lat: origin.latitude,
-                    lng: origin.longitude
+
+    const getLalaMove = () => {
+        axios.post("https://server.seafreshing.com/api/shipment/get-lalamove-info",
+            {
+
+                "serviceType": typVehicle,
+                "item": {
+                    "categories": [
+                        "FOOD DELIVERY",
+                        "SEAFOOD"
+                    ],
+                    "handlingInstructions": [
+                        "AWARE"
+                    ],
+                    "quantity": product.priceUnit,
+                    "weight": product.productQuantityUnit
+                },
+                "origin": {
+                    "address": destination?.address[0].fullAddress,
+                    "coordinates": {
+                        "lat": destination?.address[0].lat,
+                        "lng": destination?.address[0].lng
+                    }
+                },
+                "destination": {
+                    "address": origin?.fullAddress,
+                    "coordinates": {
+                        "lat": origin?.latitude,
+                        "lng": origin.longitude
+                    }
                 }
-            },
-            destination: {
-                address: destination[0]?.fullAddress,
-                coordinates: {
-                    lat: destination[0]?.lat,
-                    lng: destination[0]?.lng
-                }
-            }
-        },
-        callback: (res) => {
-            setLalamovePrice(lalamovePrice + res.data.quotes[0]?.amount);
-        },
-    });
+            }).then((res) => {
+                const price = parseInt(res.data.data.priceBreakdown.total)
+                setPriceDelivery(price)
+                setLalamovePrice(price);
+            }).catch((err) => {
+                setPriceDelivery(0)
+                setLalamovePrice(0);
+            })
+    }
 
-    const { data: deliveree } = FetchHooks({
-        url: 'api/shipment/get-deliveree-info',
-        method: 'post',
-        headers: {
-            authorization: JSON.parse(localStorage.getItem('token')),
-        },
-        body: {
-            note: 'no notes',
-            packs: packs,
-            locations: [
-                {
-                    address: origin?.fullAddress,
-                    latitude: parseFloat(origin.latitude),
-                    longitude: parseFloat(origin.longitude),
-                    recipient_name: kioskDetails.name,
-                    recipient_phone: kioskDetails.mobileNumber,
-                    note: 'no notes',
-                },
-                {
-                    address: selectedAddress.fullAddress,
-                    latitude: parseFloat(selectedAddress.lat),
-                    longitude: parseFloat(selectedAddress.lng),
-                    recipient_name: userData?.name,
-                    recipient_phone: userData?.mobilenumber,
-                },
-            ],
-            vehicle_id: 12,
-        },
-        callback: (res) => {
-            setDelivereePrice(res.data.deliveree.data[11].total_fees);
-        },
-    });
+    // const { data: deliveree } = FetchHooks({
+    //     url: 'api/shipment/get-deliveree-info',
+    //     method: 'post',
+    //     headers: {
+    //         authorization: JSON.parse(localStorage.getItem('token')),
+    //     },
+    //     body: {
+    //         note: 'no notes',
+    //         packs: packs,
+    //         locations: [
+    //             {
+    //                 address: origin?.fullAddress,
+    //                 latitude: parseFloat(origin.latitude),
+    //                 longitude: parseFloat(origin.longitude),
+    //                 recipient_name: kioskDetails.name,
+    //                 recipient_phone: kioskDetails.mobileNumber,
+    //                 note: 'no notes',
+    //             },
+    //             {
+    //                 address: selectedAddress.fullAddress,
+    //                 latitude: parseFloat(selectedAddress.lat),
+    //                 longitude: parseFloat(selectedAddress.lng),
+    //                 recipient_name: userData?.name,
+    //                 recipient_phone: userData?.mobilenumber,
+    //             },
+    //         ],
+    //         vehicle_id: 12,
+    //     },
+    //     callback: (res) => {
+    //         setDelivereePrice(res.data.deliveree.data[11].total_fees);
+    //     },
+    // });
 
     // Price Method
+
     let subtotal = product?.reduce((accumulator, object) => {
         return accumulator + object.clearPrice;
     }, 0);
-    let payTax = (0.11 * (subtotal + selectedDeliveryMethod.clear)).toFixed(0);
+    let payTax = (0.11 * (subtotal + priceDelivery)).toFixed(0);
     let total = subtotal + selectedDeliveryMethod.clear + parseInt(payTax);
 
     const handlePayment = async (e) => {
@@ -241,16 +202,37 @@ export default function Checkout() {
                     },
                     product,
                     shipping: {
-                        cost: shipping.cost,
-                        service: shipping.service,
-                        status: shipping.status,
+                        cost: priceDelivery,
+                        service: typeDeliveryMethod,
+                        status: status,
                         trackUrl: shipping.trackUrl,
                     },
                     status,
                 },
             ],
-        }, { headers });
+        }, { headers },
+        ).then((res) => {
+            console.log(res)
+        });
     };
+
+    useEffect(() => {
+        if (typVehicle) {
+            if (typeDeliveryMethod === "alamove") {
+                getLalaMove()
+                console.log(typeDeliveryMethod)
+            }
+            if (typeDeliveryMethod === "deliveree") {
+                console.log(typeDeliveryMethod)
+
+            }
+
+        }
+    }, [typVehicle])
+
+
+
+
 
     return (
         <div className="bg-gray-50">
@@ -259,9 +241,9 @@ export default function Checkout() {
 
                 <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                     <div>
-                        <ContactInformation email={userData?.email} />
                         <ShippingInformation
                             fullname={userData?.fullname}
+                            email={userData?.email}
                             company={userData?.company}
                             mobilenumber={userData?.mobilenumber}
                             province={selectedAddress.province}
@@ -274,33 +256,27 @@ export default function Checkout() {
                             selectedDeliveryMethod={selectedDeliveryMethod}
                             listMethod={deliveryMethods}
                             setSelectedDeliveryMethod={setSelectedDeliveryMethod}
+                            onChangeTypeVehicle={(delivery) => {
+                                setTypeDeliveryMethod(delivery.id)
+                                setTypeVehicle(delivery.key)
+                            }}
                         />
+
                     </div>
                     <OrderSummary
                         products={product}
                         payTax={payTax}
-                        shipping={selectedDeliveryMethod.clear}
+                        shipping={priceDelivery}
                         subtotal={subtotal}
                         total={total}
                         handlePayment={handlePayment}
+                        listMethod={deliveryMethods}
+                        kiosk={kioskDetails}
                     />
+
                 </form>
             </div>
         </div>
     );
 }
 
-/** Alamat {
-    city : "KOTA JAKARTA UTARA", 
-    zipCode : 14440
-    lat : "-6.129126670421264"
-    lng : "106.81753735989332"
-    district : "PADEMANGAN"
-    subdistrict : "PADEMANGAN BARAT"
-    province : "DKI JAKARTA"
-    label : "Building"
-    fullAddress : "Jl. Industri Dalam no. 1, Kel. Pademangan barat, kec. Pademangan, Jaka…"
-    mobileNumber : "085668279796", 
-    recievedName: :juki
-  } 
- * **/
