@@ -1,6 +1,6 @@
 const CTA = () => {
     return (
-        <section class="mt-5 bg-white dark:bg-gray-900">
+        <section class="mt-10 bg-white dark:bg-gray-900">
             <div class="container flex flex-col items-center px-4 py-12 mx-auto text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-gray-600 dark:text-white">
                     Try something really different right now.

@@ -121,7 +121,9 @@ const App = () => {
         </Route>
         <Route path="/kiosk">
           <Auth>
+            <HeaderHS />
             <KioskScreen />
+            <Footer />
           </Auth>
         </Route>
         <Route path="/ProductList" component={ProductList} />
