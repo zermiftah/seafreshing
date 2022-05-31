@@ -26,7 +26,7 @@ import Footer from "./components/Footers";
 import TrendingProduct from "./components/TrendingProduct/TrendingProduct";
 import Profile from "./screens/Profile";
 import Wishlist from "./screens/Wishlist";
-import Checkout from "./screens/Checkout";
+import Checkout from "./screens/Checkout/index";
 
 const App = () => {
   return (

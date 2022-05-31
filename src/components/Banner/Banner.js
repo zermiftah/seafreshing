@@ -1,69 +1,44 @@
+import slide1 from "../../assets/img/slide6.png"
+import slide2 from "../../assets/img/slide7.png"
+import slide3 from "../../assets/img/slide8.png"
+
 const Banner = () => {
     return (
-        <header class="bg-white dark:bg-gray-800">
+        <div className="mt-10 max-w-7xl mx-auto">
 
-            <div class="container flex flex-col px-6 py-10 mx-auto space-y-6 lg:h-[32rem] lg:py-16 lg:flex-row lg:items-center">
-                <div class="w-full lg:w-1/2">
-                    <div class="lg:max-w-lg">
-                        <h1 class="text-2xl font-medium tracking-wide text-gray-800 dark:text-white lg:text-4xl">Find your premium new seafood from Jakarta</h1>
-                        <p class="mt-2 text-gray-600 dark:text-gray-300">We work with the best call storage in Muara Angke and Muara Baru to find your new seafood.</p>
-                        <div class="grid gap-6 mt-8 sm:grid-cols-2">
-                            <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
-                                <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
+            <div id="default-carousel" className="relative" data-carousel="static">
+                <div className="overflow-hidden relative h-56 rounded-lg sm:h-64 xl:h-80 2xl:h-100">
 
-                                <span class="mx-3">Premium Seafood</span>
-                            </div>
-
-                            <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
-                                <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-
-                                <span class="mx-3">Insurance</span>
-                            </div>
-
-                            <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
-                                <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-
-                                <span class="mx-3">All legal seafoods</span>
-                            </div>
-
-                            <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
-                                <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-
-                                <span class="mx-3">From Jakarta</span>
-                            </div>
-
-                            <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
-                                <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-
-                                <span class="mx-3">Payment Security</span>
-                            </div>
-
-                            <div class="flex items-center text-gray-800 -px-3 dark:text-gray-200">
-                                <svg class="w-5 h-5 mx-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-
-                                <span class="mx-3">Fast shipping </span>
-                            </div>
-                        </div>
+                    <div className="hidden duration-700 ease-in-out" data-carousel-item>
+                        <span className="absolute top-1/2 left-1/2 text-2xl font-semibold text-white -translate-x-1/2 -translate-y-1/2 sm:text-3xl dark:text-gray-800"></span>
+                        <img src={slide1} alt="..." />
+                    </div>
+                    <div className="hidden duration-700 ease-in-out" data-carousel-item>
+                        <img src={slide2} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="..." />
+                    </div>
+                    <div className="hidden duration-700 ease-in-out" data-carousel-item>
+                        <img src={slide3} className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="..." />
                     </div>
                 </div>
-
-                <div class="flex items-center justify-center w-full h-96 lg:w-1/2">
-                    <img class="object-cover w-full h-full max-w-2xl rounded-md" src="https://cdn.vectorstock.com/i/1000x1000/80/60/production-line-canned-fish-and-preserves-vector-38868060.webp" alt="glasses photo" />
+                <div className="flex absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
+                    <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+                    <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+                    <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
                 </div>
+                <button type="button" className="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none" data-carousel-prev>
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        <span className="hidden">Previous</span>
+                    </span>
+                </button>
+                <button type="button" className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none" data-carousel-next>
+                    <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                        <svg className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        <span className="hidden">Next</span>
+                    </span>
+                </button>
             </div>
-        </header>
+        </div>
     );
 }
 
