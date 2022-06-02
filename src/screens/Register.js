@@ -23,6 +23,7 @@ const Register = () => {
   const [requestId, setRequestId] = useState('');
   const [otpVer, setOTPver] = useState({});
 
+
   const handleRegister = async (e) => {
     setRequestId(randomStr(20, '12345abcde'))
     const otp = {
@@ -33,6 +34,7 @@ const Register = () => {
       requestId: requestId
     }
     setOTPver(otp);
+    localStorage.setItem('otpVer', JSON.stringify(otpVer));
 
     e.preventDefault();
     let qs = require('qs');
@@ -49,6 +51,7 @@ const Register = () => {
           'Content-Type': 'application/json',
         }
       });
+      console.log(response)
       if (response.data) {
 
         setNotif(response.data.msg)
@@ -70,9 +73,6 @@ const Register = () => {
     }
   }
 
-  useEffect(() => {
-    localStorage.setItem('otpVer', JSON.stringify(otpVer));
-  }, [otpVer]);
 
   return (
     <>
@@ -133,8 +133,7 @@ const Register = () => {
 
 
                   <div class="mt-6">
-                    <Link to="/otp-verify"
-
+                    <Link to="./otp-verify"
                     >
                       <button type="submit"
                         class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">

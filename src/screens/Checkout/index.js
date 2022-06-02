@@ -218,7 +218,7 @@ export default function Checkout() {
 
     useEffect(() => {
         if (typVehicle) {
-            if (typeDeliveryMethod === "alamove") {
+            if (typeDeliveryMethod === "lalamove") {
                 getLalaMove()
                 console.log(typeDeliveryMethod)
             }

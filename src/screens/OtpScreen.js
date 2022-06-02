@@ -4,7 +4,7 @@ import Header from "./../components/Header";
 import axios from 'axios';
 import Notif from '../components/simple'
 
-const OtpScreen = (props) => {
+const OtpScreen = () => {
   const [otp, setOtp] = useState(''),
     [requestId, setRequestId] = useState(''),
     [email, setEmail] = useState(''),
@@ -16,16 +16,19 @@ const OtpScreen = (props) => {
   const [password, setPassword] = useState('');
   const history = useHistory();
   const [otpVer, setOTPver] = useState({});
+  const otpData = localStorage.getItem('otpVer');
 
 
   useEffect(() => {
     const otpVer = JSON.parse(localStorage.getItem('otpVer'));
+    console.log(otpVer)
     if (otpVer) {
       setOTPver(otpVer);
     }
   }, []);
 
-  console.log(otpVer)
+
+
 
 
   const handleOtpVerification = async (e) => {
