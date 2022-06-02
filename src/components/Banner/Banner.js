@@ -62,7 +62,7 @@ const Banner = () => {
         //         <img class="object-cover w-full h-full max-w-2xl rounded-md" src="https://img.freepik.com/free-vector/seafood-menu-background-with-fish-steak-lobster-spices_1284-14068.jpg?t=st=1653963653~exp=1653964253~hmac=b706cb78fef98b275ffc4fad431bd9313f41c54d647068d04d57e7eba19a81b7&w=740" alt="glasses photo" />
         //     </div>
         // </div>
-        <div className="relative bg-white overflow-hidden">
+        <div className="mt-10 relative bg-white overflow-hidden">
             <div className="pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static">
                     <div className="sm:max-w-lg">
