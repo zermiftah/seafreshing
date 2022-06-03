@@ -424,7 +424,7 @@ export default function Checkout() {
                                                             }).catch((err) => { console.log(err) })
                                                             event.preventDefault()
                                                         }}
-                                                        className="w-full bg-green-400 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500"
+                                                        className="w-full bg-slate-200 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-800"
                                                     >
                                                         Choose Method Delivery
                                                     </button>

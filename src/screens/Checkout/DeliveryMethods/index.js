@@ -3,6 +3,7 @@ import { RadioGroup } from '@headlessui/react';
 import classNames from '../modules';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import axios from 'axios'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 const DeliveryMethods = ({
     listMethod = [],
     selectedDeliveryMethod,
@@ -161,12 +162,14 @@ const DeliveryMethods = ({
                         <h2 className="text-lg font-medium text-gray-900">Shipping Information</h2>
                     </div>
                     <div className="mt-4 flex md:mt-0 md:ml-4">
-                        <button
-                            type="button"
-                            className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-400 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Add Address
-                        </button>
+                        <Link to="/addaddressform">
+                            <button
+                                type="button"
+                                className="ml-3 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-slate-200 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800"
+                            >
+                                Add Address
+                            </button>
+                        </Link>
                     </div>
                 </div>
                 <RadioGroup value={selectedAddressz
@@ -183,7 +186,7 @@ const DeliveryMethods = ({
                                 className={({ checked, active }) =>
                                     classNames(
                                         checked ? 'border-transparent' : 'border-gray-300',
-                                        active ? 'ring-2 ring-indigo-500' : '',
+                                        active ? 'ring-2 ring-slate-800' : '',
                                         'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
                                     )
                                 }
@@ -207,11 +210,11 @@ const DeliveryMethods = ({
                                                 </RadioGroup.Description>
                                             </div>
                                         </div>
-                                        {checked ? (<CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />) : null}
+                                        {checked ? (<CheckCircleIcon className="h-5 w-5 text-slate-800" aria-hidden="true" />) : null}
                                         <div
                                             className={classNames(
                                                 active ? 'border' : 'border-2',
-                                                checked ? 'border-indigo-500' : 'border-transparent',
+                                                checked ? 'border-slate-800' : 'border-transparent',
                                                 'absolute -inset-px rounded-lg pointer-events-none'
                                             )}
                                             aria-hidden="true"
@@ -288,7 +291,7 @@ const DeliveryMethods = ({
                                     className={({ checked, active }) =>
                                         classNames(
                                             checked ? 'border-transparent' : 'border-gray-300',
-                                            active ? 'ring-2 ring-indigo-500' : '',
+                                            active ? 'ring-2 ring-slate-800' : '',
                                             'relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none'
                                         )
                                     }
@@ -346,14 +349,14 @@ const DeliveryMethods = ({
                                             {
                                                 checked ? (
                                                     <CheckCircleIcon
-                                                        className="h-5 w-5 text-indigo-600"
+                                                        className="h-5 w-5 text-slate-800"
                                                         aria- hidden="true"
                                                     />
                                                 ) : null}
                                             <div
                                                 className={classNames(
                                                     active ? 'border' : 'border-2',
-                                                    checked ? 'border-indigo-500' : 'border-transparent',
+                                                    checked ? 'border-slate-800' : 'border-transparent',
                                                     'absolute -inset-px rounded-lg pointer-events-none'
                                                 )}
                                                 aria-hidden="true"

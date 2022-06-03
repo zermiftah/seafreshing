@@ -27,6 +27,7 @@ import TrendingProduct from "./components/TrendingProduct/TrendingProduct";
 import Profile from "./screens/Profile";
 import Wishlist from "./screens/Wishlist";
 import Checkout from "./screens/Checkout/index";
+import AddAddressForm from "./screens/AddAddressForm"
 
 const App = () => {
   return (
@@ -84,9 +85,11 @@ const App = () => {
             <Footer />
           </Auth>
         </Route>
-        <Route path="/payment">
+        <Route path="/addaddressform">
           <Auth>
-            <PaymentScreen />
+            <HeaderHS />
+            <AddAddressForm />
+            <Footer />
           </Auth>
         </Route>
         <Route path="/DetailProduct/:id">
