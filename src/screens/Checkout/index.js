@@ -2,46 +2,40 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { methods } from './staticData';
 import UserData from './modules/UserData';
-import ShippingInformation from './ShippingInformation';
 import OrderSummary from './OrderSummary';
 import DeliveryMethods from './DeliveryMethods';
 import FetchHooks from './hooks/FetchHooks';
-
 export default function Checkout() {
     const
         [grabPrice, setGrabPrice] = useState(0),
         [delivereePrice, setDelivereePrice] = useState(0),
-        [lalamovePrice, setLalamovePrice] = useState(0),
-        [priceDelivery, setPriceDelivery] = useState(0)
-
-
-    const [typVehicle, setTypeVehicle] = useState(null)
-    const [typeDeliveryMethod, setTypeDeliveryMethod] = useState(null)
-    const currFreezer = useRef(null);
-
-    // let products = [],
-    //     packages = [],
-    //     packs = [],
-    //     content = [],
-    //     url = '';
+        [lalamovePrice, setLalamovePrice] = useState(0)
 
     const deliveryMethods = methods({ lalamovePrice, grabPrice, delivereePrice });
 
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
         deliveryMethods[0]
     )
+    const [typVehicle] = useState(null)
+    const [typeDeliveryMethod] = useState(null)
+    const currFreezer = useRef(null);
+    const [freezerState, setFreezerState] = useState([])
+    const [freezerChoosen, setFreezerChoosen] = useState()
+    let [priceDelivery, setPriceDelivery] = useState(0)
+
     // [kiosk, setKiosk] = '';
 
-    const { userData, selectedAddress } = UserData();
+    const { userData, priceProduct } = UserData();
     const elementId = userData?.freezer?.map((value, index) => value?.id);
     const elementProduct = userData?.freezer?.map((value) => value?.product);
 
 
 
-    const { data } = FetchHooks({
+    const { data: dataKiosk } = FetchHooks({
         method: 'get',
         url: `/api/kiosk/get-kiosk/${elementId ? elementId[0] : ''}`,
     });
+
 
     currFreezer.current = [
         {
@@ -52,16 +46,16 @@ export default function Checkout() {
                 name: userData?.fullname + ' - ' + userData?.address[0]?.label,
             },
             kioskDetails: {
-                ...data?.kiosk,
-                id: data?.kiosk?.id,
-                kioskPhone: data?.kiosk?.mobileNumber,
-                name: data?.kiosk?.name,
+                ...dataKiosk?.kiosk,
+                id: dataKiosk?.kiosk?.id,
+                kioskPhone: dataKiosk?.kiosk?.mobileNumber,
+                name: dataKiosk?.kiosk?.name,
             },
             origin: {
-                fullAddress: data?.kiosk?.fullAddress,
-                latitude: data?.kiosk?.lat,
-                longitude: data?.kiosk?.lng,
-                name: data?.kiosk?.name,
+                fullAddress: dataKiosk?.kiosk?.fullAddress,
+                latitude: dataKiosk?.kiosk?.lat,
+                longitude: dataKiosk?.kiosk?.lng,
+                name: dataKiosk?.kiosk?.name,
             },
             product: elementProduct ? elementProduct[0] : [],
             shipping: {
@@ -74,7 +68,7 @@ export default function Checkout() {
         },
     ];
 
-    console.log(currFreezer)
+
 
 
     if (currFreezer.current)
@@ -85,12 +79,13 @@ export default function Checkout() {
 
 
 
+    const [destinationState, setDestinationState] = useState()
 
-    const getLalaMove = () => {
+    const getLalaMove = (originPlace, vehicle) => {
         axios.post("https://server.seafreshing.com/api/shipment/get-lalamove-info",
             {
 
-                "serviceType": typVehicle,
+                "serviceType": vehicle,
                 "item": {
                     "categories": [
                         "FOOD DELIVERY",
@@ -100,66 +95,157 @@ export default function Checkout() {
                         "AWARE"
                     ],
                     "quantity": product.priceUnit,
-                    "weight": product.productQuantityUnit
+                    "weight": "" + freezerState.weight
                 },
                 "origin": {
-                    "address": destination?.address[0].fullAddress,
+                    "address": originPlace?.address,
                     "coordinates": {
-                        "lat": destination?.address[0].lat,
-                        "lng": destination?.address[0].lng
+                        "lat": originPlace?.lat,
+                        "lng": originPlace.lng
                     }
                 },
                 "destination": {
-                    "address": origin?.fullAddress,
+                    "address": destinationState ? destinationState.address : destination?.address[0].fullAddress,
                     "coordinates": {
-                        "lat": origin?.latitude,
-                        "lng": origin.longitude
+                        "lat": destinationState ? destinationState.lat : destination?.address[0].lat,
+                        "lng": destinationState ? destinationState.lng : destination?.address[0].lng
                     }
                 }
             }).then((res) => {
                 const price = parseInt(res.data.data.priceBreakdown.total)
-                setPriceDelivery(price)
+                freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price }
+                setFreezerState(freezerState)
                 setLalamovePrice(price);
+                freezerState.forEach((freezer) => {
+                    setPriceDelivery(freezer.price + priceDelivery)
+                })
             }).catch((err) => {
                 setPriceDelivery(0)
                 setLalamovePrice(0);
             })
     }
 
-    // const { data: deliveree } = FetchHooks({
-    //     url: 'api/shipment/get-deliveree-info',
-    //     method: 'post',
-    //     headers: {
-    //         authorization: JSON.parse(localStorage.getItem('token')),
-    //     },
-    //     body: {
-    //         note: 'no notes',
-    //         packs: packs,
-    //         locations: [
-    //             {
-    //                 address: origin?.fullAddress,
-    //                 latitude: parseFloat(origin.latitude),
-    //                 longitude: parseFloat(origin.longitude),
-    //                 recipient_name: kioskDetails.name,
-    //                 recipient_phone: kioskDetails.mobileNumber,
-    //                 note: 'no notes',
-    //             },
-    //             {
-    //                 address: selectedAddress.fullAddress,
-    //                 latitude: parseFloat(selectedAddress.lat),
-    //                 longitude: parseFloat(selectedAddress.lng),
-    //                 recipient_name: userData?.name,
-    //                 recipient_phone: userData?.mobilenumber,
-    //             },
-    //         ],
-    //         vehicle_id: 12,
-    //     },
-    //     callback: (res) => {
-    //         setDelivereePrice(res.data.deliveree.data[11].total_fees);
-    //     },
-    // });
+    const getDeliveree = (originPlace, vehicle) => {
+        axios.post('https://server.seafreshing.com/api/shipment/get-deliveree-info',
 
-    // Price Method
+            {
+                "orderId": "628cfc91856eaaf5eec5a0a8",
+                "locations": [
+                    {
+                        "address": originPlace?.address,
+                        "latitude": originPlace?.lat,
+                        "longitude": originPlace.lng,
+                        "recipient_name": freezerState[freezerChoosen].name,
+                        "recipient_phone": freezerState[freezerChoosen].mobileNumber
+                    },
+                    {
+                        "address": destinationState ? destinationState.address : destination?.address[0].fullAddress,
+                        "latitude": destinationState ? destinationState.lat : destination?.address[0].lat,
+                        "longitude": destinationState ? destinationState.lng : destination?.address[0].lng,
+                        "recipient_name": destination?.name,
+                        "recipient_phone": destination?.mobilenumber
+                    }
+                ],
+                "id": "xMvDG07dDVzL",
+                "vehicleId": vehicle
+            }
+        ).then((res) => {
+
+            const data = res.data.deliveree.data.find((data) => data.vehicle_type_id === vehicle)
+            const price = data.total_fees
+            setDelivereePrice(price)
+            freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price }
+            setFreezerState(freezerState)
+            freezerState.forEach((freezer) => {
+                setPriceDelivery(freezer.price + priceDelivery)
+            })
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+
+    const getGrab = (originPlace, vehicle) => {
+
+        axios.post(
+            "https://server.seafreshing.com/api/shipment/get-grab-info",
+            {
+                "serviceType": vehicle,
+                "schedule": {
+                    "pickupTimeFrom": "2022-06-01T10:16:19+07:00",
+                    "pickupTimeTo": "2022-06-01T13:16:19+07:00"
+                },
+                "orderId": "6293801e5317396e5269744e",
+                "sender": {
+                    "email": "albertus@seafreshing.com",
+                    "firstName": originPlace.name,
+                    "lastName": "",
+                    "phone": originPlace.mobileNumber,
+                    "smsEnabled": true
+                },
+                "origin": {
+                    "address": originPlace?.address,
+                    "coordinates": {
+                        "latitude": Number(originPlace?.lat),
+                        "longitude": Number(originPlace.lng)
+                    }
+                },
+                "destination": {
+                    "address": destinationState ? destinationState.address : destination?.address[0].fullAddress,
+                    "coordinates": {
+                        "latitude": destinationState ? Number(destinationState.lat) : Number(destination?.address[0].lat),
+                        "longitude": destinationState ? Number(destinationState.lng) : Number(destination?.address[0].lng)
+                    }
+                },
+                "recipient": {
+                    "email": destination.email,
+                    "firstName": destination.name,
+                    "lastName": "",
+                    "phone": destination.mobileNumber,
+                    "smsEnabled": true
+                },
+                "paymentMethod": "CASHLESS",
+                "id": "1EPNGc9DRqC0",
+                "merchantOrderID": "1EPNGc9DRqC0",
+                "packages": [
+                    {
+                        "description": "Seafreshing",
+                        "dimensions": {
+                            "depth": 10,
+                            "height": 5,
+                            "weight": 5000,
+                            "width": 5
+                        },
+                        "name": "Kerang simping",
+                        "price": subtotal,
+                        "quantity": freezerState.weight
+                    }
+                ]
+            },
+            {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                }
+            },
+
+        )
+            .then(
+                (response) => {
+                    const price = response.data.quotes[0].amount
+                    setGrabPrice(price)
+                    freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price }
+                    setFreezerState(freezerState)
+                    freezerState.forEach((freezer) => {
+                        setPriceDelivery(freezer.price + priceDelivery)
+                    })
+                }
+            ).catch((err) => {
+
+            })
+    }
+
+
+
 
     let subtotal = product?.reduce((accumulator, object) => {
         return accumulator + object.clearPrice;
@@ -212,24 +298,9 @@ export default function Checkout() {
             ],
         }, { headers },
         ).then((res) => {
-            console.log(res)
+
         });
     };
-
-    useEffect(() => {
-        if (typVehicle) {
-            if (typeDeliveryMethod === "lalamove") {
-                getLalaMove()
-                console.log(typeDeliveryMethod)
-            }
-            if (typeDeliveryMethod === "deliveree") {
-                console.log(typeDeliveryMethod)
-
-            }
-
-        }
-    }, [typVehicle])
-
 
 
 
@@ -241,42 +312,136 @@ export default function Checkout() {
 
                 <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                     <div>
-                        <ShippingInformation
-                            fullname={userData?.fullname}
-                            email={userData?.email}
-                            company={userData?.company}
-                            mobilenumber={userData?.mobilenumber}
-                            province={selectedAddress.province}
-                            zipcode={selectedAddress.zipCode}
-                            district={selectedAddress.district}
-                            city={selectedAddress.city}
-                            fulladdress={selectedAddress.fullAddress}
-                        />
                         <DeliveryMethods
                             selectedDeliveryMethod={selectedDeliveryMethod}
                             listMethod={deliveryMethods}
+                            freezerChoosen={freezerChoosen}
                             setSelectedDeliveryMethod={setSelectedDeliveryMethod}
                             onChangeTypeVehicle={(delivery) => {
-                                setTypeDeliveryMethod(delivery.id)
-                                setTypeVehicle(delivery.key)
+                                if (delivery.id === 'alamove') {
+                                    getLalaMove(freezerState[freezerChoosen], delivery.key)
+                                }
+                                console.log(delivery.id)
+                                if (delivery.id === "deliveree") {
+                                    getDeliveree(freezerState[freezerChoosen], delivery.key)
+                                }
+                                if (delivery.id === "grab_express") {
+                                    getGrab(freezerState[freezerChoosen], delivery.key)
+                                }
+                            }}
+                            onChangeAddress={(value) => {
+                                setDestinationState({
+                                    address: value.fullAddress,
+                                    lng: value.lng,
+                                    lat: value.lat
+                                })
+
                             }}
                         />
-
                     </div>
                     <OrderSummary
+
                         products={product}
+                        freezerState={freezerState}
                         payTax={payTax}
+                        freezer={userData?.freezer}
                         shipping={priceDelivery}
-                        subtotal={subtotal}
-                        total={total}
+                        subtotal={priceProduct?.subtotal}
+                        total={priceProduct?.subtotal + parseInt(payTax) + priceDelivery}
                         handlePayment={handlePayment}
                         listMethod={deliveryMethods}
                         kiosk={kioskDetails}
-                    />
+                    >
+                        <ul className="divide-y divide-gray-200">
+                            {
+                                userData?.freezer &&
+                                userData?.freezer.map((freezer, indexFreezer) => (
+                                    <>
+                                        {freezer.product.map((product) => (
+                                            <>
+                                                <li key={product.id} className="flex py-6 px-4 sm:px-6">
+                                                    <div className="flex-shrink-0">
+                                                        <img
+                                                            src={product.image}
+                                                            alt={product.image}
+                                                            className="w-20 rounded-md"
+                                                        />
+                                                    </div>
+
+                                                    <div className="ml-6 flex-1 flex flex-col">
+                                                        <div className="flex">
+                                                            <div className="min-w-0 flex-1">
+                                                                <h4 className="text-sm">
+                                                                    <a
+                                                                        href={product.href}
+                                                                        className="font-medium text-gray-700 hover:text-gray-800"
+                                                                    >
+                                                                        {product.title}
+                                                                    </a>
+                                                                </h4>
+                                                                <p className="mt-1 text-sm text-gray-500">{product.name}</p>
+                                                                <p className="mt-1 text-sm text-gray-500">{product.size}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex-1 pt-2 flex items-end justify-between">
+                                                            <p className="mt-1 text-sm font-medium text-gray-900">
+                                                                {product.price}
+                                                            </p>
+
+
+                                                            <div className="ml-4">
+                                                                <label htmlFor="quantity" className="sr-only">
+                                                                    Quantity
+                                                                </label>
+                                                                <p className="mt-1 text-sm font-medium text-gray-900">
+                                                                    Qty: {product.productQuantity}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </li>
+                                                <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                                                    <p className="mt-1 text-sm font-medium text-gray-900">
+                                                        Cost Delivery : {freezerState[indexFreezer]?.price}
+                                                    </p>
+                                                    <button
+                                                        type="submit"
+                                                        onClick={(event) => {
+                                                            let weight = 0
+                                                            freezer.product.forEach((data) => {
+                                                                weight += data.productQuantity
+                                                            })
+                                                            setFreezerChoosen(indexFreezer)
+
+                                                            axios.get('https://server.seafreshing.com/api/kiosk/get-kiosk/' + freezer.id).then((res) => {
+                                                                const kiosk = res.data.kiosk
+                                                                console.log(res.data)
+                                                                freezerState[indexFreezer] = { lng: kiosk.lng, lat: kiosk.lat, address: kiosk.fullAddress, weight: weight, mobileNumber: kiosk.mobileNumber, name: kiosk.name, email: kiosk.email }
+                                                                setFreezerState(freezerState)
+
+                                                            }).catch((err) => { console.log(err) })
+                                                            event.preventDefault()
+                                                        }}
+                                                        className="w-full bg-green-400 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500"
+                                                    >
+                                                        Choose Method Delivery
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ))}
+                                    </>
+                                )
+                                )
+                            }
+                        </ul>
+
+                    </OrderSummary>
 
                 </form>
             </div>
-        </div>
+        </div >
     );
 }
 

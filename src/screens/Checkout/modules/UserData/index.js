@@ -6,7 +6,7 @@ let user = JSON.parse(localStorage.getItem('user-data'));
 
 const UserData = () => {
     const [userData, setUserData] = useState(null);
-
+    const [priceTotalProduct, setPriceTotalProduct] = useState(0)
     const { data } = FetchHooks({
         method: 'get',
         url: `https://server.seafreshing.com/api/user/get-user/0/${user.id}`,
@@ -14,10 +14,24 @@ const UserData = () => {
             'auth-token': JSON.parse(localStorage.getItem('token')),
         },
         callback: (res) => {
+            const data = res.data.user
             localStorage.setItem('data-in-checkout', JSON.stringify(res.data.user));
             setUserData(JSON.parse(localStorage?.getItem('data-in-checkout')));
+            let sumTotal = 0
+            data.freezer.forEach((kios) => {
+                kios.product.forEach((product) => {
+                    sumTotal += parseInt(product.clearPrice)
+
+                })
+            })
+
+            setPriceTotalProduct(sumTotal)
+
+
+
         },
     });
+
 
     const selectedAddress = {
         city: userData?.address[0]?.city,
@@ -32,7 +46,14 @@ const UserData = () => {
         subdistrict: userData?.address[0]?.subdistrict,
         zipCode: userData?.address[0]?.zipCode,
     };
-    return { userData, selectedAddress };
+
+    const priceProduct = {
+        subtotal: priceTotalProduct
+    }
+
+
+
+    return { userData, selectedAddress, priceProduct };
 };
 
 export default UserData;

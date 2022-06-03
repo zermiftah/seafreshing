@@ -14,11 +14,6 @@ export const methods = ({ lalamovePrice, grabPrice, delivereePrice }) => {
             clear: lalamovePrice,
             typeVehicle: [
                 {
-                    key: 'WALKER',
-                    name: "Walker",
-                    restrictions: 10,
-                },
-                {
                     key: 'MOTORCYCLE',
                     name: "Motorcycle",
                     restrictions: 10,
@@ -33,11 +28,7 @@ export const methods = ({ lalamovePrice, grabPrice, delivereePrice }) => {
                     name: "Sedan",
                     restrictions: 100,
                 },
-                {
-                    key: 'VAN',
-                    name: 'Van',
-                    restrictions: 700,
-                },
+
                 {
                     key: 'TRUCK175',
                     name: 'Pickup Truck',
@@ -61,6 +52,18 @@ export const methods = ({ lalamovePrice, grabPrice, delivereePrice }) => {
             turnaround: '1 - 2 business days',
             price: `Rp.${grabPrice}`,
             clear: grabPrice,
+            typeVehicle: [
+                {
+                    key: "INSTANT",
+                    name: "Instant",
+                    restrictions: 10,
+                },
+                {
+                    key: "BULK",
+                    name: "BULK",
+                    restrictions: 10,
+                },
+            ]
         },
         {
             id: 'deliveree',
@@ -71,9 +74,52 @@ export const methods = ({ lalamovePrice, grabPrice, delivereePrice }) => {
             typeVehicle: [
                 {
                     key: 36,
-                    name: "Pickup Truck",
-                    restrictions: 10,
+                    "name": "Pickup Truck",
                 },
+                {
+                    key: 24,
+                    "name": "Engkel Box",
+                },
+                {
+                    key: 23,
+                    "name": "Small Box",
+                },
+                {
+                    key: 21,
+                    "name": "Small Pickup",
+                },
+                {
+                    key: 14,
+                    "name": "Van",
+                },
+                {
+                    key: 75,
+                    "name": "Engkel Pickup",
+                },
+                {
+                    key: 76,
+                    "name": "Double Engkel Pickup",
+                },
+                {
+                    key: 77,
+                    "name": "Fuso Lite",
+                },
+                {
+                    key: 78,
+                    "name": "Fuso Heavy",
+                }, {
+                    key: 107,
+                    "name": "Phuc test",
+                },
+                {
+                    key: 108,
+                    "name": "Tronton Wing Box",
+                },
+                {
+                    key: 12,
+                    "name": "Economy",
+                },
+
             ]
         },
     ];
