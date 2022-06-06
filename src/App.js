@@ -9,7 +9,6 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import OtpScreen from "./screens/OtpScreen";
 import CartScreen from "./screens/CartScreen";
-import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";

@@ -250,7 +250,7 @@ const Freezer = () => {
 
                                     <div class="mt-6">
                                         <Link to="/checkout">
-                                            <button type="submit" class="w-full bg-sky-500 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500">Checkout</button>
+                                            <button type="submit" class="w-full bg-slate-200 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-800">Checkout</button>
                                         </Link>
                                     </div>
                                 </section>

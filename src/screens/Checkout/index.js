@@ -5,6 +5,9 @@ import UserData from './modules/UserData';
 import OrderSummary from './OrderSummary';
 import DeliveryMethods from './DeliveryMethods';
 import FetchHooks from './hooks/FetchHooks';
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+import ShippingInformation from './ShippingInformation';
 export default function Checkout() {
     const
         [grabPrice, setGrabPrice] = useState(0),
@@ -244,6 +247,15 @@ export default function Checkout() {
             })
     }
 
+    let [isOpen, setIsOpen] = useState(false)
+
+    function closeModal() {
+        setIsOpen(false)
+    }
+
+    function openModal() {
+        setIsOpen(true)
+    }
 
 
 
@@ -258,48 +270,53 @@ export default function Checkout() {
         const headers = {
             'auth-token': JSON.parse(localStorage.getItem('token'))
         }
-        await axios.post('https://server.seafreshing.com/api/orders/create-order', {
-            amount: total,
-            buyerDetails: {
-                id: destination.id,
-                userEmail: destination.email,
-                userName: destination.fullname,
-                userPhone: destination.mobilenumber,
-            },
-            orderDate: '1653162005502',
-            content: [
-                {
-                    destination: {
-                        fullAddress: destination[0]?.fullAddress,
-                        latitude: destination[0]?.lat,
-                        longitude: destination[0]?.lng,
-                        name: destination[0]?.receivedName,
-                    },
-                    kioskDetails: {
-                        id: kioskDetails.id,
-                        kioskPhone: kioskDetails.kioskPhone,
-                        name: kioskDetails.name,
-                    },
-                    origin: {
-                        fullAddress: origin.fullAddress,
-                        latitude: origin.latitude,
-                        longitude: origin.longitude,
-                        name: origin.name,
-                    },
-                    product,
-                    shipping: {
-                        cost: priceDelivery,
-                        service: typeDeliveryMethod,
-                        status: status,
-                        trackUrl: shipping.trackUrl,
-                    },
-                    status,
-                },
-            ],
-        }, { headers },
-        ).then((res) => {
 
-        });
+        freezerState.forEach(async (kiosk) => {
+            await axios.post('https://server.seafreshing.com/api/orders/create-order', {
+                amount: total,
+                buyerDetails: {
+                    id: destination.id,
+                    userEmail: destination.email,
+                    userName: destination.fullname,
+                    userPhone: destination.mobilenumber,
+                },
+                orderDate: '1653162005502',
+                content: [
+                    {
+                        destination: {
+                            fullAddress: destination[0]?.fullAddress,
+                            latitude: destination[0]?.lat,
+                            longitude: destination[0]?.lng,
+                            name: destination[0]?.receivedName,
+                        },
+                        kioskDetails: {
+                            id: kiosk.id,
+                            kioskPhone: kiosk.mobileNumber,
+                            name: kiosk.name,
+                        },
+                        origin: {
+                            fullAddress: kiosk.address,
+                            latitude: kiosk.lat,
+                            longitude: kiosk.lng,
+                            name: kiosk.name,
+                        },
+                        product,
+                        shipping: {
+                            cost: priceDelivery,
+                            service: typeDeliveryMethod,
+                            status: status,
+                            trackUrl: shipping.trackUrl,
+                        },
+                        status,
+                    },
+                ],
+            }, { headers },
+            ).then((res) => {
+                console.log(res)
+            });
+        })
+
+
     };
 
 
@@ -312,12 +329,13 @@ export default function Checkout() {
 
                 <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                     <div>
-                        <DeliveryMethods
+                        <ShippingInformation
                             selectedDeliveryMethod={selectedDeliveryMethod}
                             listMethod={deliveryMethods}
                             freezerChoosen={freezerChoosen}
                             setSelectedDeliveryMethod={setSelectedDeliveryMethod}
                             onChangeTypeVehicle={(delivery) => {
+                                console.log(localStorage.getItem("token"))
                                 if (delivery.id === 'alamove') {
                                     getLalaMove(freezerState[freezerChoosen], delivery.key)
                                 }
@@ -338,6 +356,83 @@ export default function Checkout() {
 
                             }}
                         />
+                        <Transition appear show={isOpen} as={Fragment}>
+                            <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <div className="fixed inset-0 bg-black bg-opacity-25" />
+                                </Transition.Child>
+
+                                <div className="fixed inset-0 overflow-y-auto">
+                                    <div className="flex min-h-full items-center justify-center p-4 text-center w-400">
+                                        <Transition.Child
+                                            as={Fragment}
+                                            enter="ease-out duration-300"
+                                            enterFrom="opacity-0 scale-95"
+                                            enterTo="opacity-100 scale-100"
+                                            leave="ease-in duration-200"
+                                            leaveFrom="opacity-100 scale-100"
+                                            leaveTo="opacity-0 scale-95"
+                                        >
+                                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                                <Dialog.Title
+                                                    as="h3"
+                                                    className="text-lg font-medium leading-6 text-gray-900"
+                                                >
+                                                    Choose payment
+                                                </Dialog.Title>
+                                                <div className="mt-2">
+                                                    <DeliveryMethods
+                                                        selectedDeliveryMethod={selectedDeliveryMethod}
+                                                        listMethod={deliveryMethods}
+                                                        freezerChoosen={freezerChoosen}
+                                                        setSelectedDeliveryMethod={setSelectedDeliveryMethod}
+                                                        onChangeTypeVehicle={(delivery) => {
+                                                            console.log(localStorage.getItem("token"))
+                                                            if (delivery.id === 'alamove') {
+                                                                getLalaMove(freezerState[freezerChoosen], delivery.key)
+                                                            }
+                                                            console.log(delivery.id)
+                                                            if (delivery.id === "deliveree") {
+                                                                getDeliveree(freezerState[freezerChoosen], delivery.key)
+                                                            }
+                                                            if (delivery.id === "grab_express") {
+                                                                getGrab(freezerState[freezerChoosen], delivery.key)
+                                                            }
+                                                        }}
+                                                        onChangeAddress={(value) => {
+                                                            setDestinationState({
+                                                                address: value.fullAddress,
+                                                                lng: value.lng,
+                                                                lat: value.lat
+                                                            })
+
+                                                        }}
+                                                    />
+                                                </div>
+
+                                                <div className="mt-4">
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                        onClick={closeModal}
+                                                    >
+                                                        Done
+                                                    </button>
+                                                </div>
+                                            </Dialog.Panel>
+                                        </Transition.Child>
+                                    </div>
+                                </div>
+                            </Dialog>
+                        </Transition>
                     </div>
                     <OrderSummary
 
@@ -409,6 +504,7 @@ export default function Checkout() {
                                                     <button
                                                         type="submit"
                                                         onClick={(event) => {
+                                                            openModal()
                                                             let weight = 0
                                                             freezer.product.forEach((data) => {
                                                                 weight += data.productQuantity
@@ -418,13 +514,13 @@ export default function Checkout() {
                                                             axios.get('https://server.seafreshing.com/api/kiosk/get-kiosk/' + freezer.id).then((res) => {
                                                                 const kiosk = res.data.kiosk
                                                                 console.log(res.data)
-                                                                freezerState[indexFreezer] = { lng: kiosk.lng, lat: kiosk.lat, address: kiosk.fullAddress, weight: weight, mobileNumber: kiosk.mobileNumber, name: kiosk.name, email: kiosk.email }
+                                                                freezerState[indexFreezer] = { id: kiosk.id, lng: kiosk.lng, lat: kiosk.lat, address: kiosk.fullAddress, weight: weight, mobileNumber: kiosk.mobileNumber, name: kiosk.name, email: kiosk.email }
                                                                 setFreezerState(freezerState)
 
                                                             }).catch((err) => { console.log(err) })
                                                             event.preventDefault()
                                                         }}
-                                                        className="w-full bg-slate-200 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-800"
+                                                        className="mt-4 w-full bg-slate-200 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-800"
                                                     >
                                                         Choose Method Delivery
                                                     </button>
