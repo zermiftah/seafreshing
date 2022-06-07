@@ -68,25 +68,25 @@ export default function Example() {
             >
                 {({ open }) => (
                     <>
-                        <div className="bg-gray-900 shadow-2xl">
+                        <div className="bg-slate-300 shadow-2xl">
                             <div className="max-w-8xl mx-auto h-8 px-4 flex items-center justify-between sm:px-6 lg:px-8">
                                 {/* Currency selector */}
                                 <div className="flex items-center space-x-2">
-                                    <a href="#" className="text-xs font-small text-white hover:text-gray-100">
-                                        <DeviceMobileIcon className="bg-gray-900 h-5" />
+                                    <a href="#" className="text-xs font-small text-slate-500 hover:text-black">
+                                        <DeviceMobileIcon className="bg-slate-300 h-5" />
                                     </a>
-                                    <a href="#" className="text-xs font-small text-white hover:text-gray-100">
+                                    <a href="#" className="text-xs font-small text-slate-500 hover:text-black">
                                         Download Seafreshing App
                                     </a>
                                 </div>
                                 <div className="flex items-center space-x-6">
-                                    <a href="#" className="text-xs font-small text-white hover:text-gray-100">
+                                    <a href="#" className="text-xs font-small text-slate-500 hover:text-black">
                                         Tentang Seafreshing
                                     </a>
-                                    <a href="#" className="text-xs font-medium text-white hover:text-gray-100">
+                                    <a href="#" className="text-xs font-medium text-slate-500 hover:text-black">
                                         Mitra Seafreshing
                                     </a>
-                                    <a href="#" className="text-xs font-medium text-white hover:text-gray-100">
+                                    <a href="#" className="text-xs font-medium text-slate-500 hover:text-black">
                                         Promo
                                     </a>
                                 </div>
@@ -132,7 +132,7 @@ export default function Example() {
                                 </div>
                                 <div className="flex items-center md:absolute md:right-0 md:inset-y-0 lg:hidden">
                                     {/* Mobile menu button */}
-                                    <Popover.Button className="-mx-2 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                    <Popover.Button className="-mx-2 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-slate-800">
                                         <span className="sr-only">Open menu</span>
                                         {open ? (
                                             <XIcon className="block h-6 w-6" aria-hidden="true" />

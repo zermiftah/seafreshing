@@ -1,267 +1,205 @@
-import axios from "axios";
-import { useState, useRef, useEffect } from "react";
-import Notif from '../components/simple';
-import headers from "../components/HeaderHS"
 
-export default function Profile() {
-    const [user, setUser] = useState([]);
-    const [img, setImg] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPass, setConfirmPass] = useState('');
-    const [notif, setNotif] = useState({
-        error: '',
-        success: '',
-    });
-    const userData = JSON.parse(localStorage.getItem('user-data'));
-    const imgFile = useRef('');
-    const qs = require('qs');
+/* This example requires Tailwind CSS v2.0+ */
+import { Fragment, useState } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
+import {
+    CogIcon,
+    ShoppingBagIcon,
+    MenuIcon,
+    XIcon,
+} from '@heroicons/react/outline'
 
-    useEffect(() => {
-        getUser();
-    }, [])
+const navigation = [
+    { name: 'Kiosk', href: '#', icon: ShoppingBagIcon, current: true },
+    { name: 'Settings', href: '#', icon: CogIcon, current: false },
+]
 
-    const getUser = async () => {
-        try {
-            const response = await axios.get(`https://server.seafreshing.com/api/user/get-user/${userData.accounttype}/${userData.id}`, {
-                headers: {
-                    'auth-token': JSON.parse(localStorage.getItem('token')),
-                }
-            })
-            setUser(response.data.user)
-        } catch (e) {
-            console.log(e)
-        }
-    }
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
-    const getImg = () => {
-        imgFile.current.click();
-    }
-
-    const handleUpload = async () => {
-        if (img) {
-            let data = new FormData();
-            data.append('file', img);
-
-            try {
-                let response = await axios.post('https://server.seafreshing.com/api/file-uploader/upload-profile-picture', data, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'auth-token': JSON.parse(localStorage.getItem('token')),
-                    }
-                })
-                if (response.data) {
-                    try {
-                        let res = await axios.patch('https://server.seafreshing.com/api/user/set-profile-picture', {
-                            'id': userData.id,
-                            'url': response.data.filePath,
-                        }, {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'auth-token': JSON.parse(localStorage.getItem('token')),
-                            }
-                        })
-                        if (res.data) {
-                            setNotif({
-                                'error': '',
-                                'Success': 'Profile picture has been changed'
-                            })
-                        }
-                    } catch (e) {
-                        console.log(e.res.data)
-                    }
-                }
-            } catch (e) {
-                setNotif({
-                    'error': 'File is too large',
-                    'Success': ''
-                })
-                console.log(e)
-                console.log(e.response)
-                console.log(e.response.data)
-            }
-        } else {
-            setNotif({
-                'error': "Photo is not found",
-                'success': ''
-            })
-        }
-    }
-
-    const validatePassword = (oldPass, newPass) => {
-        if (oldPass !== newPass) {
-            setNotif({
-                error: 'Password doesnt match',
-                success: '',
-            })
-        }
-    }
-
-    console.log(img)
-
-    const updateUser = async (e) => {
-        e.preventDefault();
-        if (!validatePassword(password, confirmPass)) {
-            try {
-                let response = await axios.patch(`https://server.seafreshing.com/api/user/set-fullname`, qs.stringify({
-                    'id': userData.id,
-                    'fullname': username,
-                }), {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'auth-token': JSON.parse(localStorage.getItem('token')),
-                    }
-                })
-                if (response.data) {
-                    try {
-                        let response = await axios.patch(`https://server.seafreshing.com/api/user/update-password-user`, qs.stringify({
-                            'id': userData.id,
-                            'fullname': password,
-                        }), {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'auth-token': JSON.parse(localStorage.getItem('token')),
-                            }
-                        })
-                        console.log(response.data)
-                    } catch (e) {
-                        console.log(e.response.data)
-                    }
-                }
-            } catch (e) {
-                if (e.response.data) setNotif({
-                    error: 'e.response.data.msg',
-                    success: '',
-                })
-            }
-            setNotif({
-                error: '',
-                success: 'Success',
-            })
-        }
-    }
+export default function Example() {
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
     return (
         <>
-            {
-                notif.success && (
-                    <Notif title={notif.success} text="Data has been saved!" />
-                )
-            }
-            {
-                notif.error && (
-                    <Notif title='Error' text={notif.error} />
-                )
-            }
-            <div className="mt-10 sm:mt-0 container px-6 py-3 mx-auto">
-                <div className="md:grid md:grid-cols-3 md:gap-6">
-                    <div className="md:col-span-1">
-                        <div className="px-4 sm:px-0">
-                            <h3 className="text-lg font-medium leading-6 text-gray-900">Personal Information</h3>
-                            <p className="mt-1 text-sm text-gray-600">Use a permanent address where you can receive mail.</p>
-                        </div>
-                    </div>
-
-                    <div className="mt-5 md:mt-0 md:col-span-2">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700">Photo</label>
-                            <div className="mt-1 flex items-center">
-                                {
-                                    user.profile ?
-                                        <img onClick={getImg} className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100" src={user.profile} />
-                                        :
-                                        <span onClick={getImg} className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                                            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                            </svg>
-                                        </span>
-                                }
-                                <input
-                                    type="file"
-                                    className='hidden'
-                                    ref={imgFile}
-                                    onChange={(e) => setImg(e.target.files[0])}
-                                />
-                                <button
-                                    onClick={handleUpload}
-                                    className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            <div>
+                <Transition.Root show={sidebarOpen} as={Fragment}>
+                    <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="transition-opacity ease-linear duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity ease-linear duration-300"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+                        </Transition.Child>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="transition ease-in-out duration-300 transform"
+                            enterFrom="-translate-x-full"
+                            enterTo="translate-x-0"
+                            leave="transition ease-in-out duration-300 transform"
+                            leaveFrom="translate-x-0"
+                            leaveTo="-translate-x-full"
+                        >
+                            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-in-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in-out duration-300"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
                                 >
-                                    Change
-                                </button>
+                                    <div className="absolute top-0 right-0 -mr-12 pt-2">
+                                        <button
+                                            type="button"
+                                            className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                            onClick={() => setSidebarOpen(false)}
+                                        >
+                                            <span className="sr-only">Close sidebar</span>
+                                            <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                                        </button>
+                                    </div>
+                                </Transition.Child>
+                                <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+                                    <div className="flex-shrink-0 flex items-center px-4">
+                                        <img
+                                            className="h-8 w-auto"
+                                            src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                                            alt="Workflow"
+                                        />
+                                    </div>
+                                    <nav className="mt-5 px-2 space-y-1">
+                                        {navigation.map((item) => (
+                                            <a
+                                                key={item.name}
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.current
+                                                        ? 'bg-gray-100 text-gray-900'
+                                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                                    'group flex items-center px-2 py-2 text-base font-medium rounded-md'
+                                                )}
+                                            >
+                                                <item.icon
+                                                    className={classNames(
+                                                        item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                                        'mr-4 flex-shrink-0 h-6 w-6'
+                                                    )}
+                                                    aria-hidden="true"
+                                                />
+                                                {item.name}
+                                            </a>
+                                        ))}
+                                    </nav>
+                                </div>
+                                <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+                                    <a href="#" className="flex-shrink-0 group block">
+                                        <div className="flex items-center">
+                                            <div>
+                                                <img
+                                                    className="inline-block h-10 w-10 rounded-full"
+                                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                                    alt=""
+                                                />
+                                            </div>
+                                            <div className="ml-3">
+                                                <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">Tom Cook</p>
+                                                <p className="text-sm font-medium text-gray-500 group-hover:text-gray-700">View profile</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
+                        </Transition.Child>
+                        <div className="flex-shrink-0 w-14"></div>
+                    </Dialog>
+                </Transition.Root>
+
+                {/* Static sidebar for desktop */}
+                <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
+                    {/* Sidebar component, swap this element with another sidebar if you like */}
+                    <div className="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white">
+                        <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+                            <div className="flex items-center flex-shrink-0 px-4">
+                                <img
+                                    className="h-8 w-auto"
+                                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                                    alt="Workflow"
+                                />
+                            </div>
+                            <nav className="mt-5 flex-1 px-2 bg-white space-y-1">
+                                {navigation.map((item) => (
+                                    <a
+                                        key={item.name}
+                                        href={item.href}
+                                        className={classNames(
+                                            item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                            'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                                        )}
+                                    >
+                                        <item.icon
+                                            className={classNames(
+                                                item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                                'mr-3 flex-shrink-0 h-6 w-6'
+                                            )}
+                                            aria-hidden="true"
+                                        />
+                                        {item.name}
+                                    </a>
+                                ))}
+                            </nav>
                         </div>
-                        <form onSubmit={updateUser}>
-                            <div className="shadow overflow-hidden sm:rounded-md">
-                                <div className="px-4 py-5 bg-white sm:p-6">
-                                    <div className="grid grid-cols-6 gap-6">
-
-                                        <div className="col-span-6 sm:col-span-3">
-                                            <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                                                Username
-                                            </label>
-                                            <input
-                                                type="text"
-                                                placeholder={userData.fullname}
-                                                value={username}
-                                                onChange={(e) => setUsername(e.target.value)}
-                                                required
-                                                autoComplete="given-name"
-                                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                            />
-                                        </div>
-
-                                        <div className="col-span-6 sm:col-span-4">
-                                            <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
-                                                Email address
-                                            </label>
-                                            <input
-                                                type="email" placeholder={userData.email} value={email} onChange={(e) => setEmail(e.target.value)}
-                                                autoComplete="email"
-                                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                            />
-                                        </div>
-                                        <div className="col-span-6 sm:col-span-3">
-                                            <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                                                New Password
-                                            </label>
-                                            <input
-                                                type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                                                autoComplete="given-name"
-                                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                            />
-                                        </div>
-
-                                        <div className="col-span-6 sm:col-span-3">
-                                            <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-                                                Confirm Password
-                                            </label>
-                                            <input
-                                                type="password" value={confirmPass} onChange={(e) => setConfirmPass(e.target.value)}
-                                                autoComplete="family-name"
-                                                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                            />
-                                        </div>
-
+                        <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+                            <a href="#" className="flex-shrink-0 w-full group block">
+                                <div className="flex items-center">
+                                    <div>
+                                        <img
+                                            className="inline-block h-9 w-9 rounded-full"
+                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                            alt=""
+                                        />
+                                    </div>
+                                    <div className="ml-3">
+                                        <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">Tom Cook</p>
+                                        <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">View profile</p>
                                     </div>
                                 </div>
-                                <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                                    <button
-                                        type="submit"
-                                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                    >
-                                        Save
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="hidden sm:block" aria-hidden="true">
-                <div className="py-5">
-                    <div className="border-t border-gray-200" />
+                <div className="md:pl-64 flex flex-col flex-1">
+                    <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-white">
+                        <button
+                            type="button"
+                            className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                            onClick={() => setSidebarOpen(true)}
+                        >
+                            <span className="sr-only">Open sidebar</span>
+                            <MenuIcon className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                    </div>
+                    <main className="flex-1">
+                        <div className="py-6">
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                                <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+                            </div>
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                                {/* Replace with your content */}
+                                <div className="py-4">
+                                    <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+                                </div>
+                                {/* /End replace */}
+                            </div>
+                        </div>
+                    </main>
                 </div>
             </div>
         </>

@@ -60,9 +60,7 @@ const App = () => {
         </Route>
         <Route path="/profile">
           <Auth>
-            <HeaderHS />
             <Profile />
-            <Footer />
           </Auth>
         </Route>
         <Route path="/wishlist">
