@@ -27,6 +27,7 @@ import Profile from "./screens/Profile";
 import Wishlist from "./screens/Wishlist";
 import Checkout from "./screens/Checkout/index";
 import AddAddressForm from "./screens/AddAddressForm"
+import ProfileSidebar from "./components/Profile/ProfileSidebar"
 
 const App = () => {
   return (
@@ -60,6 +61,7 @@ const App = () => {
         </Route>
         <Route path="/profile">
           <Auth>
+            <ProfileSidebar />
             <Profile />
           </Auth>
         </Route>
@@ -121,9 +123,8 @@ const App = () => {
         </Route>
         <Route path="/kiosk">
           <Auth>
-            <HeaderHS />
+            <ProfileSidebar />
             <KioskScreen />
-            <Footer />
           </Auth>
         </Route>
         <Route path="/ProductList" component={ProductList} />

@@ -11,9 +11,7 @@ import Seafreshing from "../assets/img/Seafreshing.png"
 
 const userNavigation = [
     { name: 'Your Profile', href: '/profile' },
-    { name: 'KiosK', href: '/kiosk' },
     { name: 'Wishlist', href: '/wishlist' },
-    { name: 'Settings', href: '#' },
     { name: 'Sign out', href: '#' },
 ]
 
