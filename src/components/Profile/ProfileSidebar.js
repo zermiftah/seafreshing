@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import {
     CogIcon,
     ShoppingBagIcon,
+    TagIcon,
     MenuIcon,
     XIcon,
 } from '@heroicons/react/outline'
@@ -11,6 +12,7 @@ import Seafreshing from "../../assets/img/Seafreshing.png"
 
 const navigation = [
     { name: 'Kiosk', href: '/kiosk', icon: ShoppingBagIcon, current: false },
+    { name: 'Order Purchase', href: '/kiosk', icon: TagIcon, current: false },
     { name: 'Settings', href: '', icon: CogIcon, current: false },
 ]
 

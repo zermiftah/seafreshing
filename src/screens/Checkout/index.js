@@ -98,7 +98,7 @@ export default function Checkout() {
                         "AWARE"
                     ],
                     "quantity": product.priceUnit,
-                    "weight": "" + freezerState.weight
+                    "weight": "" + freezerState[freezerChoosen].weight
                 },
                 "origin": {
                     "address": originPlace?.address,
@@ -116,15 +116,14 @@ export default function Checkout() {
                 }
             }).then((res) => {
                 const price = parseInt(res.data.data.priceBreakdown.total)
-                freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price }
+                freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price, service: 'alamove' }
                 setFreezerState(freezerState)
                 setLalamovePrice(price);
-                freezerState.forEach((freezer) => {
-                    setPriceDelivery(freezer.price + priceDelivery)
-                })
+
             }).catch((err) => {
                 setPriceDelivery(0)
                 setLalamovePrice(0);
+                console.log(err)
             })
     }
 
@@ -157,11 +156,9 @@ export default function Checkout() {
             const data = res.data.deliveree.data.find((data) => data.vehicle_type_id === vehicle)
             const price = data.total_fees
             setDelivereePrice(price)
-            freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price }
+            freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price, service: "deliveree" }
             setFreezerState(freezerState)
-            freezerState.forEach((freezer) => {
-                setPriceDelivery(freezer.price + priceDelivery)
-            })
+
         }).catch((err) => {
             console.log(err)
         })
@@ -216,12 +213,12 @@ export default function Checkout() {
                         "dimensions": {
                             "depth": 10,
                             "height": 5,
-                            "weight": 5000,
+                            "weight": freezerState[freezerChoosen].weight,
                             "width": 5
                         },
-                        "name": "Kerang simping",
-                        "price": subtotal,
-                        "quantity": freezerState.weight
+                        "name": originPlace.name,
+                        "price": originPlace.priceProductf,
+                        "quantity": freezerState[freezerChoosen].weight
                     }
                 ]
             },
@@ -236,11 +233,8 @@ export default function Checkout() {
                 (response) => {
                     const price = response.data.quotes[0].amount
                     setGrabPrice(price)
-                    freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price }
+                    freezerState[freezerChoosen] = { ...freezerState[freezerChoosen], price, service: 'grab_express' }
                     setFreezerState(freezerState)
-                    freezerState.forEach((freezer) => {
-                        setPriceDelivery(freezer.price + priceDelivery)
-                    })
                 }
             ).catch((err) => {
 
@@ -250,6 +244,9 @@ export default function Checkout() {
     let [isOpen, setIsOpen] = useState(false)
 
     function closeModal() {
+        setLalamovePrice(0)
+        setDelivereePrice(0)
+        setGrabPrice(0)
         setIsOpen(false)
     }
 
@@ -259,65 +256,81 @@ export default function Checkout() {
 
 
 
-    let subtotal = product?.reduce((accumulator, object) => {
-        return accumulator + object.clearPrice;
+
+    let payTax = (0.11 * (priceProduct.subtotal + priceDelivery)).toFixed(0);
+
+
+    const sumShipping = freezerState.reduce((accumulator, object) => {
+        return accumulator + object.price;
     }, 0);
-    let payTax = (0.11 * (subtotal + priceDelivery)).toFixed(0);
-    let total = subtotal + selectedDeliveryMethod.clear + parseInt(payTax);
 
     const handlePayment = async (e) => {
         e.preventDefault();
         const headers = {
             'auth-token': JSON.parse(localStorage.getItem('token'))
         }
-
-        freezerState.forEach(async (kiosk) => {
-            await axios.post('https://server.seafreshing.com/api/orders/create-order', {
-                amount: total,
-                buyerDetails: {
-                    id: destination.id,
-                    userEmail: destination.email,
-                    userName: destination.fullname,
-                    userPhone: destination.mobilenumber,
-                },
-                orderDate: '1653162005502',
-                content: [
-                    {
-                        destination: {
-                            fullAddress: destination[0]?.fullAddress,
-                            latitude: destination[0]?.lat,
-                            longitude: destination[0]?.lng,
-                            name: destination[0]?.receivedName,
-                        },
-                        kioskDetails: {
-                            id: kiosk.id,
-                            kioskPhone: kiosk.mobileNumber,
-                            name: kiosk.name,
-                        },
-                        origin: {
-                            fullAddress: kiosk.address,
-                            latitude: kiosk.lat,
-                            longitude: kiosk.lng,
-                            name: kiosk.name,
-                        },
-                        product,
-                        shipping: {
-                            cost: priceDelivery,
-                            service: typeDeliveryMethod,
-                            status: status,
-                            trackUrl: shipping.trackUrl,
-                        },
-                        status,
+        var BreakException = {}
+        try {
+            if (freezerState.length >= 3 && !isNaN(sumShipping)) {
+                axios.post('https://server.seafreshing.com/api/orders/create-order', {
+                    amount: priceProduct?.subtotal + parseInt(payTax) + sumShipping,
+                    buyerDetails: {
+                        id: destination.id,
+                        userEmail: destination.email,
+                        userName: destination.fullname,
+                        userPhone: destination.mobilenumber,
                     },
-                ],
-            }, { headers },
-            ).then((res) => {
-                console.log(res)
-            });
-        })
+                    orderDate: '1653162005502',
+                    content: [
+                        {
+                            destination: {
+                                fullAddress: destination[0]?.fullAddress,
+                                latitude: destination[0]?.lat,
+                                longitude: destination[0]?.lng,
+                                name: destination[0]?.receivedName,
+                            },
+                            kioskDetails: {
+                                id: freezerState[0].id,
+                                kioskPhone: freezerState[0].mobileNumber,
+                                name: freezerState[0].name,
+                            },
+                            origin: {
+                                fullAddress: freezerState[0].address,
+                                latitude: freezerState[0].lat,
+                                longitude: freezerState[0].lng,
+                                name: freezerState[0].name,
+                            },
+                            product,
+                            shipping: {
+                                cost: sumShipping,
+                                service: typeDeliveryMethod,
+                                status: status,
+                                trackUrl: shipping.trackUrl,
+                            },
+                            status,
+                        },
+                    ],
+                }, { headers },
+                ).then((res) => {
+                    console.log(res)
+                    window.open(res.data.data.paymentUrl, '_blank')
+                }).catch((err) => {
+                    throw BreakException
+                });
+
+            } else {
+                throw BreakException
+            }
+
+        } catch (err) {
+            alert('complete delivery method')
+            if (err !== BreakException) throw e
+        }
 
 
     };
+
+
 
 
 
@@ -326,7 +339,6 @@ export default function Checkout() {
         <div className="bg-gray-50">
             <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h2 className="sr-only">Checkout</h2>
-
                 <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                     <div>
                         <ShippingInformation
@@ -335,25 +347,24 @@ export default function Checkout() {
                             freezerChoosen={freezerChoosen}
                             setSelectedDeliveryMethod={setSelectedDeliveryMethod}
                             onChangeTypeVehicle={(delivery) => {
-                                console.log(localStorage.getItem("token"))
                                 if (delivery.id === 'alamove') {
                                     getLalaMove(freezerState[freezerChoosen], delivery.key)
                                 }
-                                console.log(delivery.id)
                                 if (delivery.id === "deliveree") {
                                     getDeliveree(freezerState[freezerChoosen], delivery.key)
                                 }
                                 if (delivery.id === "grab_express") {
                                     getGrab(freezerState[freezerChoosen], delivery.key)
                                 }
+
                             }}
                             onChangeAddress={(value) => {
+                                setFreezerState([])
                                 setDestinationState({
                                     address: value.fullAddress,
                                     lng: value.lng,
                                     lat: value.lat
                                 })
-
                             }}
                         />
                         <Transition appear show={isOpen} as={Fragment}>
@@ -370,8 +381,12 @@ export default function Checkout() {
                                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                                 </Transition.Child>
 
-                                <div className="fixed inset-0 overflow-y-auto">
-                                    <div className="flex min-h-full items-center justify-center p-4 text-center w-400">
+                                <div className="fixed inset-0 overflow-y-auto" onClick={(event) => {
+                                    setLalamovePrice(0)
+                                    setDelivereePrice(0)
+                                    setGrabPrice(0)
+                                }}>
+                                    <div className="flex min-h-full items-center justify-center p-4 text-center w-400" >
                                         <Transition.Child
                                             as={Fragment}
                                             enter="ease-out duration-300"
@@ -395,11 +410,9 @@ export default function Checkout() {
                                                         freezerChoosen={freezerChoosen}
                                                         setSelectedDeliveryMethod={setSelectedDeliveryMethod}
                                                         onChangeTypeVehicle={(delivery) => {
-                                                            console.log(localStorage.getItem("token"))
                                                             if (delivery.id === 'alamove') {
                                                                 getLalaMove(freezerState[freezerChoosen], delivery.key)
                                                             }
-                                                            console.log(delivery.id)
                                                             if (delivery.id === "deliveree") {
                                                                 getDeliveree(freezerState[freezerChoosen], delivery.key)
                                                             }
@@ -408,6 +421,7 @@ export default function Checkout() {
                                                             }
                                                         }}
                                                         onChangeAddress={(value) => {
+
                                                             setDestinationState({
                                                                 address: value.fullAddress,
                                                                 lng: value.lng,
@@ -435,14 +449,13 @@ export default function Checkout() {
                         </Transition>
                     </div>
                     <OrderSummary
-
                         products={product}
                         freezerState={freezerState}
-                        payTax={payTax}
+                        payTax={parseInt(payTax).toLocaleString()}
                         freezer={userData?.freezer}
-                        shipping={priceDelivery}
-                        subtotal={priceProduct?.subtotal}
-                        total={priceProduct?.subtotal + parseInt(payTax) + priceDelivery}
+                        shipping={isNaN(sumShipping) ? 0 : sumShipping.toLocaleString()}
+                        subtotal={priceProduct?.subtotal.toLocaleString()}
+                        total={(priceProduct?.subtotal + parseInt(payTax) + sumShipping).toLocaleString()}
                         handlePayment={handlePayment}
                         listMethod={deliveryMethods}
                         kiosk={kioskDetails}
@@ -452,81 +465,84 @@ export default function Checkout() {
                                 userData?.freezer &&
                                 userData?.freezer.map((freezer, indexFreezer) => (
                                     <>
-                                        {freezer.product.map((product) => (
-                                            <>
-                                                <li key={product.id} className="flex py-6 px-4 sm:px-6">
-                                                    <div className="flex-shrink-0">
-                                                        <img
-                                                            src={product.image}
-                                                            alt={product.image}
-                                                            className="w-20 rounded-md"
-                                                        />
-                                                    </div>
 
-                                                    <div className="ml-6 flex-1 flex flex-col">
-                                                        <div className="flex">
-                                                            <div className="min-w-0 flex-1">
-                                                                <h4 className="text-sm">
-                                                                    <a
-                                                                        href={product.href}
-                                                                        className="font-medium text-gray-700 hover:text-gray-800"
-                                                                    >
-                                                                        {product.title}
-                                                                    </a>
-                                                                </h4>
-                                                                <p className="mt-1 text-sm text-gray-500">{product.name}</p>
-                                                                <p className="mt-1 text-sm text-gray-500">{product.size}</p>
-                                                            </div>
+                                        {
+                                            freezer.product.map((product) => (
+                                                <>
+                                                    <li key={product.id} className="flex py-6 px-4 sm:px-6">
+                                                        <div className="flex-shrink-0">
+                                                            <img
+                                                                src={product.image}
+                                                                alt={product.image}
+                                                                className="w-20 rounded-md"
+                                                            />
                                                         </div>
 
-                                                        <div className="flex-1 pt-2 flex items-end justify-between">
-                                                            <p className="mt-1 text-sm font-medium text-gray-900">
-                                                                {product.price}
-                                                            </p>
+                                                        <div className="ml-6 flex-1 flex flex-col">
+                                                            <div className="flex">
+                                                                <div className="min-w-0 flex-1">
+                                                                    <h4 className="text-sm">
+                                                                        <a
+                                                                            href={product.href}
+                                                                            className="font-medium text-gray-700 hover:text-gray-800"
+                                                                        >
+                                                                            {product.title}
+                                                                        </a>
+                                                                    </h4>
+                                                                    <p className="mt-1 text-sm text-gray-500">{product.name}</p>
+                                                                    <p className="mt-1 text-sm text-gray-500">{product.size}</p>
+                                                                </div>
+                                                            </div>
 
-
-                                                            <div className="ml-4">
-                                                                <label htmlFor="quantity" className="sr-only">
-                                                                    Quantity
-                                                                </label>
+                                                            <div className="flex-1 pt-2 flex items-end justify-between">
                                                                 <p className="mt-1 text-sm font-medium text-gray-900">
-                                                                    Qty: {product.productQuantity}
+                                                                    Rp {product.totalPrice.toLocaleString()}
                                                                 </p>
+
+
+                                                                <div className="ml-4">
+                                                                    <label htmlFor="quantity" className="sr-only">
+                                                                        Quantity
+                                                                    </label>
+                                                                    <p className="mt-1 text-sm font-medium text-gray-900">
+                                                                        Qty: {product.productQuantity}
+                                                                    </p>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                </li>
-                                                <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                                                    <p className="mt-1 text-sm font-medium text-gray-900">
-                                                        Cost Delivery : {freezerState[indexFreezer]?.price}
-                                                    </p>
-                                                    <button
-                                                        type="submit"
-                                                        onClick={(event) => {
-                                                            openModal()
-                                                            let weight = 0
-                                                            freezer.product.forEach((data) => {
-                                                                weight += data.productQuantity
-                                                            })
-                                                            setFreezerChoosen(indexFreezer)
+                                                    </li>
 
-                                                            axios.get('https://server.seafreshing.com/api/kiosk/get-kiosk/' + freezer.id).then((res) => {
-                                                                const kiosk = res.data.kiosk
-                                                                console.log(res.data)
-                                                                freezerState[indexFreezer] = { id: kiosk.id, lng: kiosk.lng, lat: kiosk.lat, address: kiosk.fullAddress, weight: weight, mobileNumber: kiosk.mobileNumber, name: kiosk.name, email: kiosk.email }
-                                                                setFreezerState(freezerState)
+                                                </>
+                                            ))
+                                        }
+                                        <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
+                                            <p className="mt-1 text-sm font-medium text-gray-900">
+                                                Cost Delivery : {freezerState[indexFreezer]?.price}
+                                            </p>
+                                        </div>
+                                        <button
+                                            type="submit"
+                                            onClick={(event) => {
+                                                openModal()
 
-                                                            }).catch((err) => { console.log(err) })
-                                                            event.preventDefault()
-                                                        }}
-                                                        className="mt-4 w-full bg-slate-200 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-800"
-                                                    >
-                                                        Choose Method Delivery
-                                                    </button>
-                                                </div>
-                                            </>
-                                        ))}
+                                                let weight = 0
+                                                freezer.product.forEach((data) => {
+                                                    weight += data.productQuantity
+                                                })
+                                                setFreezerChoosen(indexFreezer)
+                                                axios.get('https://server.seafreshing.com/api/kiosk/get-kiosk/' + freezer.id).then((res) => {
+                                                    const kiosk = res.data.kiosk
+                                                    freezerState[indexFreezer] = { id: kiosk.id, lng: kiosk.lng, lat: kiosk.lat, address: kiosk.fullAddress, weight: weight, mobileNumber: kiosk.mobileNumber, name: kiosk.name, email: kiosk.email }
+                                                    setFreezerState(freezerState)
+
+                                                }).catch((err) => { console.log(err) })
+                                                event.preventDefault()
+                                            }}
+                                            className="w-full bg-green-400 border border-transparent rounded-md shadow-sm py-2 px-1 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500"
+                                        >
+                                            Choose Method Delivery
+                                        </button>
                                     </>
                                 )
                                 )
@@ -540,4 +556,6 @@ export default function Checkout() {
         </div >
     );
 }
+
+
 

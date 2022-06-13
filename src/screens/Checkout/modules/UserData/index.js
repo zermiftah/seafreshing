@@ -20,7 +20,7 @@ const UserData = () => {
             let sumTotal = 0
             data.freezer.forEach((kios) => {
                 kios.product.forEach((product) => {
-                    sumTotal += parseInt(product.clearPrice)
+                    sumTotal += parseInt(product.totalPrice)
 
                 })
             })
