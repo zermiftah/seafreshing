@@ -1,131 +1,138 @@
 
-
 const Chat = () => {
     return (
-        <>        <div className="w-screen">
-            <div className="grid grid-cols-3 min-w-full border rounded" style="min-height: 80vh;">
-                <div className="col-span-1 bg-white border-r border-gray-300">
-                    <div className="my-3 mx-3 ">
-                        <div className="relative text-gray-600 focus-within:text-gray-400">
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" className="w-6 h-6 text-gray-500"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </span>
-                            <input aria-placeholder="Busca tus amigos o contacta nuevos" placeholder="Busca tus amigos"
-                                className="py-2 pl-10 block w-full rounded bg-gray-100 outline-none focus:text-gray-700" type="search" name="search" required autocomplete="search" />
+        <>
+            <div className="mt-5 container mx-auto">
+                <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
+                    <div className="border-r border-gray-300 lg:col-span-1">
+                        <div className="mx-3 my-3">
+                            <div className="relative text-gray-600">
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        viewBox="0 0 24 24" className="w-6 h-6 text-gray-300">
+                                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </span>
+                                <input type="search" className="block w-full py-2 pl-10 bg-gray-100 rounded outline-none" name="search"
+                                    placeholder="Search" required />
+                            </div>
                         </div>
+
+                        <ul className="overflow-auto h-[32rem]">
+                            <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
+                            <li>
+                                <a
+                                    className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+                                    <img className="object-cover w-10 h-10 rounded-full"
+                                        src="https://cdn.pixabay.com/photo/2018/09/12/12/14/man-3672010__340.jpg" alt="username" />
+                                    <div className="w-full pb-2">
+                                        <div className="flex justify-between">
+                                            <span className="block ml-2 font-semibold text-gray-600">Jhon Don</span>
+                                            <span className="block ml-2 text-sm text-gray-600">25 minutes</span>
+                                        </div>
+                                        <span className="block ml-2 text-sm text-gray-600">bye</span>
+                                    </div>
+                                </a>
+                                <a
+                                    className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out bg-gray-100 border-b border-gray-300 cursor-pointer focus:outline-none">
+                                    <img className="object-cover w-10 h-10 rounded-full"
+                                        src="https://cdn.pixabay.com/photo/2016/06/15/15/25/loudspeaker-1459128__340.png" alt="username" />
+                                    <div className="w-full pb-2">
+                                        <div className="flex justify-between">
+                                            <span className="block ml-2 font-semibold text-gray-600">Same</span>
+                                            <span className="block ml-2 text-sm text-gray-600">50 minutes</span>
+                                        </div>
+                                        <span className="block ml-2 text-sm text-gray-600">Good night</span>
+                                    </div>
+                                </a>
+                                <a
+                                    className="flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+                                    <img className="object-cover w-10 h-10 rounded-full"
+                                        src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg" alt="username" />
+                                    <div className="w-full pb-2">
+                                        <div className="flex justify-between">
+                                            <span className="block ml-2 font-semibold text-gray-600">Emma</span>
+                                            <span className="block ml-2 text-sm text-gray-600">6 hour</span>
+                                        </div>
+                                        <span className="block ml-2 text-sm text-gray-600">Good Morning</span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-
-                    <ul className="overflow-auto" style="height: 500px;">
-                        <h2 className="ml-2 mb-2 text-gray-600 text-lg my-2">Chats</h2>
-                        <li>
-                            <a className="hover:bg-gray-100 border-b border-gray-300 px-3 py-2 cursor-pointer flex items-center text-sm focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <img className="h-10 w-10 rounded-full object-cover"
-                                    src="https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
-                                    alt="username" />
-                                <div className="w-full pb-2">
-                                    <div className="flex justify-between">
-                                        <span className="block ml-2 font-semibold text-base text-gray-600 ">Jhon C</span>
-                                        <span className="block ml-2 text-sm text-gray-600">5 minutes</span>
-                                    </div>
-                                    <span className="block ml-2 text-sm text-gray-600">Hello world!!</span>
-                                </div>
-                            </a>
-                            <a className="bg-gray-100 border-b border-gray-300 px-3 py-2 cursor-pointer flex items-center text-sm focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <img className="h-10 w-10 rounded-full object-cover"
-                                    src="https://images.pexels.com/photos/3777931/pexels-photo-3777931.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
-                                    alt="username" />
-                                <div className="w-full pb-2">
-                                    <div className="flex justify-between">
-                                        <span className="block ml-2 font-semibold text-base text-gray-600 ">Eduard</span>
-                                        <span className="block ml-2 text-sm text-gray-600">15 minutes</span>
-                                    </div>
-                                    <span className="block ml-2 text-sm text-gray-600">I am fine</span>
-                                </div>
-                            </a>
-                            <a className="hover:bg-gray-100 border-b border-gray-300 px-3 py-2 cursor-pointer flex items-center text-sm focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <img className="h-10 w-10 rounded-full object-cover"
-                                    src="https://images.pexels.com/photos/6238133/pexels-photo-6238133.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
-                                    alt="username" />
-                                <div className="w-full pb-2">
-                                    <div className="flex justify-between">
-                                        <span className="block ml-2 font-semibold text-base text-gray-600 ">Celia</span>
-                                        <span className="block ml-2 text-sm text-gray-600">1 hour</span>
-                                    </div>
-                                    <span className="block ml-2 text-sm text-gray-600">Last message</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div className="col-span-2 bg-white">
-                    <div className="w-full">
-                        <div className="flex items-center border-b border-gray-300 pl-3 py-3">
-                            <img className="h-10 w-10 rounded-full object-cover"
-                                src="https://images.pexels.com/photos/3777931/pexels-photo-3777931.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
-                                alt="username" />
-                            <span className="block ml-2 font-bold text-base text-gray-600">Eduard</span>
-                            <span className="connected text-green-500 ml-2" >
-                                <svg width="6" height="6">
-                                    <circle cx="3" cy="3" r="3" fill="currentColor"></circle>
-                                </svg>
-                            </span>
-                        </div>
-                        <div id="chat" className="w-full overflow-y-auto p-10 relative" style="height: 700px;" ref="toolbarChat">
-                            <ul>
-                                <li className="clearfix2">
-                                    <div className="w-full flex justify-start">
-                                        <div className="bg-gray-100 rounded px-5 py-2 my-2 text-gray-700 relative" style="max-width: 300px;">
-                                            <span className="block">Hello bro</span>
-                                            <span className="block text-xs text-right">10:30pm</span>
+                    <div className="hidden lg:col-span-2 lg:block">
+                        <div className="w-full">
+                            <div className="relative flex items-center p-3 border-b border-gray-300">
+                                <img className="object-cover w-10 h-10 rounded-full"
+                                    src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg" alt="username" />
+                                <span className="block ml-2 font-bold text-gray-600">Emma</span>
+                                <span className="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3">
+                                </span>
+                            </div>
+                            <div className="relative w-full p-6 overflow-y-auto h-[40rem]">
+                                <ul className="space-y-2">
+                                    <li className="flex justify-start">
+                                        <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
+                                            <span className="block">Hi</span>
                                         </div>
-                                    </div>
-                                    <div className="w-full flex justify-end" >
-                                        <div className="bg-gray-100 rounded px-5 py-2 my-2 text-gray-700 relative" style="max-width: 300px;">
-                                            <span className="block">Hello</span>
-                                            <span className="block text-xs text-left">10:32pm</span>
+                                    </li>
+                                    <li className="flex justify-end">
+                                        <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow">
+                                            <span className="block">Hiiii</span>
                                         </div>
-                                    </div>
-                                    <div className="w-full flex justify-end" >
-                                        <div className="bg-gray-100 rounded px-5 py-2 my-2 text-gray-700 relative" style="max-width: 300px;">
+                                    </li>
+                                    <li className="flex justify-end">
+                                        <div className="relative max-w-xl px-4 py-2 text-gray-700 bg-gray-100 rounded shadow">
                                             <span className="block">how are you?</span>
-                                            <span className="block text-xs text-left">10:32pm</span>
                                         </div>
-                                    </div>
-                                    <div className="w-full flex justify-start">
-                                        <div className="bg-gray-100 rounded px-5 py-2 my-2 text-gray-700 relative" style="max-width: 300px;">
-                                            <span className="block">I am fine</span>
-                                            <span className="block text-xs text-right">10:42pm</span>
+                                    </li>
+                                    <li className="flex justify-start">
+                                        <div className="relative max-w-xl px-4 py-2 text-gray-700 rounded shadow">
+                                            <span className="block">Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                                            </span>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                                    </li>
+                                </ul>
+                            </div>
 
-                        <div className="w-full py-3 px-3 flex items-center justify-between border-t border-gray-300">
-                            <button className="outline-none focus:outline-none">
-                                <svg className="text-gray-400 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </button>
-                            <button className="outline-none focus:outline-none ml-1">
-                                <svg className="text-gray-400 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                </svg>
-                            </button>
+                            <div className="flex items-center justify-between w-full p-3 border-t border-gray-300">
+                                <button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </button>
+                                <button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                    </svg>
+                                </button>
 
-                            <input aria-placeholder="Escribe un mensaje aquí" placeholder="Escribe un mensaje aquí"
-                                className="py-2 mx-3 pl-5 block w-full rounded-full bg-gray-100 outline-none focus:text-gray-700" type="text" name="message" required />
-
-                            <button className="outline-none focus:outline-none" type="submit">
-                                <svg className="text-gray-400 h-7 w-7 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                                </svg>
-                            </button>
+                                <input type="text" placeholder="Message"
+                                    className="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700"
+                                    name="message" required />
+                                <button>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                                    </svg>
+                                </button>
+                                <button type="submit">
+                                    <svg className="w-5 h-5 text-gray-500 origin-center transform rotate-90" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path
+                                            d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </>
 
     )

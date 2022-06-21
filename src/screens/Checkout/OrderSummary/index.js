@@ -38,7 +38,7 @@ const OrderSummary = ({
                 <button
                     type="submit"
                     onClick={handlePayment}
-                    className="w-full bg-sky-400 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500"
+                    className="w-full bg-slate-200 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-500"
                 >
                     Complete Payment
                 </button>

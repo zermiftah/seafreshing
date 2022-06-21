@@ -70,10 +70,10 @@ export default function Example() {
                             <div className="max-w-8xl mx-auto h-8 px-4 flex items-center justify-between sm:px-6 lg:px-8">
                                 {/* Currency selector */}
                                 <div className="flex items-center space-x-2">
-                                    <a href="#" className="text-xs font-small text-slate-500 hover:text-black">
+                                    <a href="https://play.google.com/store/apps/details?id=com.berkat.seafreshing" className="text-xs font-small text-slate-500 hover:text-black">
                                         <DeviceMobileIcon className="bg-slate-300 h-5" />
                                     </a>
-                                    <a href="#" className="text-xs font-small text-slate-500 hover:text-black">
+                                    <a href="https://play.google.com/store/apps/details?id=com.berkat.seafreshing" className="text-xs font-small text-slate-500 hover:text-black">
                                         Download Seafreshing App
                                     </a>
                                 </div>
@@ -173,21 +173,49 @@ export default function Example() {
                                             leaveTo="transform opacity-0 scale-95"
                                         >
                                             <Menu.Items className="origin-top-right absolute z-10 right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 focus:outline-none">
-                                                {userNavigation.map((item) => (
-                                                    <Menu.Item key={item.name}>
-                                                        {({ active }) => (
-                                                            <a
-                                                                href={item.href}
-                                                                className={classNames(
-                                                                    active ? 'bg-gray-100' : '',
-                                                                    'block py-2 px-4 text-sm text-gray-700'
-                                                                )}
-                                                            >
-                                                                {item.name}
-                                                            </a>
-                                                        )}
-                                                    </Menu.Item>
-                                                ))}
+
+                                                <Menu.Item key=''>
+                                                    {({ active }) => (
+                                                        <a
+                                                            href='/profile'
+                                                            className={classNames(
+                                                                active ? 'bg-gray-100' : '',
+                                                                'block py-2 px-4 text-sm text-gray-700'
+                                                            )}
+                                                        >
+                                                            Your Profile
+                                                        </a>
+                                                    )}
+                                                </Menu.Item>
+
+                                                <Menu.Item key=''>
+                                                    {({ active }) => (
+                                                        <a
+                                                            href='/wishlist'
+                                                            className={classNames(
+                                                                active ? 'bg-gray-100' : '',
+                                                                'block py-2 px-4 text-sm text-gray-700'
+                                                            )}
+                                                        >
+                                                            Wishlist
+                                                        </a>
+                                                    )}
+                                                </Menu.Item>
+
+                                                <Menu.Item key=''>
+                                                    {({ active }) => (
+                                                        <a
+                                                            onClick={logout}
+                                                            className={classNames(
+                                                                active ? 'bg-gray-100' : '',
+                                                                'block py-2 px-4 text-sm text-gray-700'
+                                                            )}
+                                                        >
+                                                            Sign Out
+                                                        </a>
+                                                    )}
+                                                </Menu.Item>
+
                                             </Menu.Items>
                                         </Transition>
                                     </Menu>
@@ -225,15 +253,30 @@ export default function Example() {
                                     >
                                         Freezer
                                     </a>
-                                    {userNavigation.map((item) => (
-                                        <a
-                                            key={item.name}
-                                            href={item.href}
-                                            className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                                        >
-                                            {item.name}
-                                        </a>
-                                    ))}
+                                    <a
+                                        key=''
+                                        href='/profile'
+                                        className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                    >
+                                        Profile
+                                    </a>
+
+                                    <a
+                                        key=''
+                                        href='/wishlist'
+                                        className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                    >
+                                        Wishlist
+                                    </a>
+
+                                    <a
+                                        key=''
+                                        onClick={logout}
+                                        className="block rounded-md py-2 px-3 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                    >
+                                        Sign Out
+                                    </a>
+
                                 </div>
                             </div>
                         </Popover.Panel>

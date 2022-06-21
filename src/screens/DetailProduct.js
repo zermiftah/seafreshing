@@ -7,6 +7,10 @@ import { useParams } from 'react-router-dom'
 import Notif from '../components/simple'
 // import Reviews from "../components/Reviews/Reviews";
 
+
+function convertToAngka(rupiah) {
+    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+}
 export default function DetailProduct() {
     const [product, setProduct] = useState([]);
     const [quantity, setQuantity] = useState('');
@@ -24,6 +28,7 @@ export default function DetailProduct() {
         try {
             const data = await axios.get(`https://server.seafreshing.com/api/product/get-product/${id}`)
             let temp = data.data.product;
+
             setProduct(temp)
 
         } catch (e) {
@@ -32,41 +37,25 @@ export default function DetailProduct() {
         }
     }
 
-    // console.log(product)
 
     const handleAddToCart = async (e) => {
         e.preventDefault();
         try {
             let response = await axios.patch('https://server.seafreshing.com/api/user/add-freezer', JSON.stringify({
-                // 'clearPrice': product[0].price.value.replace(/\D/g, ''),
-                // 'productId': id,
-                // 'image': product[0].image[0].imgUrl,
-                // 'name': product[0].productName,
-                // 'price': product[0].price.value,
-                // 'priceUnit': unit,
-                // 'productQuantity': 1,
-                // 'kioskName': product[0].kioskName,
-                // 'kioskId': product[0].kioskId,
-                // 'idUser': userData.id,
-                // 'kioskCity': product[0].kioskDetails[0].city,
-                // 'minimumOrder': product[0].minimumOrder.total,
-                // 'isWholesalePrice': product[0].isWholesale,
-                // "quantityWholesaleReal": 0,
-                // 'isChecked': true,
 
                 "isWholesale": true,
                 "quantityWholesaleReal": 0,
-                "idUser": "NiE4X6f8jxea",
-                "kioskId": "QmlLzQ2VuHhH",
-                "productId": "CWleYKPPC8ZG",
-                "clearPrice": 43000,
-                "name": "Cumi",
-                "price": "Rp43.000",
+                "idUser": userData.id,
+                "kioskId": product[0].kioskId,
+                "productId": id,
+                "clearPrice": convertToAngka(product[0].price.value),
+                "name": product[0].productName,
+                "price": product[0].price.value,
                 "minimumOrder": {
-                    "total": 1,
+                    "total": product[0].minimumOrder.total,
                     "unit": "kg"
                 },
-                "image": "https://server.seafreshing.com/public/uploads/9cd266b1e030f75da986fed341b61ad7.JPG",
+                "image": product[0].image[0].imgUrl,
                 "priceUnit": "kg",
                 "productQuantity": 1,
                 "isWholesalePrice": false,
@@ -85,7 +74,7 @@ export default function DetailProduct() {
                         },
                         "width": 10
                     },
-                    "packingName": "Carton"
+                    "packingName": product[0].packingVariant[0].packingName
                 },
                 "variant": ""
 
@@ -108,26 +97,51 @@ export default function DetailProduct() {
     const handleAddWishlist = async (e) => {
         e.preventDefault();
         try {
-            let response = await axios.patch('https://server.seafreshing.com/api/user/add-wishlist', {
-                'id': userData.id,
-                'productId': id,
-                'image': product[0].image[0].imgUrl,
-                'name': product[0].productName,
-                'price': product[0].price.value,
-                'productQuantity': quantity,
-                'priceQuantityUnit': unit,
-                'kioskName': product[0].kioskName,
-                'kioskId': product[0].kioskId,
-                'idUser': userData.id,
-                'kioskCity': product[0].kioskDetails[0].city,
-                'minimumOrder': product[0].minimumOrder.total,
-                'isWholesale': product[0].isWholesalePrice,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'auth-token': token,
+            let response = await axios.patch('https://server.seafreshing.com/api/user/add-wishlist',
+                {
+                    "isWholesale": true,
+                    "quantityWholesaleReal": 0,
+                    "idUser": "NiE4X6f8jxea",
+                    "kioskId": "QmlLzQ2VuHhH",
+                    "productId": "CWleYKPPC8ZG",
+                    "clearPrice": 43000,
+                    "name": "Cumi",
+                    "price": "Rp43.000",
+                    "minimumOrder": {
+                        "total": 1,
+                        "unit": "kg"
+                    },
+                    "image": "https://server.seafreshing.com/public/uploads/9cd266b1e030f75da986fed341b61ad7.JPG",
+                    "priceUnit": "kg",
+                    "productQuantity": 12,
+                    "isWholesalePrice": false,
+                    "unitWholesale": "kg",
+                    "priceWholesale": 20,
+                    "isChecked": true,
+                    "latLng": "",
+                    "packingVariant": {
+                        "isCheck": true,
+                        "packingDimensions": {
+                            "height": 10,
+                            "length": 10,
+                            "weight": {
+                                "unit": "kg",
+                                "value": "2"
+                            },
+                            "width": 10
+                        },
+                        "packingName": "Carton"
+                    },
+                    "variant": ""
                 }
-            });
+                , {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': token,
+                    }
+                }).then((res) => {
+                    console.log(res)
+                }).catch((err) => { console.log(err) });
             if (response.data) {
                 setNotif(response.data.msg)
             }
@@ -185,19 +199,19 @@ export default function DetailProduct() {
                                         <h3 class="sr-only">Reviews</h3>
                                         <div class="flex items-center">
                                             <div class="flex items-center">
-                                                <svg class="h-5 w-5 flex-shrink-0 text-sky-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <svg class="h-5 w-5 flex-shrink-0 text-slate-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                 </svg>
 
-                                                <svg class="h-5 w-5 flex-shrink-0 text-sky-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <svg class="h-5 w-5 flex-shrink-0 text-slate-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                 </svg>
 
-                                                <svg class="h-5 w-5 flex-shrink-0 text-sky-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <svg class="h-5 w-5 flex-shrink-0 text-slate-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                 </svg>
 
-                                                <svg class="h-5 w-5 flex-shrink-0 text-sky-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <svg class="h-5 w-5 flex-shrink-0 text-slate-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                                 </svg>
 
@@ -218,30 +232,33 @@ export default function DetailProduct() {
                                     </div>
 
                                     <form class="mt-6">
-                                        <div>
-                                            <h3 class="text-sm text-gray-600">Qty</h3>
+                                        <h2 className='font-bold'>Packing Variant</h2>
 
-                                            <fieldset class="mt-2">
-                                                <legend class="sr-only">Choose a color</legend>
-                                                <div class="mt-1 relative rounded-md shadow-sm">
-                                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                        <span class="text-gray-500 sm:text-sm"> </span>
-                                                    </div>
-                                                    <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="number" name="price" id="price" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="0" />
-                                                    <div class="absolute inset-y-0 right-0 flex items-center">
-                                                        <label for="currency" class="sr-only">Qty</label>
-                                                        <select value={unit} onChange={(e) => setUnit(e.target.value)} id="currency" name="currency" class="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
-                                                            <option value="kg">Kg</option>
-                                                            <option value="quitanl">Kwintal</option>
-                                                            <option value="ton">Ton</option>
-                                                        </select>
+                                        <div className='flex gap-2 '>
+                                            {product[0].packingVariant.map((variant) => (
+                                                <div className='mt-3 w-full' onClick={() => { console.log('test') }}>
+                                                    <h6 className='font-bold'>{variant.packingName}</h6>
+                                                    <div className="max-w-sm rounded overflow-hidden shadow-sm border-2">
+                                                        <div className="px-6 py-4 text-gray">
+                                                            <p className='text-gray-500'>Content : {variant.packingDimensions.weight.value + " " + variant.packingDimensions.weight.unit}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </fieldset>
+                                            ))}
+                                            <div className='mt-3 w-full ml-1'>
+                                                <h6 className='font-bold '>Detail Product</h6>
+                                                <div className=" rounded overflow-hidden  ">
+                                                    <div className="  py-4 text-gray-500">
+                                                        <p>Min. order : {product[0].minimumOrder.total + " " + product[0].minimumOrder.unit}</p>
+                                                        <p className='mt-1'>Category : {product[0].category}</p>
+                                                        <p className='mt-1'>{product[0].productDescription}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="mt-10 flex sm:flex-col1">
-                                            <button onClick={handleAddToCart} class="max-w-xs flex-1 bg-sky-400 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-sky-500 sm:w-full">Add to freezer</button>
+                                            <button onClick={handleAddToCart} class="max-w-xs flex-1 bg-slate-200 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-black hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-slate-800 sm:w-full">Add to freezer</button>
 
                                             <button onClick={handleAddWishlist} class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
                                                 <svg class="h-6 w-6 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -261,7 +278,7 @@ export default function DetailProduct() {
 
 
                                                         <img class="h-12 w-12 rounded-full" src={product[0].kioskPicture} alt="" />
-                                                        <span class="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-300"></span>
+                                                        <span class="absolute top-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-600"></span>
 
                                                     </span>
                                                 </div>
@@ -278,7 +295,6 @@ export default function DetailProduct() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <Reviews /> */}
                         </div>
                     </div>
                     : "Loading..."
