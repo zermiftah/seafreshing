@@ -29,6 +29,7 @@ import Checkout from "./screens/Checkout/index";
 import AddAddressForm from "./screens/AddAddressForm"
 import ProfileSidebar from "./components/Profile/ProfileSidebar"
 import Chat from "./screens/Chat";
+import VerifyBuyer from "./screens/VerifyBuyer";
 
 const App = () => {
   return (
@@ -76,6 +77,13 @@ const App = () => {
           <Auth>
             <HeaderHS />
             <Wishlist />
+            <Footer />
+          </Auth>
+        </Route>
+        <Route path="/verifybuyer">
+          <Auth>
+            <HeaderHS />
+            <VerifyBuyer />
             <Footer />
           </Auth>
         </Route>
